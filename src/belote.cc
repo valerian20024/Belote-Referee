@@ -7,39 +7,24 @@
 #include <set>
 #include <utility>   // std::pair
 
+
+
+
+
+
+
+
+
+
 using namespace std;
 
 typedef string Card;                    // A Card(V, S) is made of a value and a suit.
-typedef int Player;                     // Can be [0; 3]
+typedef size_t Player;                     // Can be [0; 3]
 typedef pair<Player, Player> Team;      // Team1 : players 1 and 3; Team2 players 2 and 4
 typedef set<Card> CardSet;              // A set of different cards
 
-bool game(istream& in, ostream& out, ostream& err)
-{
-
-    // State variables required through the whole processing
-
-    pair<int, int> team_scores = pair(0, 0);
-    int trick_counter = 0;
-    array<CardSet, 4> cards_played;         // By each player
-    Player leader;                          // Who started first the trick
-    string trump_suit;                      // Initialized once only const?
-    int team_taking_contract;               // Initialized once only const?
-    Player previous_trick_winner;           // Is going to start the next trick
-    array<int, 8> winning_tricks;           // Tracks which team won which trick (for capot)
-
-    /* Per trick state : */
-
-    Player master;  // The player currently winning the trick
-    string suit;    // The trick's suit
 
 
-
-    (void) in;
-    (void) out;
-    (void) err;
-    return true;
-}
 
 /* Parsing */
 //* Surely useless, we will use >> for each element
@@ -57,8 +42,6 @@ void parse_trick(string trick);
 // Creates a card based on raw string input, e.g. "9h"
 Card make_card(string card);
 
-// Computes the points associated to a card.
-unsigned int points(Card card, bool is_trump);
 
 /* Cards, suits and values */
 
@@ -77,6 +60,9 @@ string value(Card card);
 // Takes into account current trump
 bool is_stronger(Card given, Card compared_to);
 
+// Computes the points associated to a card.
+size_t points(Card card, bool is_trump);
+
 
 /* Team and players */
 
@@ -84,20 +70,23 @@ bool is_stronger(Card given, Card compared_to);
 Player partner(Player p);
 
 // Returns the team number of a given player
-int team(Player p);
+size_t team(Player p);
 
 // Returns the two players in a given team
-Team players_in_team(int team_number);
+Team players_in_team(size_t team_number);
 
 // Whether a player is trick master
 bool is_master(Player p);
 
 // Returns the team that has more score 
-int winning_team();
+size_t winning_team();
+
+// Returns the current player giving the card
+Player current_player(Player leader, size_t offset);
 
 /* Scoring */
 
-void add_points(int team, int points);
+void add_points(size_t team, size_t points);
 
 void check_and_award_belotte();  // must be added directly
 
@@ -107,14 +96,70 @@ void check_and_award_capot();  // don't overwrite belote scores!
 void check_and_award_dix_de_der();
 
 // If is_inside, must zero out the points.
-bool is_inside(int team);  // team != winning_team
+bool is_inside(size_t team);  // return team != winning_team
 
 // Check whether the two team score sum up to 162 / 252 (+ 20 if belote)
 bool complete_sum_of_points();
 
 /* Rule checking */
+//* How to implement the checking rules mecanisms?
 
 bool is_legal_play(Card card, Player p);
 
+
+
 //bool must_play_trump_card();
 
+
+
+
+
+bool game(istream& in, ostream& out, ostream& err)
+{
+
+    // State variables required through the whole processing
+    string trump;                       // Initialized once only const?
+    size_t contract_team;                  // Initialized once only const?
+
+    
+    array<size_t, 2> team_scores = {};
+    array<bool, 2> belote_scored = {};  
+    size_t trick_counter = 0;
+    array<CardSet, 4> cards_played;         // By each player
+    Player leader = 1;                      // Who started first the trick
+    Player previous_trick_winner;           // Is going to start the next trick
+    array<size_t, 8> trick_won;           // Tracks which team won which trick (for capot)
+
+    in >> trump >> contract_team;
+
+    while (trick_counter < 8) {
+
+        /* Per-trick state : */
+
+        Player master;              // The player currently winning the trick
+        string led_suit;            // The trick's suit
+        string highest_trump_card;
+        string highest_led_card;
+
+        // Reads each card of the trick
+        for (size_t i = 0; i < 4; i++) {
+            Card card;
+            in >> card;
+
+            //if (i == 0) led_suit = suit(card);
+
+            //Player player = current_player(leader, i);
+
+            // IF it's not a legal play, print an error and return 0
+
+            //cards_played[player].insert(card);
+        }
+
+        trick_counter++;
+    }
+
+    out << "trump suit is : " << trump << endl
+        << "team taking contract: " << contract_team << endl;
+
+    return true;
+}
