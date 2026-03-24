@@ -6,6 +6,7 @@
 #include <array>
 #include <set>
 #include <utility>   // std::pair
+#include <cstdint>
 
 using namespace std;
 
@@ -87,6 +88,9 @@ bool is_legal_play(Card card, Player p);
 
 
 bool game(istream& in, ostream& out, ostream& err) {
+
+    (void) err;
+
     // State variables required through the whole processing
     string trump;                       // Initialized once only const?
     int contract_team;                  // Initialized once only const?
@@ -94,11 +98,18 @@ bool game(istream& in, ostream& out, ostream& err) {
     
     array<int, 2> team_scores = {};
     array<bool, 2> belote_scored = {};  
-    size_t trick_counter = 0;
+    int trick_counter = 0;
     array<CardSet, 4> cards_played;         // By each player
-    Player leader = 1;                      // Who started first the trick
+    Player leader = 0;                      // Who started first the trick
     Player previous_trick_winner;           // Is going to start the next trick
     array<int, 8> trick_won;           // Tracks which team won which trick (for capot)
+
+    (void) team_scores;
+    (void) belote_scored;
+    //(void) cards_played;
+    (void) leader;
+    (void) previous_trick_winner;
+    (void) trick_won;
 
     in >> trump >> contract_team;
 
@@ -111,33 +122,31 @@ bool game(istream& in, ostream& out, ostream& err) {
         string highest_trump_card;
         string highest_led_card;
 
+        (void) master;
+        (void) highest_trump_card;
+        (void) highest_led_card;
+
         // Reads each card of the trick
-        for (size_t i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             Card card;
             in >> card;
 
             cout << "card is : " << card << endl;
 
-            cout << value(card) << endl;
-            cout << suit(card) << endl;
-            
-            /*if (i == 0) {
-                led_suit = suit(card);
-                cout << led_suit << endl;
-                cout << value(card);
-            }*/
-            //Player player = current_player(leader, i);
+            if (i == 0) led_suit = suit(card);
+
+            Player player = current_player(leader, i);
+
 
             // IF it's not a legal play, print an error and return 0
 
-            //cards_played[player].insert(card);
+            cards_played[static_cast<size_t>(player)].insert(card);
+
+
         }
 
         trick_counter++;
     }
-
-    out << "trump suit is : " << trump << endl
-        << "team taking contract: " << contract_team << endl;
 
     return true;
 }
@@ -148,4 +157,8 @@ string suit(const Card& card) {
 
 string value(const Card& card) {
     return string(1, card.front());
+}
+
+Player current_player(Player leader, int offset) {
+    return (leader + offset) % 4;
 }
