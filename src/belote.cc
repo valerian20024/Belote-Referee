@@ -27,7 +27,7 @@ bool is_trump(string suit, string trump_suit);
 string suit(const Card& card);
 
 // Returns the LHS of the Card
-string value(Card card);
+string value(const Card& card);
 
 // Takes into account current trump
 bool is_stronger(Card given, Card compared_to);
@@ -86,9 +86,7 @@ bool is_legal_play(Card card, Player p);
 
 
 
-bool game(istream& in, ostream& out, ostream& err)
-{
-
+bool game(istream& in, ostream& out, ostream& err) {
     // State variables required through the whole processing
     string trump;                       // Initialized once only const?
     int contract_team;                  // Initialized once only const?
@@ -120,10 +118,14 @@ bool game(istream& in, ostream& out, ostream& err)
 
             cout << "card is : " << card << endl;
 
-            if (i == 0) {
+            cout << value(card) << endl;
+            cout << suit(card) << endl;
+            
+            /*if (i == 0) {
                 led_suit = suit(card);
                 cout << led_suit << endl;
-            }
+                cout << value(card);
+            }*/
             //Player player = current_player(leader, i);
 
             // IF it's not a legal play, print an error and return 0
@@ -140,7 +142,10 @@ bool game(istream& in, ostream& out, ostream& err)
     return true;
 }
 
-string suit(const Card& card)
-{
+string suit(const Card& card) {
     return string(1, card.back());
+}
+
+string value(const Card& card) {
+    return string(1, card.front());
 }
