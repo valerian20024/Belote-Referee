@@ -24,7 +24,7 @@ bool same_suit(string suit1, string suit2);
 bool is_trump(string suit, string trump_suit);
 
 // Returns the RHS part of the Card
-string suit(Card card);
+string suit(const Card& card);
 
 // Returns the LHS of the Card
 string value(Card card);
@@ -104,7 +104,7 @@ bool game(istream& in, ostream& out, ostream& err)
 
     in >> trump >> contract_team;
 
-    while (trick_counter < 8) {
+    while (trick_counter < 3) {
 
         /* Per-trick state : */
 
@@ -118,8 +118,12 @@ bool game(istream& in, ostream& out, ostream& err)
             Card card;
             in >> card;
 
-            //if (i == 0) led_suit = suit(card);
+            cout << "card is : " << card << endl;
 
+            if (i == 0) {
+                led_suit = suit(card);
+                cout << led_suit << endl;
+            }
             //Player player = current_player(leader, i);
 
             // IF it's not a legal play, print an error and return 0
@@ -134,4 +138,9 @@ bool game(istream& in, ostream& out, ostream& err)
         << "team taking contract: " << contract_team << endl;
 
     return true;
+}
+
+string suit(const Card& card)
+{
+    return string(1, card.back());
 }
