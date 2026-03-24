@@ -7,39 +7,65 @@
 #include <set>
 #include <utility>   // std::pair
 
-typedef std::pair<char, char> Card;
+using namespace std;
 
-/*
-namespace {  // anonymous namespace → completely hidden from outside
+typedef pair<string, string> Card;      // A Card(V, S) is made of a value and a suit.
+typedef int Player;                     // Can be [0; 3]
+typedef pair<Player, Player> Team;      // Team1 : players 1 and 3; Team2 players 2 and 4
+typedef set<Card> CardSet;              // A set of different cards
 
-    // Dummy / placeholder helpers – replace with real logic
-    bool parse_trump_and_team(std::istream& in, char& trump, int& contract_team);
-    bool read_trick(std::istream& in, std::vector<Card>& trick_cards);
-    int  determine_leader(int previous_winner);
-    bool is_legal_play(const Card& played, const std::vector<Card>& trick_so_far,
-                       int player, const std::array<std::set<char>,5>& renounced,
-                       char trump, int contract_team);
-    int  compute_trick_winner(const std::vector<Card>& trick, char trump);
-    int  trick_points(const std::vector<Card>& trick, char trump);
-    void update_renouncements(int player, const Card& played,
-                              const std::vector<Card>& trick, char trump,
-                              std::array<std::set<char>,5>& renounced);
-    bool check_and_add_belote(int player, const Card& played, char trump,
-                              std::array<bool,5>& has_k, std::array<bool,5>& has_q,
-                              int& scores);
-    void print_scores(std::ostream& out, const std::array<int,2>& scores, int winner);
-
-}
-*/
-
-
-
-bool game(std::istream& in, std::ostream& out, std::ostream& err)
+bool game(istream& in, ostream& out, ostream& err)
 {
+
+    // State variables required through the whole processing
+
+    pair<int, int> team_scores;
+    int trick_counter;
+    vector<CardSet> cards_played_by_players;    // array ?
+    Player leader;                              // who started first the trick
+    string trump_suit;            // initialized once only const?
+    int team_taking_contract;     // initialized once only const?
+
+    
+    /* Per trick state : */
+
+    Player master;  // The player currently winning the trick
+
+
+
+
     (void) in;
     (void) out;
     (void) err;
     return true;
 }
+
+// Parse and update state variables. e.g.,
+// s 2
+void parse_game_header(string header);
+
+// Parse and update state variables. e.g.,
+// Qh 8h Ah 9h
+void parse_trick(string trick);
+
+// Creates a card based on raw string input, e.g.,
+// 9h
+Card make_card(string card);
+
+// Computes the points associated to a card.
+unsigned int points(Card card, bool is_trump);
+
+/* Tiny helpers */
+Team players_in_team(int team_number);
+
+bool same_suit(string suit1, string suit2);
+
+bool is_trump(string suit, string trump_suit);
+
+Player partner(Player p);
+
+void add_points(int team, int points);
+
+
 
 
