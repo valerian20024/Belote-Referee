@@ -7,40 +7,12 @@
 #include <set>
 #include <utility>   // std::pair
 
-
-
-
-
-
-
-
-
-
 using namespace std;
 
 typedef string Card;                    // A Card(V, S) is made of a value and a suit.
-typedef size_t Player;                     // Can be [0; 3]
+typedef int Player;                     // Can be [0; 3]
 typedef pair<Player, Player> Team;      // Team1 : players 1 and 3; Team2 players 2 and 4
 typedef set<Card> CardSet;              // A set of different cards
-
-
-
-
-/* Parsing */
-//* Surely useless, we will use >> for each element
-
-// Returns a string representing one element.
-// Can be a card, or a part of the header.
-// string make_one_element(istream& input);
-
-// Parse and update state variables. e.g., "s 2"
-void parse_game_header(string header);
-
-// Parse and update state variables. e.g. "Qh 8h Ah 9h"
-void parse_trick(string trick);
-
-// Creates a card based on raw string input, e.g. "9h"
-Card make_card(string card);
 
 
 /* Cards, suits and values */
@@ -61,7 +33,7 @@ string value(Card card);
 bool is_stronger(Card given, Card compared_to);
 
 // Computes the points associated to a card.
-size_t points(Card card, bool is_trump);
+int points(Card card, bool is_trump);
 
 
 /* Team and players */
@@ -70,23 +42,23 @@ size_t points(Card card, bool is_trump);
 Player partner(Player p);
 
 // Returns the team number of a given player
-size_t team(Player p);
+int team(Player p);
 
 // Returns the two players in a given team
-Team players_in_team(size_t team_number);
+Team players_in_team(int team_number);
 
 // Whether a player is trick master
 bool is_master(Player p);
 
 // Returns the team that has more score 
-size_t winning_team();
+int winning_team();
 
 // Returns the current player giving the card
-Player current_player(Player leader, size_t offset);
+Player current_player(Player leader, int offset);
 
 /* Scoring */
 
-void add_points(size_t team, size_t points);
+void add_points(int team, int points);
 
 void check_and_award_belotte();  // must be added directly
 
@@ -96,7 +68,7 @@ void check_and_award_capot();  // don't overwrite belote scores!
 void check_and_award_dix_de_der();
 
 // If is_inside, must zero out the points.
-bool is_inside(size_t team);  // return team != winning_team
+bool is_inside(int team);  // return team != winning_team
 
 // Check whether the two team score sum up to 162 / 252 (+ 20 if belote)
 bool complete_sum_of_points();
@@ -119,16 +91,16 @@ bool game(istream& in, ostream& out, ostream& err)
 
     // State variables required through the whole processing
     string trump;                       // Initialized once only const?
-    size_t contract_team;                  // Initialized once only const?
+    int contract_team;                  // Initialized once only const?
 
     
-    array<size_t, 2> team_scores = {};
+    array<int, 2> team_scores = {};
     array<bool, 2> belote_scored = {};  
     size_t trick_counter = 0;
     array<CardSet, 4> cards_played;         // By each player
     Player leader = 1;                      // Who started first the trick
     Player previous_trick_winner;           // Is going to start the next trick
-    array<size_t, 8> trick_won;           // Tracks which team won which trick (for capot)
+    array<int, 8> trick_won;           // Tracks which team won which trick (for capot)
 
     in >> trump >> contract_team;
 
