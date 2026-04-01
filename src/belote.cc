@@ -94,20 +94,18 @@ bool game(istream& in, ostream& out, ostream& err) {
     // State variables required through the whole processing
     string trump;                       // Initialized once only const?
     int contract_team;                  // Initialized once only const?
-
-    
-    array<int, 2> team_scores = {};
-    array<bool, 2> belote_scored = {};  
+    pair<bool, bool> team_scores = {};
+    pair<bool, bool> belote_scored = {};  
     int trick_counter = 0;
     array<CardSet, 4> cards_played;         // By each player
     Player leader = 0;                      // Who started first the trick
     Player previous_trick_winner;           // Is going to start the next trick
-    array<int, 8> trick_won;           // Tracks which team won which trick (for capot)
+    array<int, 8> trick_won;                // Tracks which team won which trick (for capot)
 
     (void) team_scores;
     (void) belote_scored;
     //(void) cards_played;
-    (void) leader;
+    //(void) leader;
     (void) previous_trick_winner;
     (void) trick_won;
 
@@ -131,17 +129,19 @@ bool game(istream& in, ostream& out, ostream& err) {
             Card card;
             in >> card;
 
-            cout << "card is : " << card << endl;
+            out << "card is : " << card << endl;
 
             if (i == 0) led_suit = suit(card);
 
             Player player = current_player(leader, i);
+            out << "player is: " << player << endl;
 
+            
 
             // IF it's not a legal play, print an error and return 0
 
             cards_played[static_cast<size_t>(player)].insert(card);
-
+            //print_cards(cards_played);
 
         }
 
@@ -162,3 +162,14 @@ string value(const Card& card) {
 Player current_player(Player leader, int offset) {
     return (leader + offset) % 4;
 }
+
+/*
+void dump_cards_played(array<CardSet, 4> cards) {
+
+        for (auto& c: cards) {
+            cout << c << " ";
+        }
+    cout << endl;
+}
+*/
+
