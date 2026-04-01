@@ -10,54 +10,41 @@
 
 using namespace std;
 
-typedef string Card;                    // A Card(V, S) is made of a value and a suit.
-typedef int Player;                     // Can be [0; 3]
-typedef pair<Player, Player> Team;      // Team1 : players 1 and 3; Team2 players 2 and 4
-typedef set<Card> CardSet;              // A set of different cards
+// Tracks the cards played by each player.
+typedef array<set<string>, 4> CardsCollection;
 
-
-/* Cards, suits and values */
-
-// Whether two suits are the same or not
-bool same_suit(string suit1, string suit2);
-
-// Whether a suit is trump or not
-bool is_trump(string suit, string trump_suit);
 
 // Returns the RHS part of the Card
-string suit(const Card& card);
+string suit(const string& card);
 
 // Returns the LHS of the Card
-string value(const Card& card);
+string value(const string& card);
 
 // Takes into account current trump
-bool is_stronger(Card given, Card compared_to);
+bool is_stronger(string given, string compared_to, string trump);
 
 // Computes the points associated to a card.
-int points(Card card, bool is_trump);
+int points(string card, bool is_trump);
 
 
-/* Team and players */
 
 // Returns the partner of a given player
-Player partner(Player p);
+int partner(int player);
 
 // Returns the team number of a given player
-int team(Player p);
-
-// Returns the two players in a given team
-Team players_in_team(int team_number);
+int team(int player);
 
 // Whether a player is trick master
-bool is_master(Player p);
-
-// Returns the team that has more score 
-int winning_team();
+bool is_master(int player);
 
 // Returns the current player giving the card
-Player current_player(Player leader, int offset);
+int current_player(int leader, int offset);
 
-/* Scoring */
+// Add a new card 
+void play(CardsCollection& collection, int player, const string& card);
+
+
+
 
 void add_points(int team, int points);
 
@@ -69,20 +56,24 @@ void check_and_award_capot();  // don't overwrite belote scores!
 void check_and_award_dix_de_der();
 
 // If is_inside, must zero out the points.
-bool is_inside(int team);  // return team != winning_team
+void check_is_inside(int team);  // return team != winning_team
 
 // Check whether the two team score sum up to 162 / 252 (+ 20 if belote)
 bool complete_sum_of_points();
 
-/* Rule checking */
-//* How to implement the checking rules mecanisms?
-
-bool is_legal_play(Card card, Player p);
+int current_leader(int trick_number);
 
 
+bool is_legal_play(string card, int p);
 
-//bool must_play_trump_card();
 
+
+/* Helpers and debug */
+void print_cards_played(const CardsCollection& cards_played, ostream& out);
+
+void print_scores(const int& score1, const int& score2, const int& trick_winner, ostream& out);
+
+void print_final_scores(const int& score1, const int& score2, ostream& out);
 
 
 
@@ -90,32 +81,30 @@ bool is_legal_play(Card card, Player p);
 bool game(istream& in, ostream& out, ostream& err) {
 
     (void) err;
-
+    
     // State variables required through the whole processing
-    string trump;                       // Initialized once only const?
-    int contract_team;                  // Initialized once only const?
-    pair<bool, bool> team_scores = {};
-    pair<bool, bool> belote_scored = {};  
-    int trick_counter = 0;
-    array<CardSet, 4> cards_played;         // By each player
-    Player leader = 0;                      // Who started first the trick
-    Player previous_trick_winner;           // Is going to start the next trick
-    array<int, 8> trick_won;                // Tracks which team won which trick (for capot)
+    string trump;
+    int contract_team;
 
-    (void) team_scores;
+    pair<int, int> scores = {};
+    pair<bool, bool> belote_scored = {};
+    
+    CardsCollection cards_played;           // By each player
+    
+    int previous_trick_winner;              // Is going to start the next trick
+    array<bool, 8> tricks_won;              // Tricks which team won which trick (for capot)
+
+    (void) scores;
     (void) belote_scored;
-    //(void) cards_played;
-    //(void) leader;
+    
     (void) previous_trick_winner;
-    (void) trick_won;
+    (void) tricks_won;
 
     in >> trump >> contract_team;
 
-    while (trick_counter < 3) {
-
-        /* Per-trick state : */
-
-        Player master;              // The player currently winning the trick
+    for (int trick_counter = 0; trick_counter < 3; trick_counter++) {
+        int master;                 // The player currently winning the trick
+        int leader = 0;             // Who started first the trick
         string led_suit;            // The trick's suit
         string highest_trump_card;
         string highest_led_card;
@@ -126,50 +115,66 @@ bool game(istream& in, ostream& out, ostream& err) {
 
         // Reads each card of the trick
         for (int i = 0; i < 4; i++) {
-            Card card;
+            string card;
             in >> card;
-
-            out << "card is : " << card << endl;
 
             if (i == 0) led_suit = suit(card);
 
-            Player player = current_player(leader, i);
-            out << "player is: " << player << endl;
+            int player = current_player(leader, i);
 
-            
-
-            // IF it's not a legal play, print an error and return 0
-
-            cards_played[static_cast<size_t>(player)].insert(card);
-            //print_cards(cards_played);
-
+            // call the play function
+            play(cards_played, player, card);
         }
-
-        trick_counter++;
     }
+
+    print_cards_played(cards_played, out);
 
     return true;
 }
 
-string suit(const Card& card) {
+string suit(const string& card) {
     return string(1, card.back());
 }
 
-string value(const Card& card) {
+string value(const string& card) {
     return string(1, card.front());
 }
 
-Player current_player(Player leader, int offset) {
+int current_player(int leader, int offset) {
     return (leader + offset) % 4;
 }
 
-/*
-void dump_cards_played(array<CardSet, 4> cards) {
-
-        for (auto& c: cards) {
-            cout << c << " ";
+// Helper function to print the current cards played by each player
+void print_cards_played(const CardsCollection& cards_played, ostream& out) {   
+    for (int player = 0; player < 4; ++player) {
+        out << "Player " << (player + 1) << ": ";
+        
+        if (cards_played[static_cast<size_t>(player)].empty()) {
+            out << "(none)";
+        } else {
+            bool first = true;
+            for (const auto& card : cards_played[static_cast<size_t>(player)]) {
+                if (!first) out << " ";
+                out << card;
+                first = false;
+            }
         }
-    cout << endl;
+        out << "\n";
+    }
 }
-*/
 
+
+// Insert a card in the right player's set
+void play(CardsCollection& collection, int player, const string& card) {
+    if (player < 0 || player > 3) {
+        cerr << "error in play function" << endl;
+        return;
+    }
+
+    collection[static_cast<size_t>(player)].insert(card);
+}
+
+// On the first trick, the leader is player 0
+int current_leader(int trick_number, int previous_winner) {
+    return trick_number == 0 ? 0 : previous_winner;
+}

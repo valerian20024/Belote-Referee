@@ -5,9 +5,6 @@ ARCHIVE := s200825.tar.xz
 
 ARCHIVE_FILES := belote.hh belote.cc
 
-
-
-
 all: belote.cc belote.hh
 	$(CXX) $(CXXFLAGS) belote.cc main.cc -o belote
 
