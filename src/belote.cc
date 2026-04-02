@@ -72,6 +72,10 @@ void update_belote_table(BeloteLookupTable& belote_table, const int player, cons
 
 void update_highest_cards(string& highest_trump_card, string& highest_led_card, const string card, const string trump);
 
+bool is_stronger_trump(const string value1, const string value2);
+
+bool is_stronger_raw(const string value1, const string value2);
+
 void update_master();
 
 void update_trick_points();
@@ -263,9 +267,52 @@ void update_highest_cards(
     }
 }
 
+// Assumes that the compared_to card is the led suit in case of a tie.
 bool is_stronger(const string given, const string compared_to, const string trump) {
-    
+    const string suit_given = suit(given);
+    const string suit_comp  = suit(compared_to);
+
+    const bool given_is_trump = (suit_given == trump);
+    const bool comp_is_trump  = (suit_comp == trump);
+
+    // Any trump card beats any non-trump card
+    if (given_is_trump && !comp_is_trump)
+        return true;
+    if (!given_is_trump && comp_is_trump)
+        return false;
+
+    // Cards now have the same suit
+    // Comparing trump suits
+    if (given_is_trump)
+        return is_stronger_trump(value(given), value(compared_to));
+
+    // Comparing non-trump suit
+    if (suit_given == suit_comp)
+        return is_stronger_raw(value(given), value(compared_to));
+
+    // Cards have different suits
+    return false;
 }
+
+// Returns true if the first value is stronger when both are trumps
+bool is_stronger_trump(const string value1, const string value2) {
+    // First characters of the string are stronger
+    static const string trump_order = "J9ATKQ87";
+    size_t pos1 = trump_order.find(value1);
+    size_t pos2 = trump_order.find(value2);
+    return pos1 < pos2;
+}
+
+// Returns true is the first value is stronger in a raw (non-trump) suit
+bool is_stronger_raw(const string value1, const string value2) {
+    // First characters of the string are stronger
+    static const string plain_order = "ATKQJ987";
+    size_t pos1 = plain_order.find(value1);
+    size_t pos2 = plain_order.find(value2);
+    return pos1 < pos2;
+}
+
+
 
 
 void update_trick_points();
