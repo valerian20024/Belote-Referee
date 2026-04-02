@@ -286,7 +286,7 @@ bool is_stronger(const string given, const string compared_to, const string trum
     if (given_is_trump)
         return is_stronger_trump(value(given), value(compared_to));
 
-    // Comparing non-trump suit
+    // Comparing non-trump suits
     if (suit_given == suit_comp)
         return is_stronger_raw(value(given), value(compared_to));
 
@@ -311,6 +311,7 @@ bool is_stronger_raw(const string value1, const string value2) {
     size_t pos2 = plain_order.find(value2);
     return pos1 < pos2;
 }
+
 
 
 
