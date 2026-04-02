@@ -241,8 +241,6 @@ void update_belote_table(
     }
 }
 
-
-
 void update_highest_cards(
     string& highest_trump_card, 
     string& highest_led_card, 
@@ -311,9 +309,6 @@ bool is_stronger_raw(const string value1, const string value2) {
     size_t pos2 = plain_order.find(value2);
     return pos1 < pos2;
 }
-
-
-
 
 
 void update_trick_points();
