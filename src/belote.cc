@@ -61,9 +61,11 @@ void update_state(
     string&                 highest_led_card,
     int&                    trick_points,
     const int&              player, 
-    string&                 card,
+    const string&                 card,
     const string&           trump
 );
+
+void update_cards_played(CardsCollection& cards_played, const int& player, const string& card);
 
 
 void add_points(int team, int points);
@@ -163,7 +165,7 @@ void process_trick(
         string card;
         in >> card;
 
-        if (i == 0) led_suit = suit(card);
+        const string led_suit = (i == 0) ? 0 : suit(card);
 
         int player = current_player(leader, i);
 
@@ -181,9 +183,6 @@ void process_trick(
     }
 }
 
-
-
-
 // Orchestrator for updating each variable
 void update_state(
     CardsCollection&      cards_played,
@@ -193,14 +192,16 @@ void update_state(
     string&               highest_led_card,
     int&                  trick_points,
     const int&            player,
-    string&               card,
+    const string&         card,
     const string&         trump
 ) {
-    cards_played[static_cast<size_t>(player)].insert(card);
+    update_cards_played(cards_played, player, card);
 }
 
 
-void update_cards_played();
+void update_cards_played(CardsCollection& cards_played, const int& player, const string& card) {
+    cards_played[static_cast<size_t>(player)].insert(card);
+}
 
 void update_belote_table();
 
@@ -269,7 +270,7 @@ void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
     out << "====================================================\n" << endl;
 }
 
-// Helper to print which team won each trick (very useful for debugging capot)
+// Helper to print which team won each trick
 void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 {
     out << "=== Tricks won by team ===\n";
