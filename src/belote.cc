@@ -15,10 +15,10 @@ typedef array<set<string>, 4> CardsCollection;
 typedef array<array<bool, 2>, 4> BeloteLookupTable;
 
 // Returns the RHS part of the Card
-string suit(const string& card);
+string suit(const string card);
 
 // Returns the LHS of the Card
-string value(const string& card);
+string value(const string card);
 
 // Takes into account current trump
 bool is_stronger(string given, string compared_to, string trump);
@@ -68,7 +68,7 @@ void update_state(
 
 void update_cards_played(CardsCollection& cards_played, const int player, const string card);
 
-void update_belote_table(BeloteLookupTable& belote_table, const int& player, const string& card, const string& trump);
+void update_belote_table(BeloteLookupTable& belote_table, const int player, const string card, const string trump);
 
 void update_master();
 
@@ -104,7 +104,7 @@ bool is_legal_play(string card, int p);
 /* Helpers and debug */
 void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
-void print_scores(const pair<int, int>& scores, const int& trick_winner, ostream& out);
+void print_scores(const pair<int, int>& scores, const int trick_winner, ostream& out);
 
 void print_final_scores(const pair<int, int>& scores, ostream& out);
 
@@ -252,11 +252,11 @@ void update_trick_points();
 
 
 
-string suit(const string& card) {
+string suit(const string card) {
     return string(1, card.back());
 }
 
-string value(const string& card) {
+string value(const string card) {
     return string(1, card.front());
 }
 
@@ -321,7 +321,7 @@ void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 }
 
 //todo remove the pretty printing
-void print_scores(const pair<int, int>& scores , const int& trick_winner, ostream& out) {
+void print_scores(const pair<int, int>& scores , const int trick_winner, ostream& out) {
     out << "=== Scores ===\n"
         << scores.first << " " 
         << scores.second << " " 
