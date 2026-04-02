@@ -49,7 +49,7 @@ void process_trick(
     ostream& out,
     ostream& err,
     const string& trump,
-    int& trick_number
+    const int& trick_number
 );
 
 
@@ -151,7 +151,7 @@ void process_trick(
     ostream&                out,
     ostream&                err,
     const string&           trump,
-    int&                    trick_number
+    const int&                    trick_number
 ) {
     int master;                 // The player currently winning the trick
     int leader = 0;             // Who started first the trick
@@ -207,7 +207,7 @@ void update_belote_table();
 
 void update_master();
 
-void update_highest_cards(string& highest_trump_card, string& highest_led_card);
+void update_highest_cards();
 
 void update_trick_points();
 
