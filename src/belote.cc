@@ -44,11 +44,11 @@ int current_player(int leader, int offset);
 
 void process_trick(
     const string& trump,
-    pair<int, int> scores,
-    CardsCollection cards_played,
+    pair<int, int>& scores,
+    CardsCollection& cards_played,
     BeloteLookupTable& belote_table,
     int& previous_trick_winner,
-    array<bool, 8> tricks_won,
+    array<bool, 8>& tricks_won,
     const int& trick_number,
     istream& in,
     ostream& out,
@@ -67,6 +67,7 @@ void update_state(
     const string& card
 );
 
+//todo remove
 void play(CardsCollection& collection, int player, const string& card);
 
 
@@ -109,29 +110,14 @@ void print_tricks_won(const std::array<bool, 8>& tricks_won, std::ostream& out);
 
 
 bool game(istream& in, ostream& out, ostream& err) {
-
-    (void) err;
-    
-    // State variables required through the whole processing
     string trump;
     int contract_team;
-
     pair<int, int> scores = {};
     BeloteLookupTable belote_table = {};
-    
     CardsCollection cards_played;           // By each player
-    
     int previous_trick_winner;              // Is going to start the next trick
     array<bool, 8> tricks_won = {};              // Tricks which team won which trick (for capot)
-
     
-    print_belote_assets(belote_table, out);
-    print_tricks_won(tricks_won, out);
-    print_scores(scores, 0, out);
-
-    (void) previous_trick_winner;
-    (void) tricks_won;
-
     in >> trump >> contract_team;
 
     for (int trick_counter = 0; trick_counter < 3; trick_counter++) {
@@ -150,17 +136,20 @@ bool game(istream& in, ostream& out, ostream& err) {
     }
 
     print_cards_played(cards_played, out);
+    print_belote_assets(belote_table, out);
+    print_tricks_won(tricks_won, out);
+    print_scores(scores, 0, out);
 
     return true;
 }
 
 void process_trick(
     const string& trump,
-    pair<int, int> scores,
-    CardsCollection cards_played,
+    pair<int, int>& scores,
+    CardsCollection& cards_played,
     BeloteLookupTable& belote_table,
     int& previous_trick_winner,
-    array<bool, 8> tricks_won,
+    array<bool, 8>& tricks_won,
     const int& trick_number,
     istream& in,
     ostream& out,
@@ -171,10 +160,7 @@ void process_trick(
     string led_suit;            // The trick's suit
     string highest_trump_card;
     string highest_led_card;
-
-    (void) master;
-    (void) highest_trump_card;
-    (void) highest_led_card;
+    int trick_points = 0;
 
     // Reads each card of the trick
     for (int i = 0; i < 4; i++) {
@@ -185,7 +171,16 @@ void process_trick(
 
         int player = current_player(leader, i);
 
-        play(cards_played, player, card);
+        update_state(
+            cards_played, 
+            belote_table,
+            master,
+            highest_trump_card,
+            highest_led_card,
+            trick_points,
+            player, 
+            card
+        );
     }   
 }
 
@@ -213,8 +208,24 @@ void play(CardsCollection& collection, int player, const string& card) {
     collection[static_cast<size_t>(player)].insert(card);
 }
 
+
+// Add a new card 
+void update_state(
+    CardsCollection& collection, 
+    BeloteLookupTable& belote_table,
+    int& master,
+    string& highest_trump_card,
+    string& highest_led_card,
+    int& trick_points,
+    const int& player, 
+    const string& card
+) {
+    collection[static_cast<size_t>(player)].insert(card);
+}
+
 // Helper function to print the current cards played by each player
-void print_cards_played(const CardsCollection& cards_played, ostream& out) {   
+void print_cards_played(const CardsCollection& cards_played, ostream& out) {
+    out << "=== Cards played by each player so far ===" << endl;
     for (int player = 0; player < 4; ++player) {
         out << "Player " << (player + 1) << ": ";
         
@@ -228,8 +239,9 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
                 first = false;
             }
         }
-        out << "\n";
+        out << endl;
     }
+    out << "====================================================" << endl;
 }
 
 // Helper to print current belote assets state
