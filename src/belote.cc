@@ -41,35 +41,31 @@ bool is_master(int player);
 int current_player(int leader, int offset);
 
 
-
 void process_trick(
-    const string& trump,
     pair<int, int>& scores,
     CardsCollection& cards_played,
     BeloteLookupTable& belote_table,
     int& previous_trick_winner,
     array<bool, 8>& tricks_won,
-    const int& trick_number,
     istream& in,
     ostream& out,
-    ostream& err
+    ostream& err,
+    const string& trump,
+    int& trick_number
 );
 
-// Add a new card 
+
 void update_state(
-    CardsCollection& collection, 
-    BeloteLookupTable& belote_table,
-    int& master,
-    string& highest_trump_card,
-    string& highest_led_card,
-    int& trick_points,
-    const int& player, 
-    const string& card
+    CardsCollection&        cards_played, 
+    BeloteLookupTable&      belote_table,
+    int&                    master,
+    string&                 highest_trump_card,
+    string&                 highest_led_card,
+    int&                    trick_points,
+    const int&              player, 
+    string&                 card,
+    const string&           trump
 );
-
-//todo remove
-void play(CardsCollection& collection, int player, const string& card);
-
 
 
 void add_points(int team, int points);
@@ -122,16 +118,16 @@ bool game(istream& in, ostream& out, ostream& err) {
 
     for (int trick_counter = 0; trick_counter < 3; trick_counter++) {
         process_trick(
-            trump,
             scores,
             cards_played,
             belote_table,
             previous_trick_winner,
             tricks_won,
-            trick_counter,
             in,
             out,
-            err
+            err,
+            trump,
+            trick_counter
         );
     }
 
@@ -144,16 +140,16 @@ bool game(istream& in, ostream& out, ostream& err) {
 }
 
 void process_trick(
-    const string& trump,
-    pair<int, int>& scores,
-    CardsCollection& cards_played,
-    BeloteLookupTable& belote_table,
-    int& previous_trick_winner,
-    array<bool, 8>& tricks_won,
-    const int& trick_number,
-    istream& in,
-    ostream& out,
-    ostream& err
+    pair<int, int>&         scores,
+    CardsCollection&        cards_played,
+    BeloteLookupTable&      belote_table,
+    int&                    previous_trick_winner,
+    array<bool, 8>&         tricks_won,
+    istream&                in,
+    ostream&                out,
+    ostream&                err,
+    const string&           trump,
+    int&                    trick_number
 ) {
     int master;                 // The player currently winning the trick
     int leader = 0;             // Who started first the trick
@@ -162,9 +158,9 @@ void process_trick(
     string highest_led_card;
     int trick_points = 0;
 
-    // Reads each card of the trick
+    //todo change to idiomatic cin
     for (int i = 0; i < 4; i++) {
-        string card = {};
+        string card;
         in >> card;
 
         if (i == 0) led_suit = suit(card);
@@ -178,8 +174,9 @@ void process_trick(
             highest_trump_card,
             highest_led_card,
             trick_points,
-            player, 
-            card
+            player,
+            card,
+            trump
         );
     }   
 }
@@ -203,29 +200,41 @@ int current_leader(int trick_number, int previous_winner) {
     return trick_number == 0 ? 0 : previous_winner;
 }
 
-// Insert a card in the right player's set
-void play(CardsCollection& collection, int player, const string& card) {
-    collection[static_cast<size_t>(player)].insert(card);
-}
 
 
-// Add a new card 
+// Orchestrator for updating each variable
 void update_state(
-    CardsCollection& collection, 
-    BeloteLookupTable& belote_table,
-    int& master,
-    string& highest_trump_card,
-    string& highest_led_card,
-    int& trick_points,
-    const int& player, 
-    const string& card
+    CardsCollection&      cards_played,
+    BeloteLookupTable&    belote_table,
+    int&                  master,
+    string&               highest_trump_card,
+    string&               highest_led_card,
+    int&                  trick_points,
+    const int&            player,
+    string&               card,
+    const string&         trump
 ) {
-    collection[static_cast<size_t>(player)].insert(card);
+    cards_played[static_cast<size_t>(player)].insert(card);
 }
+
+void update_cards_played();
+
+void update_belote_table();
+
+void update_master();
+
+void update_highest_cards(string& highest_trump_card, string& highest_led_card);
+
+void update_trick_points();
+
+
+
+
+
 
 // Helper function to print the current cards played by each player
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
-    out << "=== Cards played by each player so far ===" << endl;
+    out << "=== Cards played by each player so far ===\n";
     for (int player = 0; player < 4; ++player) {
         out << "Player " << (player + 1) << ": ";
         
@@ -239,7 +248,7 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
                 first = false;
             }
         }
-        out << endl;
+        out << "\n";
     }
     out << "====================================================\n" << endl;
 }
