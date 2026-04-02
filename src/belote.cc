@@ -108,9 +108,9 @@ void print_scores(const pair<int, int>& scores, const int trick_winner, ostream&
 
 void print_final_scores(const pair<int, int>& scores, ostream& out);
 
-void print_belote_assets(const BeloteLookupTable& belote_assets, std::ostream& out);
+void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 
-void print_tricks_won(const std::array<bool, 8>& tricks_won, std::ostream& out);
+void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out);
 
 
 
@@ -176,7 +176,7 @@ void process_trick(
         string card;
         in >> card;
 
-        const string led_suit = (i == 0) ? 0 : suit(card);
+        if (i == 0) led_suit = suit(card);
 
         int player = current_player(leader, i);
 
@@ -208,6 +208,8 @@ void update_state(
 ) {
     update_cards_played(cards_played, player, card);
 
+    update_belote_table(belote_table, player, card, trump);
+
 
 
 }
@@ -223,24 +225,16 @@ void update_belote_table(
     const string       card,
     const string       trump
 ) {
-    /*
-    // Only the King and Queen of the trump suit matter for Belote
-    if (suit(card) != trump) {
-        return;                     // not a trump card → nothing to do
-    }
+    if (suit(card) != trump)
+        return;
 
     const string val = value(card);
 
-    // BeloteLookupTable[player][0] = has King of trump
-    // BeloteLookupTable[player][1] = has Queen of trump
     if (val == "K") {
         belote_table[static_cast<size_t>(player)][0] = true;
-    }
-    else if (val == "Q") {
+    } else if (val == "Q") {
         belote_table[static_cast<size_t>(player)][1] = true;
     }
-
-    */
 }
 
 void update_master();
