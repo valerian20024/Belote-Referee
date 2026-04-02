@@ -28,6 +28,7 @@ int points(string card, bool is_trump);
 
 
 
+
 // Returns the partner of a given player
 int partner(int player);
 
@@ -48,8 +49,8 @@ void process_trick(
     istream& in,
     ostream& out,
     ostream& err,
-    const string& trump,
-    const int& trick_number
+    const string trump,
+    const int trick_number
 );
 
 
@@ -60,12 +61,22 @@ void update_state(
     string&                 highest_trump_card,
     string&                 highest_led_card,
     int&                    trick_points,
-    const int&              player, 
-    const string&                 card,
-    const string&           trump
+    const int               player, 
+    const string            card,
+    const string            trump
 );
 
-void update_cards_played(CardsCollection& cards_played, const int& player, const string& card);
+void update_cards_played(CardsCollection& cards_played, const int player, const string card);
+
+void update_belote_table(BeloteLookupTable& belote_table, const int& player, const string& card, const string& trump);
+
+void update_master();
+
+void update_highest_cards();
+
+void update_trick_points();
+
+
 
 
 void add_points(int team, int points);
@@ -150,8 +161,8 @@ void process_trick(
     istream&                in,
     ostream&                out,
     ostream&                err,
-    const string&           trump,
-    const int&                    trick_number
+    const string            trump,
+    const int               trick_number
 ) {
     int master;                 // The player currently winning the trick
     int leader = 0;             // Who started first the trick
@@ -191,19 +202,46 @@ void update_state(
     string&               highest_trump_card,
     string&               highest_led_card,
     int&                  trick_points,
-    const int&            player,
-    const string&         card,
-    const string&         trump
+    const int             player,
+    const string          card,
+    const string          trump
 ) {
     update_cards_played(cards_played, player, card);
+
+
+
 }
 
 
-void update_cards_played(CardsCollection& cards_played, const int& player, const string& card) {
+void update_cards_played(CardsCollection& cards_played, const int player, const string card) {
     cards_played[static_cast<size_t>(player)].insert(card);
 }
 
-void update_belote_table();
+void update_belote_table(
+    BeloteLookupTable& belote_table,
+    const int          player,
+    const string       card,
+    const string       trump
+) {
+    /*
+    // Only the King and Queen of the trump suit matter for Belote
+    if (suit(card) != trump) {
+        return;                     // not a trump card → nothing to do
+    }
+
+    const string val = value(card);
+
+    // BeloteLookupTable[player][0] = has King of trump
+    // BeloteLookupTable[player][1] = has Queen of trump
+    if (val == "K") {
+        belote_table[static_cast<size_t>(player)][0] = true;
+    }
+    else if (val == "Q") {
+        belote_table[static_cast<size_t>(player)][1] = true;
+    }
+
+    */
+}
 
 void update_master();
 
