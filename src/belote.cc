@@ -21,7 +21,7 @@ string suit(const string card);
 string value(const string card);
 
 // Takes into account current trump
-bool is_stronger(string given, string compared_to, string trump);
+bool is_stronger(const string given, const string compared_to, const string trump);
 
 // Computes the points associated to a card.
 int points(string card, bool is_trump);
@@ -70,9 +70,9 @@ void update_cards_played(CardsCollection& cards_played, const int player, const 
 
 void update_belote_table(BeloteLookupTable& belote_table, const int player, const string card, const string trump);
 
-void update_master();
+void update_highest_cards(string& highest_trump_card, string& highest_led_card, const string card, const string trump);
 
-void update_highest_cards();
+void update_master();
 
 void update_trick_points();
 
@@ -210,7 +210,7 @@ void update_state(
 
     update_belote_table(belote_table, player, card, trump);
 
-
+    update_highest_cards(highest_trump_card, highest_led_card, card, trump);
 
 }
 
@@ -237,12 +237,40 @@ void update_belote_table(
     }
 }
 
-void update_master();
 
-void update_highest_cards();
+
+void update_highest_cards(
+    string& highest_trump_card, 
+    string& highest_led_card, 
+    const string card, 
+    const string trump
+) {
+    if (suit(card) == trump) {
+        if (highest_trump_card.empty() || 
+            is_stronger(card, highest_trump_card, trump)
+        ) {
+            highest_trump_card = card;
+        }
+        return;
+    }
+
+    if (suit(card) == suit(highest_led_card) || highest_led_card.empty()) {
+        if (highest_led_card.empty() || 
+            is_stronger(card, highest_led_card, trump)
+        ) {
+            highest_led_card = card;
+        }
+    }
+}
+
+bool is_stronger(const string given, const string compared_to, const string trump) {
+    
+}
+
 
 void update_trick_points();
 
+void update_master();
 
 
 
