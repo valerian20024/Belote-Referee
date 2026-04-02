@@ -71,10 +71,13 @@ bool is_legal_play(string card, int p);
 /* Helpers and debug */
 void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
-void print_scores(const int& score1, const int& score2, const int& trick_winner, ostream& out);
+void print_scores(const pair<int, int> scores, const int& trick_winner, ostream& out);
 
 void print_final_scores(const int& score1, const int& score2, ostream& out);
 
+void print_belote_assets(const std::array<std::array<bool, 2>, 4>& belote_assets, std::ostream& out);
+
+void print_tricks_won(const std::array<bool, 8>& tricks_won, std::ostream& out);
 
 
 
@@ -87,16 +90,20 @@ bool game(istream& in, ostream& out, ostream& err) {
     int contract_team;
 
     pair<int, int> scores = {};
-    pair<bool, bool> belote_scored = {};
+    array<array<bool, 2>, 4> belote_assets = {};
     
     CardsCollection cards_played;           // By each player
     
     int previous_trick_winner;              // Is going to start the next trick
-    array<bool, 8> tricks_won;              // Tricks which team won which trick (for capot)
+    array<bool, 8> tricks_won = {};              // Tricks which team won which trick (for capot)
 
     (void) scores;
-    (void) belote_scored;
+    //(void) belote_assets;
     
+    print_belote_assets(belote_assets, out);
+    print_tricks_won(tricks_won, out);
+    print_scores(scores, 0, out);
+
     (void) previous_trick_winner;
     (void) tricks_won;
 
@@ -122,7 +129,6 @@ bool game(istream& in, ostream& out, ostream& err) {
 
             int player = current_player(leader, i);
 
-            // call the play function
             play(cards_played, player, card);
         }
     }
@@ -144,6 +150,16 @@ int current_player(int leader, int offset) {
     return (leader + offset) % 4;
 }
 
+// On the first trick, the leader is player 0
+int current_leader(int trick_number, int previous_winner) {
+    return trick_number == 0 ? 0 : previous_winner;
+}
+
+// Insert a card in the right player's set
+void play(CardsCollection& collection, int player, const string& card) {
+    collection[static_cast<size_t>(player)].insert(card);
+}
+
 // Helper function to print the current cards played by each player
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {   
     for (int player = 0; player < 4; ++player) {
@@ -163,18 +179,37 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     }
 }
 
-
-// Insert a card in the right player's set
-void play(CardsCollection& collection, int player, const string& card) {
-    if (player < 0 || player > 3) {
-        cerr << "error in play function" << endl;
-        return;
+// Helper to print current belote assets state
+void print_belote_assets(const array<array<bool, 2>, 4>& assets, ostream& out)
+{
+    out << "=== Belote assets (King/Queen of trump per player) ===" << endl;
+    for (int p = 0; p < 4; ++p) {  //todo dynamically with array size
+        out << "Player " << (p + 1) << ": "
+            << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
+            << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
+            << endl;
     }
-
-    collection[static_cast<size_t>(player)].insert(card);
+    out << "====================================================\n" << endl;
 }
 
-// On the first trick, the leader is player 0
-int current_leader(int trick_number, int previous_winner) {
-    return trick_number == 0 ? 0 : previous_winner;
+// Helper to print which team won each trick (very useful for debugging capot)
+void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
+{
+    out << "=== Tricks won by team ===" << endl;
+    for (int t = 0; t < 8; ++t) {  //todo dynamically with array size
+        out << "Trick " << (t + 1) << ": Team " 
+            << (tricks_won[static_cast<size_t>(t)] ? "1" : "2") 
+            << "\n";
+    }
+    out << "=======================================================\n" << endl;
 }
+
+//todo remove the pretty printing
+void print_scores(const pair<int, int> scores , const int& trick_winner, ostream& out) {
+    out << "=== Scores ===" << endl
+        << scores.first << " " 
+        << scores.second << " " 
+        << trick_winner << endl
+        << "=================" << endl;
+}
+
