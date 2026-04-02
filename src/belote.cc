@@ -110,13 +110,13 @@ void print_tricks_won(const std::array<bool, 8>& tricks_won, std::ostream& out);
 
 
 bool game(istream& in, ostream& out, ostream& err) {
-    string trump;
-    int contract_team;
-    pair<int, int> scores = {};
-    BeloteLookupTable belote_table = {};
-    CardsCollection cards_played;           // By each player
-    int previous_trick_winner;              // Is going to start the next trick
-    array<bool, 8> tricks_won = {};              // Tricks which team won which trick (for capot)
+    string              trump = {};
+    int                 contract_team = {};
+    pair<int, int>      scores = {};
+    BeloteLookupTable   belote_table = {};
+    CardsCollection     cards_played = {};          // By each player
+    int                 previous_trick_winner = {}; // Is going to start the next trick
+    array<bool, 8>      tricks_won = {};            // Tricks which team won which trick (for capot)
     
     in >> trump >> contract_team;
 
@@ -164,7 +164,7 @@ void process_trick(
 
     // Reads each card of the trick
     for (int i = 0; i < 4; i++) {
-        string card;
+        string card = {};
         in >> card;
 
         if (i == 0) led_suit = suit(card);
@@ -241,18 +241,18 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
         }
         out << endl;
     }
-    out << "====================================================" << endl;
+    out << "====================================================\n" << endl;
 }
 
 // Helper to print current belote assets state
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
 {
-    out << "=== Belote assets (King/Queen of trump per player) ===" << endl;
+    out << "=== Belote assets (King/Queen of trump per player) ===\n";
     for (int p = 0; p < 4; ++p) {  //todo dynamically with array size
         out << "Player " << (p + 1) << ": "
             << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
             << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
-            << endl;
+            << "\n";
     }
     out << "====================================================\n" << endl;
 }
@@ -260,7 +260,7 @@ void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
 // Helper to print which team won each trick (very useful for debugging capot)
 void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 {
-    out << "=== Tricks won by team ===" << endl;
+    out << "=== Tricks won by team ===\n";
     for (int t = 0; t < 8; ++t) {  //todo dynamically with array size
         out << "Trick " << (t + 1) << ": Team " 
             << (tricks_won[static_cast<size_t>(t)] ? "1" : "2") 
@@ -271,10 +271,10 @@ void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 
 //todo remove the pretty printing
 void print_scores(const pair<int, int> scores , const int& trick_winner, ostream& out) {
-    out << "=== Scores ===" << endl
+    out << "=== Scores ===\n"
         << scores.first << " " 
         << scores.second << " " 
-        << trick_winner << endl
-        << "=================" << endl;
+        << trick_winner << "\n"
+        << "=================\n" << endl;
 }
 
