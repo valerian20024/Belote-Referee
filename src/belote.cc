@@ -12,7 +12,7 @@ using namespace std;
 
 // Tracks the cards played by each player.
 typedef array<set<string>, 4> CardsCollection;
-
+typedef array<array<bool, 2>, 4> BeloteLookupTable;
 
 // Returns the RHS part of the Card
 string suit(const string& card);
@@ -40,9 +40,34 @@ bool is_master(int player);
 // Returns the current player giving the card
 int current_player(int leader, int offset);
 
-// Add a new card 
-void play(CardsCollection& collection, int player, const string& card);
 
+
+void process_trick(
+    const string& trump,
+    pair<int, int> scores,
+    CardsCollection cards_played,
+    BeloteLookupTable& belote_table,
+    int& previous_trick_winner,
+    array<bool, 8> tricks_won,
+    const int& trick_number,
+    istream& in,
+    ostream& out,
+    ostream& err
+);
+
+// Add a new card 
+void update_state(
+    CardsCollection& collection, 
+    BeloteLookupTable& belote_table,
+    int& master,
+    string& highest_trump_card,
+    string& highest_led_card,
+    int& trick_points,
+    const int& player, 
+    const string& card
+);
+
+void play(CardsCollection& collection, int player, const string& card);
 
 
 
@@ -75,9 +100,11 @@ void print_scores(const pair<int, int> scores, const int& trick_winner, ostream&
 
 void print_final_scores(const int& score1, const int& score2, ostream& out);
 
-void print_belote_assets(const std::array<std::array<bool, 2>, 4>& belote_assets, std::ostream& out);
+void print_belote_assets(const BeloteLookupTable& belote_assets, std::ostream& out);
 
 void print_tricks_won(const std::array<bool, 8>& tricks_won, std::ostream& out);
+
+
 
 
 
@@ -90,17 +117,15 @@ bool game(istream& in, ostream& out, ostream& err) {
     int contract_team;
 
     pair<int, int> scores = {};
-    array<array<bool, 2>, 4> belote_assets = {};
+    BeloteLookupTable belote_table = {};
     
     CardsCollection cards_played;           // By each player
     
     int previous_trick_winner;              // Is going to start the next trick
     array<bool, 8> tricks_won = {};              // Tricks which team won which trick (for capot)
 
-    (void) scores;
-    //(void) belote_assets;
     
-    print_belote_assets(belote_assets, out);
+    print_belote_assets(belote_table, out);
     print_tricks_won(tricks_won, out);
     print_scores(scores, 0, out);
 
@@ -110,33 +135,61 @@ bool game(istream& in, ostream& out, ostream& err) {
     in >> trump >> contract_team;
 
     for (int trick_counter = 0; trick_counter < 3; trick_counter++) {
-        int master;                 // The player currently winning the trick
-        int leader = 0;             // Who started first the trick
-        string led_suit;            // The trick's suit
-        string highest_trump_card;
-        string highest_led_card;
-
-        (void) master;
-        (void) highest_trump_card;
-        (void) highest_led_card;
-
-        // Reads each card of the trick
-        for (int i = 0; i < 4; i++) {
-            string card;
-            in >> card;
-
-            if (i == 0) led_suit = suit(card);
-
-            int player = current_player(leader, i);
-
-            play(cards_played, player, card);
-        }
+        process_trick(
+            trump,
+            scores,
+            cards_played,
+            belote_table,
+            previous_trick_winner,
+            tricks_won,
+            trick_counter,
+            in,
+            out,
+            err
+        );
     }
 
     print_cards_played(cards_played, out);
 
     return true;
 }
+
+void process_trick(
+    const string& trump,
+    pair<int, int> scores,
+    CardsCollection cards_played,
+    BeloteLookupTable& belote_table,
+    int& previous_trick_winner,
+    array<bool, 8> tricks_won,
+    const int& trick_number,
+    istream& in,
+    ostream& out,
+    ostream& err
+) {
+    int master;                 // The player currently winning the trick
+    int leader = 0;             // Who started first the trick
+    string led_suit;            // The trick's suit
+    string highest_trump_card;
+    string highest_led_card;
+
+    (void) master;
+    (void) highest_trump_card;
+    (void) highest_led_card;
+
+    // Reads each card of the trick
+    for (int i = 0; i < 4; i++) {
+        string card;
+        in >> card;
+
+        if (i == 0) led_suit = suit(card);
+
+        int player = current_player(leader, i);
+
+        play(cards_played, player, card);
+    }   
+}
+
+
 
 string suit(const string& card) {
     return string(1, card.back());
@@ -180,7 +233,7 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
 }
 
 // Helper to print current belote assets state
-void print_belote_assets(const array<array<bool, 2>, 4>& assets, ostream& out)
+void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
 {
     out << "=== Belote assets (King/Queen of trump per player) ===" << endl;
     for (int p = 0; p < 4; ++p) {  //todo dynamically with array size
