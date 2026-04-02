@@ -34,8 +34,6 @@ int partner(int player);
 // Returns the team number of a given player
 int team(int player);
 
-// Whether a player is trick master
-bool is_master(int player);
 
 // Returns the current player giving the card
 int current_player(int leader, int offset);
@@ -93,9 +91,9 @@ bool is_legal_play(string card, int p);
 /* Helpers and debug */
 void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
-void print_scores(const pair<int, int> scores, const int& trick_winner, ostream& out);
+void print_scores(const pair<int, int>& scores, const int& trick_winner, ostream& out);
 
-void print_final_scores(const int& score1, const int& score2, ostream& out);
+void print_final_scores(const pair<int, int>& scores, ostream& out);
 
 void print_belote_assets(const BeloteLookupTable& belote_assets, std::ostream& out);
 
@@ -129,12 +127,14 @@ bool game(istream& in, ostream& out, ostream& err) {
             trump,
             trick_counter
         );
+
+        print_scores(scores, previous_trick_winner, out);
     }
 
     print_cards_played(cards_played, out);
     print_belote_assets(belote_table, out);
     print_tricks_won(tricks_won, out);
-    print_scores(scores, 0, out);
+    print_final_scores(scores, out);
 
     return true;
 }
@@ -178,8 +178,38 @@ void process_trick(
             card,
             trump
         );
-    }   
+    }
 }
+
+
+
+
+// Orchestrator for updating each variable
+void update_state(
+    CardsCollection&      cards_played,
+    BeloteLookupTable&    belote_table,
+    int&                  master,
+    string&               highest_trump_card,
+    string&               highest_led_card,
+    int&                  trick_points,
+    const int&            player,
+    string&               card,
+    const string&         trump
+) {
+    cards_played[static_cast<size_t>(player)].insert(card);
+}
+
+
+void update_cards_played();
+
+void update_belote_table();
+
+void update_master();
+
+void update_highest_cards(string& highest_trump_card, string& highest_led_card);
+
+void update_trick_points();
+
 
 
 
@@ -199,33 +229,6 @@ int current_player(int leader, int offset) {
 int current_leader(int trick_number, int previous_winner) {
     return trick_number == 0 ? 0 : previous_winner;
 }
-
-
-
-// Orchestrator for updating each variable
-void update_state(
-    CardsCollection&      cards_played,
-    BeloteLookupTable&    belote_table,
-    int&                  master,
-    string&               highest_trump_card,
-    string&               highest_led_card,
-    int&                  trick_points,
-    const int&            player,
-    string&               card,
-    const string&         trump
-) {
-    cards_played[static_cast<size_t>(player)].insert(card);
-}
-
-void update_cards_played();
-
-void update_belote_table();
-
-void update_master();
-
-void update_highest_cards(string& highest_trump_card, string& highest_led_card);
-
-void update_trick_points();
 
 
 
@@ -279,7 +282,7 @@ void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 }
 
 //todo remove the pretty printing
-void print_scores(const pair<int, int> scores , const int& trick_winner, ostream& out) {
+void print_scores(const pair<int, int>& scores , const int& trick_winner, ostream& out) {
     out << "=== Scores ===\n"
         << scores.first << " " 
         << scores.second << " " 
@@ -287,3 +290,9 @@ void print_scores(const pair<int, int> scores , const int& trick_winner, ostream
         << "=================\n" << endl;
 }
 
+void print_final_scores(const pair<int, int>& scores, ostream& out) {
+    out << "=== Finals ===\n"
+        << scores.first << " " 
+        << scores.second << "\n" 
+        << "=================\n" << endl;
+}
