@@ -24,20 +24,19 @@ string value(const string card);
 bool is_stronger(const string given, const string compared_to, const string trump);
 
 // Computes the points associated to a card.
-int points(string card, bool is_trump);
+int points(const string card, const bool is_trump);
 
 
 
 
 // Returns the partner of a given player
-int partner(int player);
+int partner(const int player);
 
 // Returns the team number of a given player
-int team(int player);
-
+int team(const int player);
 
 // Returns the current player giving the card
-int current_player(int leader, int offset);
+int current_player(const int leader, const int offset);
 
 
 void process_trick(
@@ -101,9 +100,10 @@ void update_master(
     const string    trump
 );
 
-void update_trick_points();
+// Updates the current trick points
+void update_trick_points(int& trick_points, const string card, const string trump);
 
-
+void update_scores(pair<int, int>& scores, const int trick_points, const int winner);
 
 
 void add_points(int team, int points);
@@ -229,7 +229,7 @@ void process_trick(
         );
     }
 
-    // add trick points to the scores
+    update_scores(scores, trick_points, master);
 }
 
 // Orchestrator for updating each variable
@@ -249,22 +249,11 @@ void update_state(
     update_belote_table(belote_table, player, card, trump);
 
     // Updated based on the previous highest cards
-    update_master(
-        master, 
-        player, 
-        card, 
-        highest_trump_card, 
-        highest_led_card, 
-        trump
-    );
+    update_master(master, player, card, highest_trump_card, highest_led_card, trump);
 
-    update_highest_cards(
-        highest_trump_card, 
-        highest_led_card, 
-        card, 
-        trump
-    );
+    update_highest_cards(highest_trump_card, highest_led_card, card, trump);
 
+    update_trick_points(trick_points, card, trump);
 
 
     cout << "Master is: " 
@@ -380,9 +369,6 @@ bool is_stronger_raw(const string given, const string compared_to) {
     return pos_given > pos_compared_to;
 }
 
-
-void update_trick_points();
-
 void update_master(
     int&            master,                // current trick winner (will be updated)
     const int       player,                // player who just played
@@ -403,6 +389,55 @@ void update_master(
         master = player;
 }
 
+void update_trick_points(
+    int&            trickpoints,
+    const string    card,
+    const string    trump
+) {
+    const bool is_trump = suit(card) == trump;
+    int score = points(card, is_trump);
+    trickpoints += score;
+}
+
+// Computes the points associated to a card, depending on whether it is trump or not.
+// Returns 0 for any card that has no point value.
+int points(const string card, const bool is_trump) {
+    if (card.empty())
+        return 0;
+
+    const char val = card.front();
+
+    if (is_trump) {
+        switch (val) {
+            case 'J': return 20;
+            case '9': return 14;
+            case 'A': return 11;
+            case 'T': return 10;
+            case 'K': return  4;
+            case 'Q': return  3;
+            
+            default:  return  0;
+        }
+    } else {
+        switch (val) {
+            case 'A': return 11;
+            case 'T': return 10;
+            case 'K': return  4;
+            case 'Q': return  3;
+            case 'J': return  2;
+            
+            default:  return  0;
+        }
+    }
+}
+
+void update_scores(
+    pair<int, int>& scores, 
+    const int trick_points, 
+    const int winner
+) {
+    return;
+}
 
 //todo  Check for empty strings. Should be more robust and incorporate
 //todo  error management
@@ -414,7 +449,7 @@ string value(const string card) {
     return string(1, card.front());
 }
 
-int current_player(int leader, int offset) {
+int current_player(const int leader, const int offset) {
     return (leader + offset) % 4;
 }
 
