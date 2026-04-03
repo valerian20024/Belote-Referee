@@ -128,15 +128,20 @@ bool is_legal_play(string card, int p);
 
 
 
-/* Helpers and debug */
+
+// Helper function to print the current cards played by each player
 void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
+// Function to print the intermediary scores of both teams and the trick winner.
 void print_scores(const pair<int, int>& scores, const int trick_winner, ostream& out);
 
+// Function to print the final scores of both teams.
 void print_final_scores(const pair<int, int>& scores, ostream& out);
 
+// Helper to print current belote assets state
 void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 
+// Helper to print which team won which trick
 void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out);
 
 
@@ -144,6 +149,8 @@ void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out);
 
 
 bool game(istream& in, ostream& out, ostream& err) {
+    const int MAX_TRICKS = 3;
+
     string              trump = {};
     int                 contract_team = {};
     pair<int, int>      scores = {};
@@ -154,7 +161,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     
     in >> trump >> contract_team;
 
-    for (int trick_counter = 0; trick_counter < 3; trick_counter++) {
+    for (int trick_counter = 0; trick_counter < MAX_TRICKS; trick_counter++) {
         process_trick(
             scores,
             cards_played,
@@ -191,6 +198,8 @@ void process_trick(
     const string            trump,
     const int               trick_number
 ) {
+    const int MAX_CARDS = 4;
+
     int master = -1;            // The player currently winning the trick. Sentinel value.
     int leader = current_leader(trick_number, previous_trick_winner);
     string led_suit = {};            // The trick's suit
@@ -199,7 +208,7 @@ void process_trick(
     int trick_points = 0;
 
     //todo change to idiomatic cin
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < MAX_CARDS; i++) {
         string card;
         in >> card;
 
@@ -357,7 +366,6 @@ bool is_stronger(const string given, const string compared_to, const string trum
     return false;
 }
 
-// Returns true if the first value is stronger when both are trumps
 bool is_stronger_trump(const string given, const string compared_to) {
     const string trump_order = "78QKTA9J";
     size_t pos_given = trump_order.find(given);
@@ -365,7 +373,6 @@ bool is_stronger_trump(const string given, const string compared_to) {
     return pos_given > pos_compared_to;
 }
 
-// Returns true is the first value is stronger in a raw (non-trump) suit
 bool is_stronger_raw(const string given, const string compared_to) {
     const string plain_order = "789JQKTA";
     size_t pos_given = plain_order.find(given);
@@ -421,7 +428,6 @@ int current_leader(const int trick_number, const int previous_winner) {
 
 
 
-// Helper function to print the current cards played by each player
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     out << "=== Cards played by each player so far ===\n";
     for (int player = 0; player < 4; ++player) {
@@ -442,7 +448,6 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     out << "====================================================\n" << endl;
 }
 
-// Helper to print current belote assets state
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
 {
     out << "=== Belote assets (King/Queen of trump per player) ===\n";
@@ -455,7 +460,6 @@ void print_belote_assets(const BeloteLookupTable& assets, ostream& out)
     out << "====================================================\n" << endl;
 }
 
-// Helper to print which team won each trick
 void print_tricks_won(const array<bool, 8>& tricks_won, ostream& out)
 {
     out << "=== Tricks won by team ===\n";
