@@ -103,6 +103,8 @@ void update_master(
 // Updates the current trick points
 void update_trick_points(int& trick_points, const string card, const string trump);
 
+void update_tricks_won(array<bool, 8>& tricks_won, const int master, const int trick_number);
+
 void update_scores(pair<int, int>& scores, const int trick_points, const int winner);
 
 
@@ -231,6 +233,8 @@ void process_trick(
 
     update_scores(scores, trick_points, master);
 
+    update_tricks_won(tricks_won, master, trick_number);
+
     previous_trick_winner = master;
 }
 
@@ -321,7 +325,7 @@ void update_highest_cards(
         return;
     }
 
-    //* First checking for empty strings
+    // First checking for empty strings
     if (highest_led_card.empty() || suit(card) == suit(highest_led_card)) {
         if (highest_led_card.empty() || 
             is_stronger(card, highest_led_card, trump)
@@ -444,6 +448,18 @@ void update_scores(
     winning_team == 0 ? 
         scores.first += trick_points : 
         scores.second += trick_points;
+}
+
+void update_tricks_won(
+    array<bool, 8>& tricks_won, 
+    const int master, 
+    const int trick_number
+) {
+    const int winning_team = team(master);
+
+    winning_team == 0 ?
+        tricks_won[static_cast<size_t>(trick_number)] = true :
+        tricks_won[static_cast<size_t>(trick_number)] = false;
 }
 
 // Returns 0 if player belongs to the first team. Returns 1 otherwise.
