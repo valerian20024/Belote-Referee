@@ -11,7 +11,7 @@
 using namespace std;
 
 // Tracks the cards played by each player.
-typedef array<set<string>, 4> CardsCollection;
+typedef array<vector<string>, 4> CardsCollection;
 typedef array<array<bool, 2>, 4> BeloteLookupTable;
 
 // Returns the RHS part of the Card
@@ -289,7 +289,7 @@ void update_cards_played(
     const int player, 
     const string card
 ) {
-    cards_played[static_cast<size_t>(player)].insert(card);
+    cards_played[static_cast<size_t>(player)].push_back(card);
 }
 
 void update_belote_table(
