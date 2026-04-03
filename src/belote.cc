@@ -86,9 +86,11 @@ void update_highest_cards(
     const string trump
 );
 
-bool is_stronger_trump(const string value1, const string value2);
+// Returns true if rank of given card is stronger. False otherwise.
+bool is_stronger_trump(const string given, const string compared_to);
 
-bool is_stronger_raw(const string value1, const string value2);
+// Returns true if rank of given card is stronger. False otherwise.
+bool is_stronger_raw(const string given, const string compared_to);
 
 void update_master(
     int&            master,
@@ -235,9 +237,16 @@ void update_state(
 
     update_belote_table(belote_table, player, card, trump);
 
-    update_highest_cards(highest_trump_card, highest_led_card, card, trump);
-
     update_master(master, player, card, highest_trump_card, highest_led_card, trump);
+
+    update_highest_cards(
+        highest_trump_card, 
+        highest_led_card, 
+        card, 
+        trump
+    );
+
+    
 }
 
 
@@ -316,21 +325,19 @@ bool is_stronger(const string given, const string compared_to, const string trum
 }
 
 // Returns true if the first value is stronger when both are trumps
-bool is_stronger_trump(const string value1, const string value2) {
-    // First characters of the string are stronger
-    static const string trump_order = "J9ATKQ87";
-    size_t pos1 = trump_order.find(value1);
-    size_t pos2 = trump_order.find(value2);
-    return pos1 < pos2;
+bool is_stronger_trump(const string given, const string compared_to) {
+    const string trump_order = "78QKTA9J";
+    size_t pos_given = trump_order.find(given);
+    size_t pos_compared_to = trump_order.find(compared_to);
+    return pos_given > pos_compared_to;
 }
 
 // Returns true is the first value is stronger in a raw (non-trump) suit
-bool is_stronger_raw(const string value1, const string value2) {
-    // First characters of the string are stronger
-    static const string plain_order = "ATKQJ987";
-    size_t pos1 = plain_order.find(value1);
-    size_t pos2 = plain_order.find(value2);
-    return pos1 < pos2;
+bool is_stronger_raw(const string given, const string compared_to) {
+    const string plain_order = "789JQKTA";
+    size_t pos_given = plain_order.find(given);
+    size_t pos_compared_to = plain_order.find(compared_to);
+    return pos_given > pos_compared_to;
 }
 
 
