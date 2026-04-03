@@ -193,9 +193,9 @@ void process_trick(
 ) {
     int master = -1;            // The player currently winning the trick. Sentinel value.
     int leader = current_leader(trick_number, previous_trick_winner);
-    string led_suit;            // The trick's suit
-    string highest_trump_card;
-    string highest_led_card;
+    string led_suit = {};            // The trick's suit
+    string highest_trump_card = {};
+    string highest_led_card = {};
     int trick_points = 0;
 
     //todo change to idiomatic cin
@@ -219,6 +219,8 @@ void process_trick(
             trump
         );
     }
+
+    // add trick points to the scores
 }
 
 // Orchestrator for updating each variable
@@ -237,7 +239,15 @@ void update_state(
 
     update_belote_table(belote_table, player, card, trump);
 
-    update_master(master, player, card, highest_trump_card, highest_led_card, trump);
+    // Updated based on the previous highest cards
+    update_master(
+        master, 
+        player, 
+        card, 
+        highest_trump_card, 
+        highest_led_card, 
+        trump
+    );
 
     update_highest_cards(
         highest_trump_card, 
@@ -246,11 +256,34 @@ void update_state(
         trump
     );
 
-    
+
+
+    cout << "Master is: " 
+        << master
+        << "\n"
+        << "Player is: "
+        << player
+        << "\n"
+        << "Card is: "
+        << card
+        << "\n"
+        << "Highest cards : \n"
+        << "  trump: " << highest_trump_card
+        << "\n"
+        << "  led: " << highest_led_card
+        << "\n"
+        << "Trump: "
+        << trump
+        << "\n"
+        << endl;
 }
 
 
-void update_cards_played(CardsCollection& cards_played, const int player, const string card) {
+void update_cards_played(
+    CardsCollection& cards_played, 
+    const int player, 
+    const string card
+) {
     cards_played[static_cast<size_t>(player)].insert(card);
 }
 
@@ -350,29 +383,7 @@ void update_master(
     const string    highest_trump_card,    // best trump seen so far this trick
     const string    highest_led_card,      // best card of led suit seen so far
     const string    trump
-) {
-    
-    cout << "Master is: " 
-         << master
-         << "\n"
-         << "Player is: "
-         << player
-         << "\n"
-         << "Card is: "
-         << card
-         << "\n"
-         << "Highest cards : \n"
-         << "  trump: " << highest_trump_card
-         << "\n"
-         << "  led: " << highest_led_card
-         << "\n"
-         << "Trump: "
-         << trump
-         << "\n"
-         << endl;
-    
-
-    
+) {    
     if (master == -1) {
         master = player;
         return;
