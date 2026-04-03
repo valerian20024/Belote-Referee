@@ -256,7 +256,8 @@ void update_state(
     update_trick_points(trick_points, card, trump);
 
 
-    cout << "Master is: " 
+    cout << "---------------\n"
+        << "Master is: " 
         << master
         << "\n"
         << "Player is: "
@@ -268,11 +269,11 @@ void update_state(
         << "Highest cards : \n"
         << "  trump: " << highest_trump_card
         << "\n"
-        << "  led: " << highest_led_card
+        << "  led:   " << highest_led_card
         << "\n"
         << "Trump: "
         << trump
-        << "\n"
+        << "\n---------------\n"
         << endl;
 }
 
@@ -436,7 +437,23 @@ void update_scores(
     const int trick_points, 
     const int winner
 ) {
-    return;
+    const int winning_team = team(winner);
+
+    winning_team == 0 ? 
+        scores.first += trick_points : 
+        scores.second += trick_points;
+}
+
+// Returns 0 if player belongs to the first team. Returns 1 otherwise.
+int team(const int player) {
+    switch (player) {
+        case 0: return 0;
+        case 1: return 1;
+        case 2: return 0;
+        case 3: return 1;
+
+        default: return -1;
+    }
 }
 
 //todo  Check for empty strings. Should be more robust and incorporate
