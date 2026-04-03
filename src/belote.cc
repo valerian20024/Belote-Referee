@@ -230,6 +230,8 @@ void process_trick(
     }
 
     update_scores(scores, trick_points, master);
+
+    previous_trick_winner = master;
 }
 
 // Orchestrator for updating each variable
@@ -528,7 +530,7 @@ void print_scores(const pair<int, int>& scores , const int trick_winner, ostream
     out << "=== Scores ===\n"
         << scores.first << " " 
         << scores.second << " " 
-        << trick_winner << "\n"
+        << trick_winner + 1 << "\n"
         << "=================\n" << endl;
 }
 
