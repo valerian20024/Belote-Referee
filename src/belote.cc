@@ -66,17 +66,38 @@ void update_state(
     const string            trump
 );
 
-void update_cards_played(CardsCollection& cards_played, const int player, const string card);
+void update_cards_played(
+    CardsCollection& cards_played, 
+    const int player, 
+    const string card
+);
 
-void update_belote_table(BeloteLookupTable& belote_table, const int player, const string card, const string trump);
+void update_belote_table(
+    BeloteLookupTable& belote_table, 
+    const int player, 
+    const string card, 
+    const string trump
+);
 
-void update_highest_cards(string& highest_trump_card, string& highest_led_card, const string card, const string trump);
+void update_highest_cards(
+    string& highest_trump_card, 
+    string& highest_led_card, 
+    const string card, 
+    const string trump
+);
 
 bool is_stronger_trump(const string value1, const string value2);
 
 bool is_stronger_raw(const string value1, const string value2);
 
-void update_master();
+void update_master(
+    int&            master,
+    const int       player,
+    const string    card,
+    const string    highest_trump_card,
+    const string    highest_led_card,
+    const string    trump
+);
 
 void update_trick_points();
 
@@ -168,7 +189,7 @@ void process_trick(
     const string            trump,
     const int               trick_number
 ) {
-    int master;                 // The player currently winning the trick
+    int master = -1;            // The player currently winning the trick. Sentinel value.
     int leader = 0;             // Who started first the trick
     string led_suit;            // The trick's suit
     string highest_trump_card;
@@ -216,6 +237,7 @@ void update_state(
 
     update_highest_cards(highest_trump_card, highest_led_card, card, trump);
 
+    update_master(master, player, card, highest_trump_card, highest_led_card, trump);
 }
 
 
@@ -256,7 +278,8 @@ void update_highest_cards(
         return;
     }
 
-    if (suit(card) == suit(highest_led_card) || highest_led_card.empty()) {
+    //* First checking for empty strings
+    if (highest_led_card.empty() || suit(card) == suit(highest_led_card)) {
         if (highest_led_card.empty() || 
             is_stronger(card, highest_led_card, trump)
         ) {
@@ -313,10 +336,51 @@ bool is_stronger_raw(const string value1, const string value2) {
 
 void update_trick_points();
 
-void update_master();
+void update_master(
+    int&            master,                // current trick winner (will be updated)
+    const int       player,                // player who just played
+    const string    card,                  // card just played
+    const string    highest_trump_card,    // best trump seen so far this trick
+    const string    highest_led_card,      // best card of led suit seen so far
+    const string    trump
+) {
+    
+    cout << "Master is: " 
+         << master
+         << "\n"
+         << "Player is: "
+         << player
+         << "\n"
+         << "Card is:"
+         << "\n"
+         << card
+         << "Highest cards : \n"
+         << highest_trump_card
+         << "\n"
+         << highest_led_card
+         << "\n"
+         << "Trump: "
+         << trump
+         << endl;
+    
+
+    
+    if (master == -1) {
+        master = player;
+        return;
+    }
+
+    const string current_best = (!highest_trump_card.empty()) ?
+        highest_trump_card : highest_led_card;
+    
+    if (is_stronger(card, current_best, trump))
+        master = player;
+    
+}
 
 
-
+//todo  Check for empty strings. Should be more robust and incorporate
+//todo  error management
 string suit(const string card) {
     return string(1, card.back());
 }
