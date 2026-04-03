@@ -2,7 +2,7 @@
 #CXXFLAGS := -Weverything -Wno-c++98-compat -g
 
 CXX := g++
-CXXFLAGS := -std=c++14 -Wall -Wextra
+CXXFLAGS := -std=c++14 -Wall -Wextra -g
 
 ARCHIVE := s200825.tar.xz
 

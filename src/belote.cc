@@ -119,7 +119,7 @@ void check_is_inside(int team);  // return team != winning_team
 // Check whether the two team score sum up to 162 / 252 (+ 20 if belote)
 bool complete_sum_of_points();
 
-int current_leader(int trick_number);
+int current_leader(const int trick_number, const int previous_trick_winner);
 
 
 bool is_legal_play(string card, int p);
@@ -190,7 +190,7 @@ void process_trick(
     const int               trick_number
 ) {
     int master = -1;            // The player currently winning the trick. Sentinel value.
-    int leader = 0;             // Who started first the trick
+    int leader = current_leader(trick_number, previous_trick_winner);
     string led_suit;            // The trick's suit
     string highest_trump_card;
     string highest_led_card;
@@ -351,16 +351,17 @@ void update_master(
          << "Player is: "
          << player
          << "\n"
-         << "Card is:"
-         << "\n"
+         << "Card is: "
          << card
-         << "Highest cards : \n"
-         << highest_trump_card
          << "\n"
-         << highest_led_card
+         << "Highest cards : \n"
+         << "  trump: " << highest_trump_card
+         << "\n"
+         << "  led: " << highest_led_card
          << "\n"
          << "Trump: "
          << trump
+         << "\n"
          << endl;
     
 
@@ -375,7 +376,6 @@ void update_master(
     
     if (is_stronger(card, current_best, trump))
         master = player;
-    
 }
 
 
@@ -394,7 +394,7 @@ int current_player(int leader, int offset) {
 }
 
 // On the first trick, the leader is player 0
-int current_leader(int trick_number, int previous_winner) {
+int current_leader(const int trick_number, const int previous_winner) {
     return trick_number == 0 ? 0 : previous_winner;
 }
 
