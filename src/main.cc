@@ -7,10 +7,7 @@
 
 using namespace std;
 
-int main(int argc, const char* argv[]) {
-    (void) argc;
-    (void) argv;
-
+int main() {
     std::string input_data = R"(
     s 2
     Qh 8h Ah 9h
@@ -20,10 +17,5 @@ int main(int argc, const char* argv[]) {
 
     std::istringstream in(input_data);
 
-    bool result = game(in, std::cout, std::cerr);
-
-    std::cout << "\nGame finished with return value: " 
-              << (result ? "true" : "false") << std::endl;
-
-    return 0;
+    return game(in, std::cout, std::cerr);
 } 

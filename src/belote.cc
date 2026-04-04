@@ -9,22 +9,27 @@
 using namespace std;
 
 //todo change back to 8 tricks
+
+// Business logic of the belote game.
 constexpr int NUM_TRICKS    = 3;
 constexpr int NUM_CARDS     = 4;
 constexpr int NUM_PLAYERS   = 4;
 constexpr int NUM_TEAMS     = 2;
 
+// Whether to compile with debug printing.
+constexpr bool DEBUG_MODE = true;
+
 // Tracks the cards played by each player.
 typedef array<vector<string>, NUM_CARDS> CardsCollection;
 typedef array<array<bool, NUM_TEAMS>, NUM_CARDS> BeloteLookupTable;
 
-// Returns the RHS part of the Card
+// Returns the RHS part of the Card.
 string suit(const string card);
 
-// Returns the LHS of the Card
+// Returns the LHS of the Card.
 string value(const string card);
 
-// Takes into account current trump
+// Takes into account current trump.
 bool is_stronger(
     const string given, 
     const string compared_to, 
@@ -37,13 +42,13 @@ int points(const string card, const bool is_trump);
 
 
 
-// Returns the partner of a given player
+// Returns the partner of a given player.
 int partner(const int player);
 
-// Returns the team number of a given player
+// Returns the team number of a given player.
 int team(const int player);
 
-// Returns the current player giving the card
+// Returns the current player giving the card.
 int current_player(const int leader, const int offset);
 
 
@@ -108,7 +113,7 @@ void update_master(
     const string    trump
 );
 
-// Updates the current trick points
+// Updates the current trick points.
 void update_trick_points(
     int&            trick_points, 
     const string    card, 
@@ -130,17 +135,17 @@ void update_scores(
 
 void add_points(int team, int points);
 
-void check_and_award_belotte();  // must be added directly
+void check_and_award_belotte();  // Must be added directly.
 
-// Sets score to 252 or 272 if belote happened
-void check_and_award_capot();  // don't overwrite belote scores!
+// Sets score to 252 or 272 if belote happened.
+void check_and_award_capot();  // Don't overwrite belote scores!
 
 void check_and_award_dix_de_der();
 
 // If is_inside, must zero out the points.
-void check_is_inside(int team);  // return team != winning_team
+void check_is_inside(int team);  // Returns team != winning_team
 
-// Check whether the two team score sum up to 162 / 252 (+ 20 if belote)
+// Checks whether the two team score sum up to 162 / 252 (+ 20 if belote).
 bool complete_sum_of_points();
 
 int current_leader(const int trick_number, const int previous_trick_winner);
@@ -151,7 +156,7 @@ bool is_legal_play(string card, int p);
 
 
 
-// Helper function to print the current cards played by each player
+// Helper function to print the current cards played by each player.
 void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
 // Function to print the intermediary scores of both teams and the trick winner.
@@ -164,10 +169,10 @@ void print_scores(
 // Function to print the final scores of both teams.
 void print_final_scores(const pair<int, int>& scores, ostream& out);
 
-// Helper to print current belote assets state
+// Helper to print current belote assets state.
 void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 
-// Helper to print which team won which trick
+// Helper to print which team won which trick.
 void print_tricks_won(const array<bool, NUM_TRICKS>& tricks_won, ostream& out);
 
 
@@ -200,13 +205,16 @@ bool game(istream& in, ostream& out, ostream& err) {
         );
 
         print_scores(scores, previous_trick_winner, out);
+
     }
 
-    print_cards_played(cards_played, out);
-    print_belote_assets(belote_table, out);
-    print_tricks_won(tricks_won, out);
-    print_final_scores(scores, out);
-
+    if (DEBUG_MODE) {
+        print_cards_played(cards_played, out);
+        print_belote_assets(belote_table, out);
+        print_tricks_won(tricks_won, out);
+        print_final_scores(scores, out);
+    }
+    
     return true;
 }
 
@@ -281,26 +289,16 @@ void update_state(
 
     update_trick_points(trick_points, card, trump);
 
-
-    cout << "---------------\n"
-        << "Master is: " 
-        << master
-        << "\n"
-        << "Player is: "
-        << player
-        << "\n"
-        << "Card is: "
-        << card
-        << "\n"
-        << "Highest cards : \n"
-        << "  trump: " << highest_trump_card
-        << "\n"
-        << "  led:   " << highest_led_card
-        << "\n"
-        << "Trump: "
-        << trump
-        << "\n---------------\n"
-        << endl;
+    if (DEBUG_MODE) {
+        cout << "----- New card -----\n"
+            << "Master is [" << master << "]\n"
+            << "Player [" << player << "] played card [" << card << "]\n"
+            << "Highest cards : \n"
+            << "  trump: [" << highest_trump_card << "]\n"
+            << "  led:   [" << highest_led_card << "]\n"
+            << "---------------------\n"
+            << endl;
+    }
 }
 
 
@@ -509,7 +507,7 @@ int team(const int player) {
 //todo  error management
 string suit(const string card) {
     if (card.empty()) {
-        cerr << "empty string!" << endl;
+        cerr << "ERROR: suit() called on empty string." << endl;
         return "";
     }
     return string(1, card.back());
@@ -517,7 +515,7 @@ string suit(const string card) {
 
 string value(const string card) {
     if (card.empty()) {
-        cerr << "empty string!" << endl;
+        cerr << "ERROR: value() called on empty string." << endl;
         return "";
     }
     return string(1, card.front());
@@ -587,16 +585,29 @@ void print_scores(
     const int               trick_winner, 
     ostream&                out
 ) {
-    out << "=== Scores ===\n"
-        << scores.first << " " 
-        << scores.second << " " 
-        << trick_winner + 1 << "\n"
-        << "=================\n" << endl;
+    if (DEBUG_MODE) {
+        // 0-indexed player and pretty-printing.
+        out << "=== Scores ===\n"
+            << scores.first << " " 
+            << scores.second << " " 
+            << trick_winner + 1 << "\n"
+            << "=================\n" << endl;
+    } else {
+        // Release version.
+        out << scores.first << " " 
+            << scores.second << " " 
+            << (trick_winner + 1) << endl;
+    }
 }
 
 void print_final_scores(const pair<int, int>& scores, ostream& out) {
-    out << "=== Finals ===\n"
-        << scores.first << " " 
-        << scores.second << "\n" 
-        << "=================\n" << endl;
+    if (DEBUG_MODE) {
+        out << "===== Finals =====\n"
+            << scores.first << " " 
+            << scores.second << "\n" 
+            << "==================\n" << endl;
+    } else {
+        out << scores.first << " "
+            << scores.second << endl;
+    }
 }
