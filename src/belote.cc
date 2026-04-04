@@ -52,7 +52,7 @@ int points(const string card, const bool is_trump);
 // Returns the partner of a given player.
 int partner(const int player);
 
-// Returns the team number of a given player.
+// Returns 0 if player belongs to the first team. Returns 1 otherwise.
 int team(const int player);
 
 // Returns the current player giving the card.
@@ -153,7 +153,10 @@ void check_and_award_belote(
 // Sets score to 252 or 272 if belote happened.
 void check_and_award_capot();  // Don't overwrite belote scores!
 
-void check_and_award_dix_de_der();
+void check_and_award_dix_de_der(
+    pair<int, int>&                 scores, 
+    const array<bool, NUM_TRICKS>&  tricks_won
+);
 
 // If is_inside, must zero out the points.
 void check_and_award_dedans();
@@ -219,10 +222,9 @@ bool game(istream& in, ostream& out, ostream& err) {
         );
 
         print_scores(scores, previous_trick_winner, out);
-
     }
 
-    //check_and_award_dix_de_der(scores, tricks_won);
+    check_and_award_dix_de_der(scores, tricks_won);
     //check_and_award_capot(scores, tricks_won, belote_scored);
     //check_and_award_dedans();
 
@@ -317,11 +319,14 @@ void update_state(
         cout << "----- New card -----\n"
             << "Master is [" << master << "]\n"
             << "Player [" << player << "] played card [" << card << "]\n"
-            << "Highest cards : \n"
-            << "  trump: [" << highest_trump_card << "]\n"
-            << "  led:   [" << highest_led_card << "]\n"
+            << "Highest cards : " 
+            << "t: [" << highest_trump_card << "] "
+            << "l: [" << highest_led_card << "]\n"
             << "---------------------\n"
             << endl;
+
+        print_cards_played(cards_played, cout);
+        print_belote_assets(belote_table, cout);
     }
 }
 
@@ -439,9 +444,36 @@ void check_and_award_belote(
     pair<int, int>&      belote_scored,
     const int            player
 ) {
+    if (belote_table[player][0] && belote_table[player][1]) {
+        cout << "BELOOOTEEEE!!!!" << endl;
+        if (team(player) == 0) {
+            belote_scored.first += 1;
+            scores.first += 20;
+        } else if (team(player) == 1) {
+            belote_scored.second += 1;
+            scores.first += 20;
+        }
 
-
+        // Resetting belote state for that player.
+        belote_table[player][0] = false;
+        belote_table[player][1] = false;
+    }
 }
+
+void check_and_award_dix_de_der(
+    pair<int, int>&                 scores, 
+    const array<bool, NUM_TRICKS>&  tricks_won
+) {
+    if (tricks_won.back()) {
+        cout << "DIX DE DER TO FIRST TEAM" << endl;
+        scores.first += 10;
+    } else {
+        cout << "DIX DE DER TO SECOND TEAM" << endl;
+        scores.second += 10;
+    }
+}
+
+
 
 
 
@@ -531,11 +563,6 @@ int points(const string card, const bool is_trump) {
 }
 
 
-
-
-
-
-// Returns 0 if player belongs to the first team. Returns 1 otherwise.
 int team(const int player) {
     switch (player) {
         case 0: return 0;
