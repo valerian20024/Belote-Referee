@@ -21,11 +21,12 @@ constexpr int NUM_CARDS         = 4;
 constexpr int NUM_PLAYERS       = 4;
 constexpr int NUM_TEAMS         = 2;
 constexpr int CAPOT_SCORE       = 252;
+constexpr int TRICK_SCORE       = 162;
 constexpr int BELOTE_SCORE      = 20;
 constexpr int DIX_DE_DER_SCORE  = 10;
 
 // Whether to compile with debug printing.
-constexpr bool DEBUG_MODE = false;
+constexpr bool DEBUG_MODE = true;
 
 
     /*================================================++
@@ -162,7 +163,7 @@ void check_and_award_capot(
 );
 
 // Add 10 points to the team winning the last trick.
-void check_and_award_dix_de_der(
+void award_dix_de_der(
     pair<int, int>&                 scores, 
     const array<bool, NUM_TRICKS>&  tricks_won
 );
@@ -220,6 +221,9 @@ bool game(istream& in, ostream& out, ostream& err) {
     array<bool, NUM_TRICKS>     tricks_won = {};
     
     in >> trump >> contract_team;
+
+    //0-indexing
+    contract_team -= 1;
 
     for (int trick_counter = 0; trick_counter < NUM_TRICKS; trick_counter++) {
         process_trick(
@@ -302,7 +306,7 @@ void process_trick(
     update_tricks_won(tricks_won, master, trick_number);
 
     if (trick_number == NUM_TRICKS - 1)
-        check_and_award_dix_de_der(scores, tricks_won);
+        award_dix_de_der(scores, tricks_won);
 
     previous_trick_winner = master;
 }
@@ -324,9 +328,9 @@ void update_state(
 
     update_belote_table(belote_table, player, card, trump);
 
-    check_and_award_belote(scores, belote_table, belote_scored, player);  //modify the belote_table
+    check_and_award_belote(scores, belote_table, belote_scored, player);
 
-    // Updated based on the previous highest cards
+    // Updated based on the previous highest cards.
     update_master(master, player, card, highest_trump_card, highest_led_card, trump);
 
     update_highest_cards(highest_trump_card, highest_led_card, card, trump);
@@ -460,7 +464,6 @@ void check_and_award_belote(
     const int            player
 ) {
     if (belote_table[player][0] && belote_table[player][1]) {
-        cout << "BELOOOTEEEE!!!!" << endl;
         if (team(player) == 0) {
             belote_scored.first += 1;
             scores.first += BELOTE_SCORE;
@@ -475,23 +478,20 @@ void check_and_award_belote(
     }
 }
 
-void check_and_award_dix_de_der(
+void award_dix_de_der(
     pair<int, int>&                 scores, 
     const array<bool, NUM_TRICKS>&  tricks_won
 ) {
-    if (tricks_won.back()) {
-        cout << "DIX DE DER TO FIRST TEAM" << endl;
+    if (tricks_won.back())
         scores.first += DIX_DE_DER_SCORE;
-    } else {
-        cout << "DIX DE DER TO SECOND TEAM" << endl;
+    else 
         scores.second += DIX_DE_DER_SCORE;
-    }
 }
 
 void check_and_award_capot(
-    pair<int, int>&             scores, 
-    const array<bool, NUM_TRICKS>&    tricks_won, 
-    const pair<int, int>&             belote_scored
+    pair<int, int>&                     scores, 
+    const array<bool, NUM_TRICKS>&      tricks_won, 
+    const pair<int, int>&               belote_scored
 ) {
     const int team0_tricks = count(
         tricks_won.begin(), 
@@ -515,16 +515,16 @@ void check_and_award_dedans(
     bool second_team_won = !first_team_won;
 
     // First team is capot.
-    if (second_team_won && contract_team == 0)
+    if (second_team_won && contract_team == 0) {
         scores.first = 0 + belote_scored.first * BELOTE_SCORE;
-
+        scores.second = TRICK_SCORE + belote_scored.second * BELOTE_SCORE;
+    }
     // Second team is capot.    
-    if (first_team_won && contract_team == 1)
+    if (first_team_won && contract_team == 1) {
         scores.second = 0 + belote_scored.second * BELOTE_SCORE;
+        scores.first = TRICK_SCORE + belote_scored.first * BELOTE_SCORE;
+    }
 }
-
-
-
 
 // Assumes that the compared_to card is the led suit in case of a tie.
 bool is_stronger(

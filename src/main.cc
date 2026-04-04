@@ -20,19 +20,19 @@ int main() {
     Jh Tc Jd 9h
     )";
 
-    std::string test8 = R"(
-    c 1
-    Jd Td 9d Ad
-    Ts Qs Js As
-    Kh Th Ah 9h
-    Kc Jc Tc Ac
-    Jh Qh 9c 7h
-    8s Qc 7s 9s
-    8h 8c 7d Ks
-    8d Qd 7c Kd
+    std::string test9 = R"(
+    s 1
+    Ah Qh Jh 7h
+    Qd Jd 9d Td
+    Kc 8s Tc Ac
+    9h Ts 7s 8h
+    Qc Jc 7c As
+    Th Qs 8c Kd
+    Ks 7d Ad Js
+    Kh 9s 9c 8d
     )";
 
-    std::istringstream in(test1);
+    std::istringstream in(test9);
 
     return game(in, std::cout, std::cerr);
 } 

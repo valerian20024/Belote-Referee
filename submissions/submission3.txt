@@ -1,0 +1,526 @@
+This automated test script will try to check that your submission
+looks like a valid one.
+
+It is by no mean exhaustive, **do your own tests!**
+
+If you see something funky, please tell the TA!
+
+* Initializing the environment...
+debconf: delaying package configuration, since apt-utils is not installed
+* Trying to decompress your archive...
+tar: s200825/belote.cc: time stamp 2026-04-04 19:45:52 is 440.094833284 s in the future
+* Checking presence of required files...
+* Copying our own main.cc into s200825...
+* Checking you are not using class...
+* Trying to compile the application...
+* Running a few tests, to check if your code at least seems OK...
+------------------------------------------------------------
+Testing tests/001-correct...
+OK
+------------------------------------------------------------
+Testing tests/002-correct...
+OK
+------------------------------------------------------------
+Testing tests/003-correct...
+OK
+------------------------------------------------------------
+Testing tests/004-correct...
+OK
+------------------------------------------------------------
+Testing tests/005-correct...
+OK
+------------------------------------------------------------
+Testing tests/006-correct...
+OK
+------------------------------------------------------------
+Testing tests/007-correct...
+OK
+------------------------------------------------------------
+Testing tests/008-correct...
+OK
+------------------------------------------------------------
+Testing tests/009-correct...
+game() output differs from expected one.
+Input game:
+s 1
+Ah Qh Jh 7h
+Qd Jd 9d Td
+Kc 8s Tc Ac
+9h Ts 7s 8h
+Qc Jc 7c As
+Th Qs 8c Kd
+Ks 7d Ad Js
+Kh 9s 9c 8d
+Your game() standard output:
+16 0 1
+16 15 4
+41 15 1
+41 25 2
+57 25 1
+57 42 2
+112 42 1
+112 70 2
+112 70
+Expected game() standard output:
+16 0 1
+16 15 4
+41 15 1
+41 25 2
+57 25 1
+57 42 2
+92 62 1
+92 90 2
+92 90
+Test failed!
+------------------------------------------------------------
+Testing tests/010-correct...
+OK
+------------------------------------------------------------
+Testing tests/011-correct...
+OK
+------------------------------------------------------------
+Testing tests/012-correct...
+OK
+------------------------------------------------------------
+Testing tests/013-correct...
+OK
+------------------------------------------------------------
+Testing tests/014-correct...
+OK
+------------------------------------------------------------
+Testing tests/015-correct...
+OK
+------------------------------------------------------------
+Testing tests/016-correct...
+game() output differs from expected one.
+Input game:
+h 2
+Td Jd 7d Kd
+Qc Tc Kc 7c
+Jh 7h Ah Th
+9s 7s 9c Ks
+9h Kh 9d Ad
+8h Qh 8s Jc
+Ts As Qd Ac
+Js 8c 8d Qs
+Your game() standard output:
+16 0 1
+16 17 2
+16 58 2
+20 58 1
+49 58 1
+69 63 2
+104 63 3
+104 78 2
+162 20
+Expected game() standard output:
+16 0 1
+16 17 2
+16 58 2
+20 58 1
+49 58 1
+49 83 2
+84 83 3
+84 98 2
+84 98
+Test failed!
+------------------------------------------------------------
+Testing tests/017-correct...
+OK
+------------------------------------------------------------
+Testing tests/018-correct...
+game() output differs from expected one.
+Input game:
+s 1
+9c Kc Tc 8c
+7h 9h Jh Qh
+Jc Ac Qs As
+Th 8h Ah Ks
+Kd Ad 8d Jd
+Qd 9d 7s Td
+9s Js 8s 7d
+Ts Kh 7c Qc
+Your game() standard output:
+14 0 3
+14 5 2
+41 5 1
+61 30 4
+78 30 1
+91 30 3
+91 64 4
+91 91 4
+91 91
+Expected game() standard output:
+14 0 3
+14 5 2
+41 5 1
+41 50 4
+58 50 1
+71 50 3
+71 84 4
+71 111 4
+0 182
+Test failed!
+------------------------------------------------------------
+Testing tests/019-correct...
+game() output differs from expected one.
+Input game:
+c 1
+Ah 7h Kh Kc
+8s Ts Ks Js
+Th 8h 9h 7c
+As 8c 7s Qs
+9c Qd Ac Tc
+Kd Ad 8d 7d
+Jh Td 9s Jc
+9d Qh Jd Qc
+Your game() standard output:
+0 19 4
+16 19 1
+16 29 4
+30 29 1
+68 29 1
+68 44 2
+100 44 1
+120 62 4
+120 62
+Expected game() standard output:
+0 19 4
+16 19 1
+16 29 4
+30 29 1
+68 29 1
+68 44 2
+100 44 1
+100 82 4
+100 82
+Test failed!
+------------------------------------------------------------
+Testing tests/020-correct...
+OK
+------------------------------------------------------------
+Testing tests/021-correct...
+OK
+------------------------------------------------------------
+Testing tests/022-correct...
+game() output differs from expected one.
+Input game:
+s 1
+Qh 7h Th Ah
+Jd 9d Td 9s
+9h Ks Js 8h
+Ts 8d Qc As
+Kc Ac 8c 9c
+Kd Ad Jh Tc
+7d Kh 8s Qd
+Qs 7s Jc 7c
+Your game() standard output:
+0 24 4
+26 24 3
+50 24 1
+50 48 4
+65 48 1
+65 75 2
+65 82 4
+85 97 4
+0 182
+Expected game() standard output:
+0 24 4
+26 24 3
+50 24 1
+50 48 4
+65 48 1
+65 75 2
+65 82 4
+65 117 4
+0 182
+Test failed!
+------------------------------------------------------------
+Testing tests/023-correct...
+OK
+------------------------------------------------------------
+Testing tests/024-correct...
+OK
+------------------------------------------------------------
+Testing tests/025-correct...
+OK
+------------------------------------------------------------
+Testing tests/026-correct...
+game() output differs from expected one.
+Input game:
+s 2
+7d Qd Ad 8d
+7s Ts 9s Qs
+Ah Qh Kh 8h
+Js Jd As 8s
+7c 8c Ac Qc
+7h 9h Ks Jh
+9d 9c Kd Tc
+Td Th Jc Kc
+Your game() standard output:
+14 0 3
+41 0 1
+59 0 1
+92 0 1
+106 0 3
+112 0 1
+126 0 3
+162 0 3
+162 0
+Expected game() standard output:
+14 0 3
+41 0 1
+59 0 1
+92 0 1
+106 0 3
+112 0 1
+126 0 3
+162 0 3
+252 0
+Test failed!
+------------------------------------------------------------
+Testing tests/027-correct...
+OK
+------------------------------------------------------------
+Testing tests/028-correct...
+OK
+------------------------------------------------------------
+Testing tests/029-correct...
+OK
+------------------------------------------------------------
+Testing tests/030-correct...
+OK
+------------------------------------------------------------
+Testing tests/031-correct...
+OK
+------------------------------------------------------------
+Testing tests/032-correct...
+OK
+------------------------------------------------------------
+Testing tests/033-correct...
+OK
+------------------------------------------------------------
+Testing tests/034-correct...
+OK
+------------------------------------------------------------
+Testing tests/035-correct...
+OK
+------------------------------------------------------------
+Testing tests/036-correct...
+OK
+------------------------------------------------------------
+Testing tests/037-correct...
+OK
+------------------------------------------------------------
+Testing tests/038-correct...
+OK
+------------------------------------------------------------
+Testing tests/039-correct...
+OK
+------------------------------------------------------------
+Testing tests/040-correct...
+OK
+------------------------------------------------------------
+Testing tests/041-correct...
+OK
+------------------------------------------------------------
+Testing tests/042-correct...
+OK
+------------------------------------------------------------
+Testing tests/043-correct...
+OK
+------------------------------------------------------------
+Testing tests/044-correct...
+OK
+------------------------------------------------------------
+Testing tests/045-correct...
+OK
+------------------------------------------------------------
+Testing tests/046-correct...
+OK
+------------------------------------------------------------
+Testing tests/047-correct...
+OK
+------------------------------------------------------------
+Testing tests/048-correct...
+OK
+------------------------------------------------------------
+Testing tests/049-correct...
+OK
+------------------------------------------------------------
+Testing tests/050-correct...
+OK
+------------------------------------------------------------
+Testing tests/051-correct...
+OK
+------------------------------------------------------------
+Testing tests/052-correct...
+OK
+------------------------------------------------------------
+Testing tests/053-correct...
+game() output differs from expected one.
+Input game:
+d 2
+8d Td Ts Ad
+Ac 8c Qc Tc
+9d Qh 7d 7c
+Qs 8s Js As
+Kh Qd 9h 7h
+Jd 8h Kc 7s
+Kd Ah 9s 9c
+Jc Jh Ks Th
+Your game() standard output:
+0 31 4
+0 55 4
+0 72 4
+16 72 3
+16 79 4
+16 103 4
+36 118 4
+36 146 4
+36 146
+Expected game() standard output:
+0 31 4
+0 55 4
+0 72 4
+16 72 3
+16 79 4
+16 103 4
+16 138 4
+16 166 4
+16 166
+Test failed!
+------------------------------------------------------------
+Testing tests/054-correct...
+OK
+------------------------------------------------------------
+Testing tests/055-correct...
+OK
+------------------------------------------------------------
+Testing tests/056-correct...
+OK
+------------------------------------------------------------
+Testing tests/057-correct...
+OK
+------------------------------------------------------------
+Testing tests/058-correct...
+game() output differs from expected one.
+Input game:
+s 2
+9s Ks 7s Js
+Kh 9h Tc Qh
+Ac Ts Qc Kc
+Jd Qd 7d 8c
+As Th 8s Kd
+Td Jc 8h 9d
+Qs Jh 7c 7h
+Ad Ah 9c 8d
+Your game() standard output:
+0 38 4
+0 55 4
+28 55 1
+28 60 2
+28 85 2
+28 97 2
+48 102 2
+48 134 2
+48 134
+Expected game() standard output:
+0 38 4
+0 55 4
+28 55 1
+28 60 2
+28 85 2
+28 97 2
+28 122 2
+28 154 2
+28 154
+Test failed!
+------------------------------------------------------------
+Testing tests/059-correct...
+OK
+------------------------------------------------------------
+Testing tests/060-correct...
+OK
+------------------------------------------------------------
+Testing tests/061-correct...
+OK
+------------------------------------------------------------
+Testing tests/062-correct...
+OK
+------------------------------------------------------------
+Testing tests/063-correct...
+game() output differs from expected one.
+Input game:
+h 1
+Jc 7c Qc 8c
+As Ks 7s 9h
+Ad Td 7d 9d
+Ah Jh Qh 8h
+Js 9s 8s Jd
+Qs Ts 7h Kd
+Tc 9c Ac Kh
+8d Kc Qd Th
+Your game() standard output:
+5 0 3
+5 29 2
+5 50 2
+39 50 3
+43 50 3
+60 50 1
+80 75 4
+107 75 3
+107 75
+Expected game() standard output:
+5 0 3
+5 29 2
+5 50 2
+39 50 3
+43 50 3
+60 50 1
+60 95 4
+87 95 3
+0 182
+Test failed!
+------------------------------------------------------------
+Testing tests/064-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Ts 7s Ks Qd
+Td 9d 8d Jd
+Ac 7c 9c Jc
+Tc 8c 7d Qc
+Js 8s As Kd
+8h 7h Kh Ah
+Jh Qh 9s Th
+Ad Kc 9h Qs
+Your game() standard output:
+0 17 4
+44 17 3
+57 17 3
+70 17 1
+90 34 4
+105 34 3
+105 49 2
+105 77 2
+162 20
+Expected game() standard output:
+0 17 4
+44 17 3
+57 17 3
+70 17 1
+70 54 4
+85 54 3
+85 69 2
+85 97 2
+85 97
+Test failed!
+------------------------------------------------------------
+Too many errors. Skipping remaining tests.
+
+* Tests finished. Passed 54 over 64.
+
+You submission presents some serious issues.
+Beware, you are likely to get zero mark unless you improve!
+Check the above error messages for improvements to make.
