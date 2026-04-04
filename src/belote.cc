@@ -8,7 +8,11 @@
 
 using namespace std;
 
-//todo change back to 8 tricks
+
+    /*================================================++
+    ||                    GLOBALS                     ||
+    ++================================================*/
+
 
 // Business logic of the belote game.
 constexpr int NUM_TRICKS    = 8;
@@ -17,7 +21,13 @@ constexpr int NUM_PLAYERS   = 4;
 constexpr int NUM_TEAMS     = 2;
 
 // Whether to compile with debug printing.
-constexpr bool DEBUG_MODE = false;
+constexpr bool DEBUG_MODE = true;
+
+
+    /*================================================++
+    ||              FORWARD DECLARATIONS              ||
+    ++================================================*/
+
 
 // Tracks the cards played by each player.
 typedef array<vector<string>, NUM_CARDS> CardsCollection;
@@ -39,9 +49,6 @@ bool is_stronger(
 // Computes the points associated to a card.
 int points(const string card, const bool is_trump);
 
-
-
-
 // Returns the partner of a given player.
 int partner(const int player);
 
@@ -51,24 +58,26 @@ int team(const int player);
 // Returns the current player giving the card.
 int current_player(const int leader, const int offset);
 
-
 void process_trick(
-    pair<int, int>& scores,
-    CardsCollection& cards_played,
-    BeloteLookupTable& belote_table,
-    int& previous_trick_winner,
-    array<bool, NUM_TRICKS>& tricks_won,
-    istream& in,
-    ostream& out,
-    ostream& err,
-    const string trump,
-    const int trick_number
+    pair<int, int>&             scores,
+    CardsCollection&            cards_played,
+    BeloteLookupTable&          belote_table,
+    pair<int, int>&             belote_scored,
+    int&                        previous_trick_winner,
+    array<bool, NUM_TRICKS>&    tricks_won,
+    istream&                    in,
+    ostream&                    out,
+    ostream&                    err,
+    const string                trump,
+    const int                   trick_number
 );
 
-
+// Orchestrator for updating each variable
 void update_state(
+    pair<int, int>&         scores,
     CardsCollection&        cards_played, 
     BeloteLookupTable&      belote_table,
+    pair<int, int>&         belote_scored,
     int&                    master,
     string&                 highest_trump_card,
     string&                 highest_led_card,
@@ -132,10 +141,14 @@ void update_scores(
     const int       winner
 );
 
-
 void add_points(int team, int points);
 
-void check_and_award_belotte();  // Must be added directly.
+void check_and_award_belote(
+    pair<int, int>&      scores,
+    BeloteLookupTable&   belote_table,
+    pair<int, int>&      belote_scored,
+    const int            player
+);
 
 // Sets score to 252 or 272 if belote happened.
 void check_and_award_capot();  // Don't overwrite belote scores!
@@ -143,17 +156,14 @@ void check_and_award_capot();  // Don't overwrite belote scores!
 void check_and_award_dix_de_der();
 
 // If is_inside, must zero out the points.
-void check_is_inside(int team);  // Returns team != winning_team
+void check_and_award_dedans();
 
 // Checks whether the two team score sum up to 162 / 252 (+ 20 if belote).
 bool complete_sum_of_points();
 
 int current_leader(const int trick_number, const int previous_trick_winner);
 
-
 bool is_legal_play(string card, int p);
-
-
 
 // Function to print the intermediary scores of both teams and the trick winner.
 void print_scores(
@@ -175,11 +185,18 @@ void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 void print_tricks_won(const array<bool, NUM_TRICKS>& tricks_won, ostream& out);
 
 
+
+    /*================================================++
+    ||               IMPLEMENTATIONS                  ||
+    ++================================================*/
+
+
 bool game(istream& in, ostream& out, ostream& err) {
     string                      trump = {};
     int                         contract_team = {};
     pair<int, int>              scores = {};
     BeloteLookupTable           belote_table = {};
+    pair<int, int>              belote_scored;
     CardsCollection             cards_played = {};
     int                         previous_trick_winner = {};
     array<bool, NUM_TRICKS>     tricks_won = {};
@@ -191,6 +208,7 @@ bool game(istream& in, ostream& out, ostream& err) {
             scores,
             cards_played,
             belote_table,
+            belote_scored,
             previous_trick_winner,
             tricks_won,
             in,
@@ -203,6 +221,10 @@ bool game(istream& in, ostream& out, ostream& err) {
         print_scores(scores, previous_trick_winner, out);
 
     }
+
+    //check_and_award_dix_de_der(scores, tricks_won);
+    //check_and_award_capot(scores, tricks_won, belote_scored);
+    //check_and_award_dedans();
 
     if (DEBUG_MODE) {
         print_cards_played(cards_played, out);
@@ -218,6 +240,7 @@ void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
+    pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
     istream&                    in,
@@ -233,18 +256,20 @@ void process_trick(
     string highest_led_card = {};
     int trick_points = 0;
 
-    //todo change to idiomatic cin
     for (int i = 0; i < NUM_CARDS; i++) {
         string card;
         in >> card;
 
-        if (i == 0) led_suit = suit(card);
+        if (i == 0) 
+            led_suit = suit(card);
 
         int player = current_player(leader, i);
 
         update_state(
+            scores,
             cards_played, 
             belote_table,
+            belote_scored,
             master,
             highest_trump_card,
             highest_led_card,
@@ -262,10 +287,11 @@ void process_trick(
     previous_trick_winner = master;
 }
 
-// Orchestrator for updating each variable
 void update_state(
+    pair<int, int>&       scores,
     CardsCollection&      cards_played,
     BeloteLookupTable&    belote_table,
+    pair<int, int>&       belote_scored,
     int&                  master,
     string&               highest_trump_card,
     string&               highest_led_card,
@@ -277,6 +303,8 @@ void update_state(
     update_cards_played(cards_played, player, card);
 
     update_belote_table(belote_table, player, card, trump);
+
+    check_and_award_belote(scores, belote_table, belote_scored, player);  //modify the belote_table
 
     // Updated based on the previous highest cards
     update_master(master, player, card, highest_trump_card, highest_led_card, trump);
@@ -338,7 +366,6 @@ void update_highest_cards(
         return;
     }
 
-    // First checking for empty strings
     if (highest_led_card.empty() || suit(card) == suit(highest_led_card)) {
         if (highest_led_card.empty() 
             || is_stronger(card, highest_led_card, trump)
@@ -347,6 +374,76 @@ void update_highest_cards(
         }
     }
 }
+
+void update_master(
+    int&            master,
+    const int       player,
+    const string    card,
+    const string    highest_trump_card,
+    const string    highest_led_card,
+    const string    trump
+) {    
+    if (master == -1) {
+        master = player;
+        return;
+    }
+
+    const string current_best = (!highest_trump_card.empty()) ?
+        highest_trump_card : highest_led_card;
+    
+    if (is_stronger(card, current_best, trump))
+        master = player;
+}
+
+void update_trick_points(
+    int&            trickpoints,
+    const string    card,
+    const string    trump
+) {
+    const bool is_trump = suit(card) == trump;
+    int score = points(card, is_trump);
+    trickpoints += score;
+}
+
+
+void update_scores(
+    pair<int, int>& scores, 
+    const int       trick_points, 
+    const int       winner
+) {
+    const int winning_team = team(winner);
+
+    if (winning_team == 0) 
+        scores.first += trick_points;
+    else
+        scores.second += trick_points;
+}
+
+void update_tricks_won(
+    array<bool, NUM_TRICKS>& tricks_won, 
+    const int                master, 
+    const int                trick_number
+) {
+    const int winning_team = team(master);
+
+    if (winning_team == 0)
+        tricks_won[static_cast<size_t>(trick_number)] = true;
+    else
+        tricks_won[static_cast<size_t>(trick_number)] = false;
+}
+
+
+void check_and_award_belote(
+    pair<int, int>&      scores,
+    BeloteLookupTable&   belote_table,
+    pair<int, int>&      belote_scored,
+    const int            player
+) {
+
+
+}
+
+
 
 // Assumes that the compared_to card is the led suit in case of a tie.
 bool is_stronger(
@@ -399,37 +496,9 @@ bool is_stronger_raw(
     return pos_given > pos_compared_to;
 }
 
-void update_master(
-    int&            master,
-    const int       player,
-    const string    card,
-    const string    highest_trump_card,
-    const string    highest_led_card,
-    const string    trump
-) {    
-    if (master == -1) {
-        master = player;
-        return;
-    }
 
-    const string current_best = (!highest_trump_card.empty()) ?
-        highest_trump_card : highest_led_card;
-    
-    if (is_stronger(card, current_best, trump))
-        master = player;
-}
-
-void update_trick_points(
-    int&            trickpoints,
-    const string    card,
-    const string    trump
-) {
-    const bool is_trump = suit(card) == trump;
-    int score = points(card, is_trump);
-    trickpoints += score;
-}
-
-// Computes the points associated to a card, depending on whether it is trump or not.
+// Computes the points associated to a card, depending on whether it is trump
+// or not.
 // Returns 0 for any card that has no point value.
 int points(const string card, const bool is_trump) {
     if (card.empty())
@@ -461,31 +530,10 @@ int points(const string card, const bool is_trump) {
     }
 }
 
-void update_scores(
-    pair<int, int>& scores, 
-    const int       trick_points, 
-    const int       winner
-) {
-    const int winning_team = team(winner);
 
-    if (winning_team == 0) 
-        scores.first += trick_points;
-    else
-        scores.second += trick_points;
-}
 
-void update_tricks_won(
-    array<bool, NUM_TRICKS>& tricks_won, 
-    const int                master, 
-    const int                trick_number
-) {
-    const int winning_team = team(master);
 
-    if (winning_team == 0)
-        tricks_won[static_cast<size_t>(trick_number)] = true;
-    else
-        tricks_won[static_cast<size_t>(trick_number)] = false;
-}
+
 
 // Returns 0 if player belongs to the first team. Returns 1 otherwise.
 int team(const int player) {
@@ -527,7 +575,37 @@ int current_leader(const int trick_number, const int previous_winner) {
 
 
 
+void print_scores(
+    const pair<int, int>&   scores, 
+    const int               trick_winner, 
+    ostream&                out
+) {
+    if (DEBUG_MODE) {
+        // 0-indexed player and pretty-printing.
+        out << "=== Scores ===\n"
+            << scores.first << " " 
+            << scores.second << " " 
+            << trick_winner << "\n"
+            << "=================\n" << endl;
+    } else {
+        // Release version.
+        out << scores.first << " " 
+            << scores.second << " " 
+            << trick_winner + 1 << endl;
+    }
+}
 
+void print_final_scores(const pair<int, int>& scores, ostream& out) {
+    if (DEBUG_MODE) {
+        out << "===== Finals =====\n"
+            << scores.first << " " 
+            << scores.second << "\n" 
+            << "==================\n" << endl;
+    } else {
+        out << scores.first << " "
+            << scores.second << endl;
+    }
+}
 
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     out << "=== Cards played by each player so far ===\n";
@@ -571,37 +649,4 @@ void print_tricks_won(
             << "\n";
     }
     out << "=======================================================\n" << endl;
-}
-
-//todo remove the pretty printing
-void print_scores(
-    const pair<int, int>&   scores, 
-    const int               trick_winner, 
-    ostream&                out
-) {
-    if (DEBUG_MODE) {
-        // 0-indexed player and pretty-printing.
-        out << "=== Scores ===\n"
-            << scores.first << " " 
-            << scores.second << " " 
-            << trick_winner << "\n"
-            << "=================\n" << endl;
-    } else {
-        // Release version.
-        out << scores.first << " " 
-            << scores.second << " " 
-            << trick_winner + 1 << endl;
-    }
-}
-
-void print_final_scores(const pair<int, int>& scores, ostream& out) {
-    if (DEBUG_MODE) {
-        out << "===== Finals =====\n"
-            << scores.first << " " 
-            << scores.second << "\n" 
-            << "==================\n" << endl;
-    } else {
-        out << scores.first << " "
-            << scores.second << endl;
-    }
 }
