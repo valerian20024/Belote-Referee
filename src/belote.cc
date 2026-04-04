@@ -11,7 +11,7 @@ using namespace std;
 //todo change back to 8 tricks
 
 // Business logic of the belote game.
-constexpr int NUM_TRICKS    = 3;
+constexpr int NUM_TRICKS    = 8;
 constexpr int NUM_CARDS     = 4;
 constexpr int NUM_PLAYERS   = 4;
 constexpr int NUM_TEAMS     = 2;
