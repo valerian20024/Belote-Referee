@@ -1,0 +1,15 @@
+This automated test script will try to check that your submission
+looks like a valid one.
+
+It is by no mean exhaustive, **do your own tests!**
+
+If you see something funky, please tell the TA!
+
+* Initializing the environment...
+debconf: delaying package configuration, since apt-utils is not installed
+* Trying to decompress your archive...
+tar: s200825/src/belote.cc: time stamp 2026-04-04 11:34:35 is 167.118089171 s in the future
+* Checking presence of required files...
+Error: could not find "s200825/belote.cc".
+This is a fatal error. Aborting...
+Beware! You will get zero mark unless you improve.

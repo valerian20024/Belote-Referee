@@ -17,7 +17,7 @@ constexpr int NUM_PLAYERS   = 4;
 constexpr int NUM_TEAMS     = 2;
 
 // Whether to compile with debug printing.
-constexpr bool DEBUG_MODE = true;
+constexpr bool DEBUG_MODE = false;
 
 // Tracks the cards played by each player.
 typedef array<vector<string>, NUM_CARDS> CardsCollection;
@@ -155,16 +155,15 @@ bool is_legal_play(string card, int p);
 
 
 
-
-// Helper function to print the current cards played by each player.
-void print_cards_played(const CardsCollection& cards_played, ostream& out);
-
 // Function to print the intermediary scores of both teams and the trick winner.
 void print_scores(
     const pair<int, int>&   scores, 
     const int               trick_winner, 
     ostream&                out
 );
+
+// Helper function to print the current cards played by each player.
+void print_cards_played(const CardsCollection& cards_played, ostream& out);
 
 // Function to print the final scores of both teams.
 void print_final_scores(const pair<int, int>& scores, ostream& out);
@@ -174,9 +173,6 @@ void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 
 // Helper to print which team won which trick.
 void print_tricks_won(const array<bool, NUM_TRICKS>& tricks_won, ostream& out);
-
-
-
 
 
 bool game(istream& in, ostream& out, ostream& err) {
@@ -503,8 +499,6 @@ int team(const int player) {
     }
 }
 
-//todo  Check for empty strings. Should be more robust and incorporate
-//todo  error management
 string suit(const string card) {
     if (card.empty()) {
         cerr << "ERROR: suit() called on empty string." << endl;
@@ -557,7 +551,7 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
 
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out) {
     out << "=== Belote assets (King/Queen of trump per player) ===\n";
-    for (int p = 0; p < NUM_PLAYERS; ++p) {  //todo dynamically with array size
+    for (int p = 0; p < NUM_PLAYERS; ++p) {
         out << "Player " << (p + 1) << ": "
             << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
             << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
@@ -571,7 +565,7 @@ void print_tricks_won(
     ostream&                        out
 ) {
     out << "=== Tricks won by team ===\n";
-    for (int t = 0; t < NUM_TRICKS; ++t) {  //todo dynamically with array size
+    for (int t = 0; t < NUM_TRICKS; ++t) {
         out << "Trick " << (t + 1) << ": Team " 
             << (tricks_won[static_cast<size_t>(t)] ? "1" : "2") 
             << "\n";
@@ -590,13 +584,13 @@ void print_scores(
         out << "=== Scores ===\n"
             << scores.first << " " 
             << scores.second << " " 
-            << trick_winner + 1 << "\n"
+            << trick_winner << "\n"
             << "=================\n" << endl;
     } else {
         // Release version.
         out << scores.first << " " 
             << scores.second << " " 
-            << (trick_winner + 1) << endl;
+            << trick_winner + 1 << endl;
     }
 }
 
