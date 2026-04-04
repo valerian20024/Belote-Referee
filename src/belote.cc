@@ -25,7 +25,7 @@ constexpr int BELOTE_SCORE      = 20;
 constexpr int DIX_DE_DER_SCORE  = 10;
 
 // Whether to compile with debug printing.
-constexpr bool DEBUG_MODE = true;
+constexpr bool DEBUG_MODE = false;
 
 
     /*================================================++
@@ -154,27 +154,35 @@ void check_and_award_belote(
     const int            player
 );
 
-// Sets score to 252 or 272 if belote happened.
+// Sets score to 252 + belote scoring.
 void check_and_award_capot(
     pair<int, int>&                     scores, 
     const array<bool, NUM_TRICKS>&      tricks_won, 
     const pair<int, int>&               belote_scored
 );
 
+// Add 10 points to the team winning the last trick.
 void check_and_award_dix_de_der(
     pair<int, int>&                 scores, 
     const array<bool, NUM_TRICKS>&  tricks_won
 );
 
-// If is_inside, must zero out the points.
-void check_and_award_dedans();
+// Zeros out the points of the team not making the contract + belote scoring.
+void check_and_award_dedans(
+    pair<int, int>&         scores, 
+    const pair<int, int>&   belote_scored,
+    const int               contract_team
+);
 
-// Checks whether the two team score sum up to 162 / 252 (+ 20 if belote).
-bool complete_sum_of_points();
-
+// Compute the current leader of the trick
 int current_leader(const int trick_number, const int previous_trick_winner);
 
-bool is_legal_play(string card, int p);
+// Checks whether a given card can be played by a player
+bool is_legal_play(
+    const CardsCollection&  cards_played, 
+    const string            card, 
+    const int               player
+);
 
 // Function to print the intermediary scores of both teams and the trick winner.
 void print_scores(
@@ -194,7 +202,6 @@ void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 
 // Helper to print which team won which trick.
 void print_tricks_won(const array<bool, NUM_TRICKS>& tricks_won, ostream& out);
-
 
 
     /*================================================++
@@ -232,15 +239,15 @@ bool game(istream& in, ostream& out, ostream& err) {
         print_scores(scores, previous_trick_winner, out);
     }
 
-    check_and_award_dix_de_der(scores, tricks_won);
     check_and_award_capot(scores, tricks_won, belote_scored);
-    //check_and_award_dedans();
+    check_and_award_dedans(scores, belote_scored, contract_team);
+
+    print_final_scores(scores, out);
 
     if (DEBUG_MODE) {
         print_cards_played(cards_played, out);
         print_belote_assets(belote_table, out);
-        print_tricks_won(tricks_won, out);
-        print_final_scores(scores, out);
+        print_tricks_won(tricks_won, out);    
     }
     
     return true;
@@ -294,6 +301,9 @@ void process_trick(
 
     update_tricks_won(tricks_won, master, trick_number);
 
+    if (trick_number == NUM_TRICKS - 1)
+        check_and_award_dix_de_der(scores, tricks_won);
+
     previous_trick_winner = master;
 }
 
@@ -337,7 +347,6 @@ void update_state(
         print_belote_assets(belote_table, cout);
     }
 }
-
 
 void update_cards_played(
     CardsCollection&    cards_played, 
@@ -496,6 +505,24 @@ void check_and_award_capot(
     if (team1_tricks == NUM_TRICKS)
         scores.second = CAPOT_SCORE + belote_scored.second * BELOTE_SCORE;
 }
+
+void check_and_award_dedans(
+    pair<int, int>&         scores, 
+    const pair<int, int>&   belote_scored,
+    const int               contract_team
+) {
+    bool first_team_won = scores.first >= scores.second;
+    bool second_team_won = !first_team_won;
+
+    // First team is capot.
+    if (second_team_won && contract_team == 0)
+        scores.first = 0 + belote_scored.first * BELOTE_SCORE;
+
+    // Second team is capot.    
+    if (first_team_won && contract_team == 1)
+        scores.second = 0 + belote_scored.second * BELOTE_SCORE;
+}
+
 
 
 

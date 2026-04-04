@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-    std::string input_data = R"(
+    std::string test1 = R"(
     d 2
     Ac Qc Kc 7c
     8c Jc 9c 7d
@@ -20,7 +20,7 @@ int main() {
     Jh Tc Jd 9h
     )";
 
-    std::string test_8 = R"(
+    std::string test8 = R"(
     c 1
     Jd Td 9d Ad
     Ts Qs Js As
@@ -32,7 +32,7 @@ int main() {
     8d Qd 7c Kd
     )";
 
-    std::istringstream in(test_8);
+    std::istringstream in(test1);
 
     return game(in, std::cout, std::cerr);
 } 
