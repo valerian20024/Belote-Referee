@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 #include <utility>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,10 +16,13 @@ using namespace std;
 
 
 // Business logic of the belote game.
-constexpr int NUM_TRICKS    = 8;
-constexpr int NUM_CARDS     = 4;
-constexpr int NUM_PLAYERS   = 4;
-constexpr int NUM_TEAMS     = 2;
+constexpr int NUM_TRICKS        = 8;
+constexpr int NUM_CARDS         = 4;
+constexpr int NUM_PLAYERS       = 4;
+constexpr int NUM_TEAMS         = 2;
+constexpr int CAPOT_SCORE       = 252;
+constexpr int BELOTE_SCORE      = 20;
+constexpr int DIX_DE_DER_SCORE  = 10;
 
 // Whether to compile with debug printing.
 constexpr bool DEBUG_MODE = true;
@@ -151,7 +155,11 @@ void check_and_award_belote(
 );
 
 // Sets score to 252 or 272 if belote happened.
-void check_and_award_capot();  // Don't overwrite belote scores!
+void check_and_award_capot(
+    pair<int, int>&                     scores, 
+    const array<bool, NUM_TRICKS>&      tricks_won, 
+    const pair<int, int>&               belote_scored
+);
 
 void check_and_award_dix_de_der(
     pair<int, int>&                 scores, 
@@ -225,7 +233,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     }
 
     check_and_award_dix_de_der(scores, tricks_won);
-    //check_and_award_capot(scores, tricks_won, belote_scored);
+    check_and_award_capot(scores, tricks_won, belote_scored);
     //check_and_award_dedans();
 
     if (DEBUG_MODE) {
@@ -410,7 +418,6 @@ void update_trick_points(
     trickpoints += score;
 }
 
-
 void update_scores(
     pair<int, int>& scores, 
     const int       trick_points, 
@@ -437,7 +444,6 @@ void update_tricks_won(
         tricks_won[static_cast<size_t>(trick_number)] = false;
 }
 
-
 void check_and_award_belote(
     pair<int, int>&      scores,
     BeloteLookupTable&   belote_table,
@@ -448,10 +454,10 @@ void check_and_award_belote(
         cout << "BELOOOTEEEE!!!!" << endl;
         if (team(player) == 0) {
             belote_scored.first += 1;
-            scores.first += 20;
+            scores.first += BELOTE_SCORE;
         } else if (team(player) == 1) {
             belote_scored.second += 1;
-            scores.first += 20;
+            scores.first += BELOTE_SCORE;
         }
 
         // Resetting belote state for that player.
@@ -466,14 +472,30 @@ void check_and_award_dix_de_der(
 ) {
     if (tricks_won.back()) {
         cout << "DIX DE DER TO FIRST TEAM" << endl;
-        scores.first += 10;
+        scores.first += DIX_DE_DER_SCORE;
     } else {
         cout << "DIX DE DER TO SECOND TEAM" << endl;
-        scores.second += 10;
+        scores.second += DIX_DE_DER_SCORE;
     }
 }
 
+void check_and_award_capot(
+    pair<int, int>&             scores, 
+    const array<bool, NUM_TRICKS>&    tricks_won, 
+    const pair<int, int>&             belote_scored
+) {
+    const int team0_tricks = count(
+        tricks_won.begin(), 
+        tricks_won.end(), 
+        true
+    );
+    const int team1_tricks = NUM_TRICKS - team0_tricks;
 
+    if (team0_tricks == NUM_TRICKS)
+        scores.first = CAPOT_SCORE + belote_scored.first * BELOTE_SCORE;
+    if (team1_tricks == NUM_TRICKS)
+        scores.second = CAPOT_SCORE + belote_scored.second * BELOTE_SCORE;
+}
 
 
 
