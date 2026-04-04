@@ -3,8 +3,6 @@
 
 #include "belote.hh"
 
-
-
 using namespace std;
 
 int main() {

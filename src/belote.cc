@@ -10,6 +10,17 @@
 using namespace std;
 
 
+
+// Whether to compile with debug printing.
+constexpr bool DEBUG_MODE = 
+#ifdef DEBUG
+    true;
+#else
+    false;
+#endif
+
+
+
     /*================================================++
     ||                    GLOBALS                     ||
     ++================================================*/
@@ -25,8 +36,6 @@ constexpr int TRICK_SCORE       = 162;
 constexpr int BELOTE_SCORE      = 20;
 constexpr int DIX_DE_DER_SCORE  = 10;
 
-// Whether to compile with debug printing.
-constexpr bool DEBUG_MODE = true;
 
 
     /*================================================++
@@ -469,7 +478,7 @@ void check_and_award_belote(
             scores.first += BELOTE_SCORE;
         } else if (team(player) == 1) {
             belote_scored.second += 1;
-            scores.first += BELOTE_SCORE;
+            scores.second += BELOTE_SCORE;
         }
 
         // Resetting belote state for that player.
