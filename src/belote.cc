@@ -4,19 +4,19 @@
 #include <sstream>
 #include <vector>
 #include <array>
-#include <set>
-#include <utility>   // std::pair
-#include <cstdint>
+#include <utility>
 
 using namespace std;
 
-constexpr int NUM_TRICKS    = 8;
+//todo change back to 8 tricks
+constexpr int NUM_TRICKS    = 3;
 constexpr int NUM_CARDS     = 4;
 constexpr int NUM_PLAYERS   = 4;
+constexpr int NUM_TEAMS     = 2;
 
 // Tracks the cards played by each player.
 typedef array<vector<string>, NUM_CARDS> CardsCollection;
-typedef array<array<bool, 2>, NUM_CARDS> BeloteLookupTable;
+typedef array<array<bool, NUM_TEAMS>, NUM_CARDS> BeloteLookupTable;
 
 // Returns the RHS part of the Card
 string suit(const string card);
@@ -323,11 +323,10 @@ void update_belote_table(
 
     const string val = value(card);
 
-    if (val == "K") {
+    if (val == "K")
         belote_table[static_cast<size_t>(player)][0] = true;
-    } else if (val == "Q") {
+    else if (val == "Q")
         belote_table[static_cast<size_t>(player)][1] = true;
-    }
 }
 
 void update_highest_cards(
@@ -337,8 +336,8 @@ void update_highest_cards(
     const string    trump
 ) {
     if (suit(card) == trump) {
-        if (highest_trump_card.empty() || 
-            is_stronger(card, highest_trump_card, trump)
+        if (highest_trump_card.empty() 
+            || is_stronger(card, highest_trump_card, trump)
         ) {
             highest_trump_card = card;
         }
@@ -347,8 +346,8 @@ void update_highest_cards(
 
     // First checking for empty strings
     if (highest_led_card.empty() || suit(card) == suit(highest_led_card)) {
-        if (highest_led_card.empty() || 
-            is_stronger(card, highest_led_card, trump)
+        if (highest_led_card.empty() 
+            || is_stronger(card, highest_led_card, trump)
         ) {
             highest_led_card = card;
         }
@@ -475,8 +474,9 @@ void update_scores(
 ) {
     const int winning_team = team(winner);
 
-    winning_team == 0 ? 
-        scores.first += trick_points : 
+    if (winning_team == 0) 
+        scores.first += trick_points;
+    else
         scores.second += trick_points;
 }
 
@@ -487,8 +487,9 @@ void update_tricks_won(
 ) {
     const int winning_team = team(master);
 
-    winning_team == 0 ?
-        tricks_won[static_cast<size_t>(trick_number)] = true :
+    if (winning_team == 0)
+        tricks_won[static_cast<size_t>(trick_number)] = true;
+    else
         tricks_won[static_cast<size_t>(trick_number)] = false;
 }
 
@@ -507,15 +508,23 @@ int team(const int player) {
 //todo  Check for empty strings. Should be more robust and incorporate
 //todo  error management
 string suit(const string card) {
+    if (card.empty()) {
+        cerr << "empty string!" << endl;
+        return "";
+    }
     return string(1, card.back());
 }
 
 string value(const string card) {
+    if (card.empty()) {
+        cerr << "empty string!" << endl;
+        return "";
+    }
     return string(1, card.front());
 }
 
 int current_player(const int leader, const int offset) {
-    return (leader + offset) % 4;
+    return (leader + offset) % NUM_PLAYERS;
 }
 
 // On the first trick, the leader is player 0
@@ -530,7 +539,7 @@ int current_leader(const int trick_number, const int previous_winner) {
 
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     out << "=== Cards played by each player so far ===\n";
-    for (int player = 0; player < 4; ++player) {
+    for (int player = 0; player < NUM_PLAYERS; ++player) {
         out << "Player " << (player + 1) << ": ";
         
         if (cards_played[static_cast<size_t>(player)].empty()) {
@@ -550,7 +559,7 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
 
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out) {
     out << "=== Belote assets (King/Queen of trump per player) ===\n";
-    for (int p = 0; p < 4; ++p) {  //todo dynamically with array size
+    for (int p = 0; p < NUM_PLAYERS; ++p) {  //todo dynamically with array size
         out << "Player " << (p + 1) << ": "
             << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
             << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
