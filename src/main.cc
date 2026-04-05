@@ -42,7 +42,19 @@ int main() {
     Td Th Jc Kc
     )";
 
-    istringstream in(test26);
+    string test71 = R"(
+    h 2
+    8s 7s Qs 9s
+    Js Ts Jh As
+    9d Ad Td 7d
+    Qc Tc 7c Jc
+    Ah 9h Kh Qh
+    Qd 8d Th 7h
+    Kc Ac 8h 9c
+    Jd Kd 8c Ks
+    )";
+
+    istringstream in(test71);
 
     return game(in, cout, cerr);
 } 

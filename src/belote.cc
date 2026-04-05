@@ -520,19 +520,42 @@ void check_and_award_dedans(
     const pair<int, int>&   belote_scored,
     const int               contract_team
 ) {
+
+
+    /*
     bool first_team_won = scores.first >= scores.second;
     bool second_team_won = !first_team_won;
 
-    // First team is capot.
+    
     if (second_team_won && contract_team == 0) {
         scores.first = 0 + belote_scored.first * BELOTE_SCORE;
         scores.second = TRICK_SCORE + belote_scored.second * BELOTE_SCORE;
     }
-    // Second team is capot.    
+    // Second team is inside.    
     if (first_team_won && contract_team == 1) {
         scores.second = 0 + belote_scored.second * BELOTE_SCORE;
         scores.first = TRICK_SCORE + belote_scored.first * BELOTE_SCORE;
     }
+    */
+
+    bool contract_ok = {};
+    // First team is inside.
+    if (contract_team == 0) {
+        contract_ok = scores.first >= scores.second;
+        if (!contract_ok) {
+            scores.first = 0 + belote_scored.first * BELOTE_SCORE;
+            scores.second = TRICK_SCORE + belote_scored.second * BELOTE_SCORE;
+        }
+    } 
+    // Second team is inside.    
+    else if (contract_team == 1) {
+        contract_ok = scores.second >= scores.first;
+        if (!contract_ok) {
+            scores.second = 0 + belote_scored.second * BELOTE_SCORE;
+            scores.first = TRICK_SCORE + belote_scored.first * BELOTE_SCORE;
+        }
+    }
+
 }
 
 // Assumes that the compared_to card is the led suit in case of a tie.
