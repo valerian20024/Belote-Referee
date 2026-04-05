@@ -37,7 +37,6 @@ constexpr int BELOTE_SCORE      = 20;
 constexpr int DIX_DE_DER_SCORE  = 10;
 
 
-
     /*================================================++
     ||              FORWARD DECLARATIONS              ||
     ++================================================*/
@@ -72,6 +71,7 @@ int team(const int player);
 // Returns the current player giving the card.
 int current_player(const int leader, const int offset);
 
+// Orchestrator for processing one trick.
 void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
@@ -86,7 +86,7 @@ void process_trick(
     const int                   trick_number
 );
 
-// Orchestrator for updating each variable
+// Orchestrator for updating each variable.
 void update_state(
     pair<int, int>&         scores,
     CardsCollection&        cards_played, 
@@ -252,8 +252,8 @@ bool game(istream& in, ostream& out, ostream& err) {
         print_scores(scores, previous_trick_winner, out);
     }
 
-    check_and_award_capot(scores, tricks_won, belote_scored);
     check_and_award_dedans(scores, belote_scored, contract_team);
+    check_and_award_capot(scores, tricks_won, belote_scored);
 
     print_final_scores(scores, out);
 
@@ -620,7 +620,6 @@ int points(const string card, const bool is_trump) {
     }
 }
 
-
 int team(const int player) {
     switch (player) {
         case 0: return 0;
@@ -656,9 +655,6 @@ int current_player(const int leader, const int offset) {
 int current_leader(const int trick_number, const int previous_winner) {
     return trick_number == 0 ? 0 : previous_winner;
 }
-
-
-
 
 void print_scores(
     const pair<int, int>&   scores, 

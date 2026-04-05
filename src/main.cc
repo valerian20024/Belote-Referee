@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-    std::string test1 = R"(
+    string test1 = R"(
     d 2
     Ac Qc Kc 7c
     8c Jc 9c 7d
@@ -18,7 +18,7 @@ int main() {
     Jh Tc Jd 9h
     )";
 
-    std::string test9 = R"(
+    string test9 = R"(
     s 1
     Ah Qh Jh 7h
     Qd Jd 9d Td
@@ -30,7 +30,19 @@ int main() {
     Kh 9s 9c 8d
     )";
 
-    std::istringstream in(test9);
+    string test26 = R"(
+    s 2
+    7d Qd Ad 8d
+    7s Ts 9s Qs
+    Ah Qh Kh 8h
+    Js Jd As 8s
+    7c 8c Ac Qc
+    7h 9h Ks Jh
+    9d 9c Kd Tc
+    Td Th Jc Kc
+    )";
 
-    return game(in, std::cout, std::cerr);
+    istringstream in(test26);
+
+    return game(in, cout, cerr);
 } 
