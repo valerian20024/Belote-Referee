@@ -28,6 +28,7 @@ constexpr int NUM_TRICKS        = 8;
 constexpr int NUM_CARDS         = 4;
 constexpr int NUM_PLAYERS       = 4;
 constexpr int NUM_TEAMS         = 2;
+constexpr int NUM_SUITS         = 4;
 constexpr int CAPOT_SCORE       = 252;
 constexpr int TRICK_SCORE       = 162;
 constexpr int BELOTE_SCORE      = 20;
@@ -42,6 +43,8 @@ constexpr int DIX_DE_DER_SCORE  = 10;
 // Tracks the cards played by each player.
 using CardsCollection = array<vector<string>, NUM_CARDS>;
 using BeloteLookupTable = array<array<bool, NUM_TEAMS>, NUM_CARDS>;
+
+using KnownVoids = array<array<bool, NUM_SUITS>, NUM_PLAYERS>;
 
 // Returns the RHS part of the Card.
 string suit(const string card);
@@ -58,6 +61,9 @@ bool is_stronger(
 
 // Computes the points associated to a card.
 int points(const string card, const bool is_trump);
+
+// Returns the card name in a human readable format
+string prettify(const string card);
 
 // Returns the partner of a given player.
 int partner(const int player);
@@ -288,12 +294,16 @@ void process_trick(
         string card;
         in >> card;
 
+        cout << card << endl;
+        cout << prettify(card) << "\n" << endl;
+
         if (i == 0) 
             led_suit = suit(card);
 
         int player = current_player(leader, i);
 
-
+        //todo add the trick number
+        //todo add a function to convert raw card format to human_readable ones.
         if (!true) {
             err << "Error: player " << (player + 1)
                 << " played " << card
@@ -627,6 +637,36 @@ int points(const string card, const bool is_trump) {
             default:  return  0;
         }
     }
+}
+
+string prettify(const string card) {
+    const char val = card.front();
+    const char suit = card.back();
+
+    string card_name = {};
+
+    switch (val) {
+        case 'A': card_name += "Ace";       break;
+        case 'T': card_name += "Ten";       break;
+        case 'K': card_name += "King";      break;
+        case 'Q': card_name += "Queen";     break;
+        case 'J': card_name += "Jack";      break;
+        
+        default:  {
+            card_name += string(1, val);
+        }
+    }
+
+    card_name += " of ";
+
+    switch (suit) {
+        case 's': card_name += "Spade";     break;
+        case 'h': card_name += "Heart";     break;
+        case 'd': card_name += "Diamond";   break;
+        case 'c': card_name += "Club";      break;
+    }
+
+    return card_name;
 }
 
 int team(const int player) {
