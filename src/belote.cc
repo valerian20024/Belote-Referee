@@ -1,4 +1,5 @@
 #include "belote.hh"
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -9,8 +10,6 @@
 
 using namespace std;
 
-
-
 // Whether to compile with debug printing.
 constexpr bool DEBUG_MODE = 
 #ifdef DEBUG
@@ -18,8 +17,6 @@ constexpr bool DEBUG_MODE =
 #else
     false;
 #endif
-
-
 
     /*================================================++
     ||                    GLOBALS                     ||
@@ -284,7 +281,8 @@ void process_trick(
     string led_suit = {};
     string highest_trump_card = {};
     string highest_led_card = {};
-    int trick_points = 0;
+    int trick_points = {};
+    string reason = {};
 
     for (int i = 0; i < NUM_CARDS; i++) {
         string card;
@@ -294,6 +292,13 @@ void process_trick(
             led_suit = suit(card);
 
         int player = current_player(leader, i);
+
+
+        if (!false) {
+            err << "Error: player " << (player + 1)
+                << " played " << card
+                << " - " << reason << endl;
+        }
 
         update_state(
             scores,
@@ -702,7 +707,8 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
         } else {
             bool first = true;
             for (const auto& card : cards_played[static_cast<size_t>(player)]) {
-                if (!first) out << " ";
+                if (!first) 
+                    out << " ";
                 out << card;
                 first = false;
             }
