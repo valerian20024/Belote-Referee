@@ -40,8 +40,8 @@ constexpr int DIX_DE_DER_SCORE  = 10;
 
 
 // Tracks the cards played by each player.
-typedef array<vector<string>, NUM_CARDS> CardsCollection;
-typedef array<array<bool, NUM_TEAMS>, NUM_CARDS> BeloteLookupTable;
+using CardsCollection = array<vector<string>, NUM_CARDS>;
+using BeloteLookupTable = array<array<bool, NUM_TEAMS>, NUM_CARDS>;
 
 // Returns the RHS part of the Card.
 string suit(const string card);
@@ -294,7 +294,7 @@ void process_trick(
         int player = current_player(leader, i);
 
 
-        if (!false) {
+        if (!true) {
             err << "Error: player " << (player + 1)
                 << " played " << card
                 << " - " << reason << endl;
