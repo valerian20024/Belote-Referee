@@ -105,6 +105,25 @@ void update_state(
     const string            trump
 );
 
+// Checks whether a given card can be played by a player
+bool is_legal_play(
+    string&                     reason,
+    const CardsCollection&      cards_played,
+    const VoidsLookupTable&     known_voids,
+    const string                highest_trump_card,
+    const string                trump,
+    const string                led_suit,
+    const string                card,
+    const int                   player,
+    const int                   master  // master before the card has been played
+);
+
+bool must_follow_suit(
+    const VoidsLookupTable& knwon_voids,
+    int                     player,
+    const string&           led_suit
+);
+
 void update_cards_played(
     CardsCollection& cards_played, 
     const int player, 
@@ -191,18 +210,8 @@ void check_and_award_dedans(
 // Compute the current leader of the trick
 int current_leader(const int trick_number, const int previous_trick_winner);
 
-// Checks whether a given card can be played by a player
-bool is_legal_play(
-    string&                     reason,
-    const CardsCollection&      cards_played,
-    const VoidsLookupTable&     known_voids,
-    const string                highest_trump_card,
-    const string                trump,
-    const string                led_suit,
-    const string                card,
-    const int                   player,
-    const int                   master  // master before the card has been played
-);
+// Returns an index based on the suit.
+size_t suit_to_index(const string suit);
 
 // Function to print the intermediary scores of both teams and the trick winner.
 void print_scores(
@@ -360,10 +369,48 @@ bool is_legal_play(
     const string                led_suit,
     const string                card,
     const int                   player,
-    const int                   master  // master before the card has been played
+    const int                   master
 ) {
+    // Trick is just beginning.
+    if (master == -1)
+        return true;
+
+
 
     return true;
+}
+
+bool must_follow_suit(
+    const VoidsLookupTable& known_voids,
+    int                     player,
+    const string&           led_suit
+) {
+    if (led_suit.empty()) {
+        cerr << "Error in must_follow_suit: empty led suit";
+        return false;
+    }
+
+    size_t player_index = static_cast<size_t>(player);
+    int suit_index = suit_to_index(led_suit);
+
+    // If the player is known to be void in this suit, doesn't have to follow
+    if (known_voids[player_index][suit_index])
+        return false;
+
+    return true;
+}
+
+size_t suit_to_index(const string suit) {
+    const string suits = "cdhs";
+
+    size_t index = suits.find(suit);
+
+    if (!(index == string::npos)) {
+        return index;
+    } else {
+        cerr << "Error in suit_to_index: unknown suit";
+        return -1;
+    }
 }
 
 
