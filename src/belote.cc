@@ -66,10 +66,10 @@ int points(const string card, const bool is_trump);
 string pretty_card(const string card);
 
 // Returns the card value in a human readable format
-string pretty_value(const string card);
+string pretty_value(const char value);
 
 // Returns the card suit in a human readable format
-string pretty_suit(const string card);
+string pretty_suit(const char suit);
 
 // Returns the partner of a given player.
 int partner(const int player);
@@ -124,10 +124,10 @@ bool is_legal_play(
     const int                   master  // master before the card has been played
 );
 
-bool must_follow_suit(
-    const VoidsLookupTable& knwon_voids,
-    int                     player,
-    const string&           led_suit
+bool is_void_in_suit(
+    const VoidsLookupTable& known_voids,
+    const int               player,
+    const string&           suit
 );
 
 void update_cards_played(
@@ -382,35 +382,15 @@ bool is_legal_play(
     if (master == -1)
         return true;
 
-    if (must_follow_suit(known_voids, player, led_suit)) {
+    if (!is_void_in_suit(known_voids, player, led_suit)) {
         if (suit(card) != led_suit) {
-            reason = "must follow suit " + led_suit + " but played " + pretty_card(card);
+            reason = "Must follow suit " + pretty_suit(led_suit.front()) + " but played " + pretty_card(card);
             return false;
         }
     
     return true;
 }
 
-
-    return true;
-}
-
-bool must_follow_suit(
-    const VoidsLookupTable& known_voids,
-    int                     player,
-    const string&           led_suit
-) {
-    if (led_suit.empty()) {
-        cerr << "Error in must_follow_suit: empty led suit";
-        return false;
-    }
-
-    size_t player_index = static_cast<size_t>(player);
-    int suit_index = suit_to_index(led_suit);
-
-    // If the player is known to be void in this suit, doesn't have to follow
-    if (known_voids[player_index][suit_index])
-        return false;
 
     return true;
 }
@@ -426,6 +406,20 @@ size_t suit_to_index(const string suit) {
         cerr << "Error in suit_to_index: unknown suit";
         return -1;
     }
+}
+
+bool is_void_in_suit(
+    const VoidsLookupTable& known_voids,
+    const int               player,
+    const string&           suit
+) {
+    if (suit.empty())
+        return false;
+
+    size_t player_index = static_cast<size_t>(player);
+    size_t suit_index = suit_to_index(suit);
+
+    return known_voids[player_index][suit_index];
 }
 
 
@@ -734,11 +728,13 @@ int points(const string card, const bool is_trump) {
 }
 
 string pretty_card(const string card) {
-    return pretty_value(card) + " of " + pretty_suit(card);
+    const char value = card.front();
+    const char suit = card.back();
+
+    return pretty_value(value) + " of " + pretty_suit(suit);
 }
 
-string pretty_suit(const string card) {
-    const char suit = card.back();
+string pretty_suit(const char suit) {
     switch (suit) {
         case 's': return "Spade";
         case 'h': return "Heart";
@@ -752,8 +748,7 @@ string pretty_suit(const string card) {
     }
 }
 
-string pretty_value(const string card) {
-    const char value = card.front();
+string pretty_value(const char value) {
     switch (value) {
         case 'A': return "Ace";
         case 'T': return "Ten";
