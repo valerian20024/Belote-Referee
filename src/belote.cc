@@ -166,13 +166,30 @@ void update_highest_cards(
     const string trump
 );
 
+
 /**
- * @brief Returns true if rank of given card is stronger. False otherwise.
+ * @brief Assesses whether `given` is stronger than `compared_to` following the `order`.
+ * @param `given` is either a card or a value.
+ * @param `compared_to` is either a card or a value.
+ * @param `order` is a string where the rightmost characters are stronger 
+ * and lefmost characters are weaker. E.g., "1234" order tells that 4 is stronger than 1.
+ */
+bool is_stronger_in_order(
+    const string given, 
+    const string compared_to,
+    const string order
+);
+
+/**
+ * @brief Returns true if rank of given trump card is stronger. False otherwise.
  * @note Can take either a card or directly a value.
  */
 bool is_stronger_trump(const string given, const string compared_to);
 
-// Returns true if rank of given card is stronger. False otherwise.
+/**
+ * @brief Returns true if rank of given raw card is stronger. False otherwise.
+ * @note Can take either a card or directly a value.
+ */
 bool is_stronger_raw(const string given, const string compared_to);
 
 void update_master(
@@ -763,9 +780,10 @@ bool is_stronger(
     return false;
 }
 
-bool is_stronger_trump(
+bool is_stronger_in_order(
     const string given, 
-    const string compared_to
+    const string compared_to,
+    const string order
 ) {
     if (given.empty())
         return false;
@@ -773,11 +791,9 @@ bool is_stronger_trump(
     if (compared_to.empty())
         return true;
 
-    const string trump_order = "78QKTA9J";
-
     // Search for the character directly
-    size_t pos_given = trump_order.find(given.front());
-    size_t pos_compared_to = trump_order.find(compared_to.front());
+    size_t pos_given = order.find(given.front());
+    size_t pos_compared_to = order.find(compared_to.front());
 
     if (pos_given == string::npos) {
         cerr << "Error in stronger_trump: the given card has no known value." << endl;
@@ -791,20 +807,23 @@ bool is_stronger_trump(
     return pos_given > pos_compared_to;
 }
 
+bool is_stronger_trump(
+    const string given, 
+    const string compared_to
+) {
+    const string trump_order = "78QKTA9J";
+    return is_stronger_in_order(given, compared_to, trump_order);
+}
+
 bool is_stronger_raw(
     const string given, 
     const string compared_to
 ) {
-    if (compared_to.empty())
-        return true;
-
-    const string plain_order = "789JQKTA";
-
-    size_t pos_given = plain_order.find(given);
-    size_t pos_compared_to = plain_order.find(compared_to);
-    
-    return pos_given > pos_compared_to;
+    const string raw_order = "789JQKTA";
+    return is_stronger_in_order(given, compared_to, raw_order);
 }
+
+
 
 
 // Computes the points associated to a card, depending on whether it is trump
