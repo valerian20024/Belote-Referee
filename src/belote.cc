@@ -388,6 +388,31 @@ bool is_legal_play(
             return false;
         }
     
+    if (is_void_in_suit(known_voids, player, led_suit)) {
+        if (!(partner(player) == master)) {
+            if (!(suit(card) == trump)) {
+                reason = "Must cut with trump but played " + pretty_card(card);
+                return false;
+            }
+            // Now we know he played a trump while forced → continue to overtrump check
+        } else {
+            // Partner being master, any card is allowed.
+            return true;
+        }
+    }
+
+    /*
+    // Rule 3 – Overtrump obligation (only reached if he was forced to trump)
+    if (is_trump(card, trump) && !highest_trump_card.empty()) {
+        if (!is_stronger_trump(card, highest_trump_card)) {   // reuse or adapt your existing function
+            // Here we detect a "liar": he played a trump, but it is not higher
+            reason = "must overtrump but played " + card 
+                     + " which is not higher than " + highest_trump_card;
+            return false;
+        }
+    }
+        */
+
     return true;
 }
 
@@ -758,6 +783,20 @@ string pretty_value(const char value) {
         
         default:  {
             return string(1, value);
+        }
+    }
+}
+
+int partner(const int player) {
+    switch (player) {
+        case 0: return 2;
+        case 1: return 3;
+        case 2: return 0;
+        case 3: return 1;
+
+        default: {
+            cerr << "Error in partner: unknown player ID." << endl;
+            return -1;
         }
     }
 }
