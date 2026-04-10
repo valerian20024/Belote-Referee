@@ -18,6 +18,18 @@ int main() {
     Jh Tc Jd 9h
     )";
 
+    string test6 = R"(
+    s 1
+    9h 7h Kh Th
+    Qc 8c 7c Ac
+    Ad Td 7d Jd
+    8d Kd Ks 9s
+    7s As Js Ah
+    Kc Tc Qs 8s
+    8h Qh 9c Jh
+    Qd 9d Jc Ts
+    )";
+
     string test9 = R"(
     s 1
     Ah Qh Jh 7h
@@ -54,7 +66,20 @@ int main() {
     Jd Kd 8c Ks
     )";
 
-    istringstream in(test71);
+
+    string test251 = R"(
+    d 2
+    Ac Jc Js Ts
+    8c Qc 8d 7d
+    Kc 9s Jh Th
+    As Td 7h 7s
+    Kh Qd Tc 9c
+    Qs 8s Jd 7c
+    Ad 8h Ah Qh
+    Kd 9h Ks 9d
+    )";
+
+    istringstream in(test251);
 
     return game(in, cout, cerr);
 } 

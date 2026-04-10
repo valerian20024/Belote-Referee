@@ -1,0 +1,449 @@
+This automated test script will try to check that your submission
+looks like a valid one.
+
+It is by no mean exhaustive, **do your own tests!**
+
+If you see something funky, please tell the TA!
+
+* Initializing the environment...
+debconf: delaying package configuration, since apt-utils is not installed
+* Trying to decompress your archive...
+tar: s200825/belote.cc: time stamp 2026-04-10 20:25:18 is 521.540351534 s in the future
+* Checking presence of required files...
+* Copying our own main.cc into s200825...
+* Checking you are not using class...
+* Trying to compile the application...
+* Running a few tests, to check if your code at least seems OK...
+------------------------------------------------------------
+Testing tests/001-correct...
+OK
+------------------------------------------------------------
+Testing tests/002-correct...
+OK
+------------------------------------------------------------
+Testing tests/003-correct...
+OK
+------------------------------------------------------------
+Testing tests/004-correct...
+OK
+------------------------------------------------------------
+Testing tests/005-correct...
+OK
+------------------------------------------------------------
+Testing tests/006-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+s 1
+9h 7h Kh Th
+Qc 8c 7c Ac
+Ad Td 7d Jd
+8d Kd Ks 9s
+7s As Js Ah
+Kc Tc Qs 8s
+8h Qh 9c Jh
+Qd 9d Jc Ts
+Standard output:
+0 14 4
+14 14 3
+37 14 3
+37 36 2
+37 78 4
+37 95 2
+42 95 3
+42 120 2
+0 162
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/007-correct...
+OK
+------------------------------------------------------------
+Testing tests/008-correct...
+OK
+------------------------------------------------------------
+Testing tests/009-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+s 1
+Ah Qh Jh 7h
+Qd Jd 9d Td
+Kc 8s Tc Ac
+9h Ts 7s 8h
+Qc Jc 7c As
+Th Qs 8c Kd
+Ks 7d Ad Js
+Kh 9s 9c 8d
+Standard output:
+16 0 1
+16 15 4
+41 15 1
+41 25 2
+57 25 1
+57 42 2
+92 62 1
+92 90 2
+92 90
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/010-correct...
+OK
+------------------------------------------------------------
+Testing tests/011-correct...
+OK
+------------------------------------------------------------
+Testing tests/012-correct...
+OK
+------------------------------------------------------------
+Testing tests/013-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 1
+Kh Qh Th 7h
+Jd Ks Qd Ad
+7c Kc Tc 9c
+8h Kd 8d 9h
+9s As Qs Ts
+Qc 8c 7s Jc
+Ac Js 8s Td
+9d 7d Ah Jh
+Standard output:
+17 0 3
+55 0 3
+69 0 1
+69 4 2
+93 4 3
+98 4 3
+98 27 2
+98 64 2
+98 64
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/014-correct...
+OK
+------------------------------------------------------------
+Testing tests/015-correct...
+OK
+------------------------------------------------------------
+Testing tests/016-correct...
+OK
+------------------------------------------------------------
+Testing tests/017-correct...
+OK
+------------------------------------------------------------
+Testing tests/018-correct...
+OK
+------------------------------------------------------------
+Testing tests/019-correct...
+OK
+------------------------------------------------------------
+Testing tests/020-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 1
+8d Td Ad Qs
+7c Ac Jc 9c
+Ts As Jd 9d
+Ah Kh Js 7h
+Qh Jh Ks 8h
+Th Kd 9s 7d
+8c 8s Kc Qc
+Tc 9h Qd 7s
+Standard output:
+24 0 3
+24 13 4
+24 68 2
+24 85 2
+24 94 2
+38 94 3
+45 94 1
+88 94 3
+20 162
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/021-correct...
+OK
+------------------------------------------------------------
+Testing tests/022-correct...
+OK
+------------------------------------------------------------
+Testing tests/023-correct...
+OK
+------------------------------------------------------------
+Testing tests/024-correct...
+OK
+------------------------------------------------------------
+Testing tests/025-correct...
+OK
+------------------------------------------------------------
+Testing tests/026-correct...
+OK
+------------------------------------------------------------
+Testing tests/027-correct...
+OK
+------------------------------------------------------------
+Testing tests/028-correct...
+OK
+------------------------------------------------------------
+Testing tests/029-correct...
+OK
+------------------------------------------------------------
+Testing tests/030-correct...
+OK
+------------------------------------------------------------
+Testing tests/031-correct...
+OK
+------------------------------------------------------------
+Testing tests/032-correct...
+OK
+------------------------------------------------------------
+Testing tests/033-correct...
+OK
+------------------------------------------------------------
+Testing tests/034-correct...
+OK
+------------------------------------------------------------
+Testing tests/035-correct...
+OK
+------------------------------------------------------------
+Testing tests/036-correct...
+OK
+------------------------------------------------------------
+Testing tests/037-correct...
+OK
+------------------------------------------------------------
+Testing tests/038-correct...
+OK
+------------------------------------------------------------
+Testing tests/039-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 1
+Qh Th Kd Qd
+9c 8c Jh Tc
+Jd 7d Qs 9d
+8h 8d 8s Ah
+Qc Jc Js Ad
+7h 7s Kc 9h
+Kh Td Ac Ks
+9s 7c As Ts
+Standard output:
+20 0 3
+20 12 2
+20 49 2
+31 49 3
+31 67 2
+35 67 1
+35 96 2
+35 127 4
+0 162
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/040-correct...
+OK
+------------------------------------------------------------
+Testing tests/041-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 2
+Tc Jd 7c Qc
+8h 9h Ad 9d
+Ks 8s Qs 9s
+As 7s 8c 8d
+Kc Jc Th Qd
+Ah Td 7d Kh
+9c Ts Qh Kd
+Jh Ac Js 7h
+Standard output:
+0 33 2
+25 33 1
+32 33 1
+32 44 4
+51 44 3
+51 69 4
+88 69 3
+113 69 3
+182 0
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/042-correct...
+OK
+------------------------------------------------------------
+Testing tests/043-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+s 2
+Kc Qc 8c Jc
+Jh 9h 8h Kh
+Ks 9s As Js
+Jd 8d Td 8s
+Tc 9c Ac 7c
+9d Ts Qs Ad
+Qh Ah 7d Kd
+7h Qd 7s Th
+Standard output:
+9 0 1
+9 6 4
+58 6 3
+58 18 2
+58 39 4
+82 39 1
+82 57 2
+82 80 4
+162 0
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/044-correct...
+OK
+------------------------------------------------------------
+Testing tests/045-correct...
+OK
+------------------------------------------------------------
+Testing tests/046-correct...
+OK
+------------------------------------------------------------
+Testing tests/047-correct...
+OK
+------------------------------------------------------------
+Testing tests/048-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 1
+7c Jc Ac 9c
+Kc 8c Qh Jd
+Ts 7s Js Qs
+As 8d Td Ks
+Qc Qd Kd Tc
+9s Ad 7d Kh
+Th Jh Ah 8h
+9d 8s 7h 9h
+Standard output:
+13 0 3
+13 27 2
+13 42 2
+13 67 4
+13 87 2
+28 87 3
+51 87 1
+75 87 1
+0 162
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/049-correct...
+OK
+------------------------------------------------------------
+Testing tests/050-correct...
+OK
+------------------------------------------------------------
+Testing tests/051-correct...
+OK
+------------------------------------------------------------
+Testing tests/052-correct...
+OK
+------------------------------------------------------------
+Testing tests/053-correct...
+OK
+------------------------------------------------------------
+Testing tests/054-correct...
+OK
+------------------------------------------------------------
+Testing tests/055-correct...
+OK
+------------------------------------------------------------
+Testing tests/056-correct...
+OK
+------------------------------------------------------------
+Testing tests/057-correct...
+OK
+------------------------------------------------------------
+Testing tests/058-correct...
+OK
+------------------------------------------------------------
+Testing tests/059-correct...
+OK
+------------------------------------------------------------
+Testing tests/060-correct...
+OK
+------------------------------------------------------------
+Testing tests/061-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+d 2
+Kc Ad 8c Jc
+9h 8h Jh Kh
+Ts 8s Qs 7s
+Qd Jd Td Kd
+7h 9d 8d Qh
+Tc Js 9c 7d
+Th 7c 9s Qc
+Ah Ac As Ks
+Standard output:
+0 17 2
+6 17 1
+19 17 1
+19 54 2
+36 54 3
+36 66 2
+36 79 2
+36 126 2
+36 126
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Testing tests/062-correct...
+OK
+------------------------------------------------------------
+Testing tests/063-correct...
+OK
+------------------------------------------------------------
+Testing tests/064-correct...
+OK
+------------------------------------------------------------
+Testing tests/065-correct...
+game() returned true, but errors were printed on stderr.
+Input game:
+h 1
+Kd Qd Td Ad
+8s Qs Ks 7s
+Js As 9s Th
+Jd 7h 9h 9d
+Kh 7c Jh Qh
+8d Ah 8h 7d
+9c Ac Tc 8c
+Kc Ts Jc Qc
+Standard output:
+0 28 4
+0 35 2
+23 35 1
+39 35 3
+66 35 1
+66 46 2
+87 46 3
+116 46 3
+116 46
+Your game() standard error:
+Error: Must overtrump when having a trump card
+Test failed!
+------------------------------------------------------------
+Too many errors. Skipping remaining tests.
+
+* Tests finished. Passed 55 over 65.
+
+You submission presents some serious issues.
+Beware, you are likely to get zero mark unless you improve!
+Check the above error messages for improvements to make.

@@ -1,0 +1,702 @@
+----- New card -----
+Master is [0]
+Player [0] played card [9h]
+Highest cards : t: [] l: [9h]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h
+Player 2: (none)
+Player 3: (none)
+Player 4: (none)
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [0]
+Player [1] played card [7h]
+Highest cards : t: [] l: [9h]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h
+Player 2: 7h
+Player 3: (none)
+Player 4: (none)
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [2] played card [Kh]
+Highest cards : t: [] l: [Kh]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h
+Player 2: 7h
+Player 3: Kh
+Player 4: (none)
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [3] played card [Th]
+Highest cards : t: [] l: [Th]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h
+Player 2: 7h
+Player 3: Kh
+Player 4: Th
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+0 14 3
+=================
+
+----- New card -----
+Master is [3]
+Player [3] played card [Qc]
+Highest cards : t: [] l: [Qc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h
+Player 2: 7h
+Player 3: Kh
+Player 4: Th Qc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [0] played card [8c]
+Highest cards : t: [] l: [Qc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c
+Player 2: 7h
+Player 3: Kh
+Player 4: Th Qc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [1] played card [7c]
+Highest cards : t: [] l: [Qc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c
+Player 2: 7h 7c
+Player 3: Kh
+Player 4: Th Qc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [2] played card [Ac]
+Highest cards : t: [] l: [Ac]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c
+Player 2: 7h 7c
+Player 3: Kh Ac
+Player 4: Th Qc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+14 14 2
+=================
+
+----- New card -----
+Master is [2]
+Player [2] played card [Ad]
+Highest cards : t: [] l: [Ad]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c
+Player 2: 7h 7c
+Player 3: Kh Ac Ad
+Player 4: Th Qc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [3] played card [Td]
+Highest cards : t: [] l: [Ad]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c
+Player 2: 7h 7c
+Player 3: Kh Ac Ad
+Player 4: Th Qc Td
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [0] played card [7d]
+Highest cards : t: [] l: [Ad]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d
+Player 2: 7h 7c
+Player 3: Kh Ac Ad
+Player 4: Th Qc Td
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [1] played card [Jd]
+Highest cards : t: [] l: [Ad]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d
+Player 2: 7h 7c Jd
+Player 3: Kh Ac Ad
+Player 4: Th Qc Td
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+37 14 2
+=================
+
+----- New card -----
+Master is [2]
+Player [2] played card [8d]
+Highest cards : t: [] l: [8d]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d
+Player 2: 7h 7c Jd
+Player 3: Kh Ac Ad 8d
+Player 4: Th Qc Td
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [3] played card [Kd]
+Highest cards : t: [] l: [Kd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d
+Player 2: 7h 7c Jd
+Player 3: Kh Ac Ad 8d
+Player 4: Th Qc Td Kd
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: - -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [0]
+Player [0] played card [Ks]
+Highest cards : t: [Ks] l: [Kd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks
+Player 2: 7h 7c Jd
+Player 3: Kh Ac Ad 8d
+Player 4: Th Qc Td Kd
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [1]
+Player [1] played card [9s]
+Highest cards : t: [9s] l: [Kd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks
+Player 2: 7h 7c Jd 9s
+Player 3: Kh Ac Ad 8d
+Player 4: Th Qc Td Kd
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+37 36 1
+=================
+
+----- New card -----
+Master is [1]
+Player [1] played card [7s]
+Highest cards : t: [7s] l: []
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d
+Player 4: Th Qc Td Kd
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [2] played card [As]
+Highest cards : t: [As] l: []
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [3] played card [Js]
+Highest cards : t: [Js] l: []
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd Js
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [3]
+Player [0] played card [Ah]
+Highest cards : t: [Js] l: [Ah]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd Js
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+37 78 3
+=================
+
+----- New card -----
+Master is [3]
+Player [3] played card [Kc]
+Highest cards : t: [] l: [Kc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [0]
+Player [0] played card [Tc]
+Highest cards : t: [] l: [Tc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - -
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [1]
+Player [1] played card [Qs]
+Highest cards : t: [Qs] l: [Tc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s Qs
+Player 3: Kh Ac Ad 8d As
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+Error: Must overtrump when having a trump card
+----- New card -----
+Master is [1]
+Player [2] played card [8s]
+Highest cards : t: [Qs] l: [Tc]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s Qs
+Player 3: Kh Ac Ad 8d As 8s
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+37 95 1
+=================
+
+----- New card -----
+Master is [1]
+Player [1] played card [8h]
+Highest cards : t: [] l: [8h]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [2] played card [Qh]
+Highest cards : t: [] l: [Qh]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh
+Player 4: Th Qc Td Kd Js Kc
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [3] played card [9c]
+Highest cards : t: [] l: [Qh]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh
+Player 4: Th Qc Td Kd Js Kc 9c
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [0] played card [Jh]
+Highest cards : t: [] l: [Qh]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh
+Player 4: Th Qc Td Kd Js Kc 9c
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+42 95 2
+=================
+
+----- New card -----
+Master is [2]
+Player [2] played card [Qd]
+Highest cards : t: [] l: [Qd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh Qd
+Player 4: Th Qc Td Kd Js Kc 9c
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [3] played card [9d]
+Highest cards : t: [] l: [Qd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh Qd
+Player 4: Th Qc Td Kd Js Kc 9c 9d
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [2]
+Player [0] played card [Jc]
+Highest cards : t: [] l: [Qd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh Jc
+Player 2: 7h 7c Jd 9s 7s Qs 8h
+Player 3: Kh Ac Ad 8d As 8s Qh Qd
+Player 4: Th Qc Td Kd Js Kc 9c 9d
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+----- New card -----
+Master is [1]
+Player [1] played card [Ts]
+Highest cards : t: [Ts] l: [Qd]
+---------------------
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh Jc
+Player 2: 7h 7c Jd 9s 7s Qs 8h Ts
+Player 3: Kh Ac Ad 8d As 8s Qh Qd
+Player 4: Th Qc Td Kd Js Kc 9c 9d
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Scores ===
+42 120 1
+=================
+
+===== Finals =====
+0 162
+==================
+
+=== Cards played by each player so far ===
+Player 1: 9h 8c 7d Ks Ah Tc Jh Jc
+Player 2: 7h 7c Jd 9s 7s Qs 8h Ts
+Player 3: Kh Ac Ad 8d As 8s Qh Qd
+Player 4: Th Qc Td Kd Js Kc 9c 9d
+====================================================
+
+=== Belote assets (King/Queen of trump per player) ===
+Player 1: K -
+Player 2: - Q
+Player 3: - -
+Player 4: - -
+====================================================
+
+=== Tricks won by team ===
+Trick 1: Team 2
+Trick 2: Team 1
+Trick 3: Team 1
+Trick 4: Team 2
+Trick 5: Team 2
+Trick 6: Team 2
+Trick 7: Team 1
+Trick 8: Team 2
+=======================================================
+

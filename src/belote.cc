@@ -24,15 +24,15 @@ constexpr bool DEBUG_MODE =
 
 
 // Business logic of the belote game.
-constexpr int NUM_TRICKS        = 8;
+constexpr int NUM_TEAMS         = 2;
 constexpr int NUM_CARDS         = 4;
 constexpr int NUM_PLAYERS       = 4;
-constexpr int NUM_TEAMS         = 2;
 constexpr int NUM_SUITS         = 4;
-constexpr int CAPOT_SCORE       = 252;
-constexpr int TRICK_SCORE       = 162;
-constexpr int BELOTE_SCORE      = 20;
+constexpr int NUM_TRICKS        = 8;
 constexpr int DIX_DE_DER_SCORE  = 10;
+constexpr int BELOTE_SCORE      = 20;
+constexpr int TRICK_SCORE       = 162;
+constexpr int CAPOT_SCORE       = 252;
 
 
     /*================================================++
@@ -40,16 +40,19 @@ constexpr int DIX_DE_DER_SCORE  = 10;
     ++================================================*/
 
 
-// Tracks the cards played by each player.
+/// @brief Tracks the cards played by each player.
+/// @example cards_collection[0][4] returns the fifth card player1 played 
 using CardsCollection = array<vector<string>, NUM_CARDS>;
-using BeloteLookupTable = array<array<bool, NUM_TEAMS>, NUM_CARDS>;
+
+/// @brief table[3][1] = true would mean player 4 has played a queen of trump.
+using BeloteLookupTable = array<array<bool, 2>, NUM_PLAYERS>;
 
 /**
  * @brief A 4 by 4 array containing pairs of bool and int. 
  * @example table[0][0] = (False, 0) means player 1 has not renounced to clubs. 
  * He is still able to draw some from his hand.
  * @example table[3][1] = (True, 4) means player 4 has renounced to diamonds in trick number 4.
- * */
+ */
 using RenouncementTable = array<array<pair<bool, int>, NUM_SUITS>, NUM_PLAYERS>;
 
 // Returns the RHS part of the Card.
@@ -58,35 +61,44 @@ string suit(const string card);
 // Returns the LHS of the Card.
 string value(const string card);
 
-// Takes into account current trump.
+/**
+ * @brief Returns whether the card `given` is stronger than `compared_to`, according to the `trump` suit.
+ */
 bool is_stronger(
     const string given, 
     const string compared_to, 
     const string trump
 );
 
-// Computes the points associated to a card.
+/// @brief Computes the points associated to a card.
 int points(const string card, const bool is_trump);
 
-// Returns the card name in a human readable format
+/// @brief Returns the card name in a human readable format
 string pretty_card(const string card);
 
-// Returns the card value in a human readable format
+/// @brief Returns the card value in a human readable format
 string pretty_value(const char value);
 
-// Returns the card suit in a human readable format
+/// @brief Returns the card suit in a human readable format
 string pretty_suit(const char suit);
 
-// Returns the partner of a given player.
+/// @brief Returns the name of the player in a human readable format.
+string pretty_player(const int player);
+
+/// @brief Returns the partner of a given player.
 int partner(const int player);
 
-// Returns 0 if player belongs to the first team. Returns 1 otherwise.
+/// @brief Returns the team number of a player (can be 0 or 1).
 int team(const int player);
 
-// Returns the current player giving the card.
+/**
+ * @brief Returns the current player.
+ * @param `leader` the player starting the trick
+ * @param `offset` the number of cards played since the trick begun.
+ */
 int current_player(const int leader, const int offset);
 
-// Orchestrator for processing one trick.
+/// @brief Orchestrator for processing one trick.
 void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
@@ -96,13 +108,12 @@ void process_trick(
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
     istream&                    in,
-    ostream&                    out,
     ostream&                    err,
     const string                trump,
     const int                   trick_number
 );
 
-// Orchestrator for updating each variable.
+/// @brief Orchestrator for updating each variable.
 void update_state(
     pair<int, int>&         scores,
     CardsCollection&        cards_played, 
@@ -117,7 +128,7 @@ void update_state(
     const string            trump
 );
 
-// Checks whether a given card can be played by a player
+/// @brief Orchestrator to check whether a given card can be played by a player.
 bool is_legal_play(
     string&                     reason,
     RenouncementTable&          renounces,
@@ -133,6 +144,7 @@ bool is_legal_play(
 
 /// @brief Tells whether a player has renounced a given suit in the past.
 bool has_renounced(
+    int&                        evidence_trick_number,
     const RenouncementTable&    renounces,
     const int                   player,
     const string                suit
@@ -274,6 +286,12 @@ void print_belote_assets(const BeloteLookupTable& belote_assets, ostream& out);
 // Helper to print which team won which trick.
 void print_tricks_won(const array<bool, NUM_TRICKS>& tricks_won, ostream& out);
 
+/// @brief Returns the card played by `player` in trick `trick_number`.
+string get_card_played(
+    const CardsCollection& cards_played, 
+    const int player, 
+    const int trick_number
+);
 
     /*================================================++
     ||               IMPLEMENTATIONS                  ||
@@ -306,7 +324,6 @@ bool game(istream& in, ostream& out, ostream& err) {
             previous_trick_winner,
             tricks_won,
             in,
-            out,
             err,
             trump,
             trick_counter
@@ -338,7 +355,6 @@ void process_trick(
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
     istream&                    in,
-    ostream&                    out,
     ostream&                    err,
     const string                trump,
     const int                   trick_number
@@ -359,8 +375,8 @@ void process_trick(
             led_suit = suit(card);
 
         int player = current_player(leader, i);
-
-        /*
+        
+        
         if (!is_legal_play(
             reason,
             renounces,
@@ -370,17 +386,12 @@ void process_trick(
             led_suit,
             card,
             player,
-            master,  // can be -1 if no master, in which case it's the first card, and it's legal.
+            master,
             trick_number
         )) {
-            err << "Error: player " << (player + 1)
-                << " played " << pretty_card(card)
-                << " in trick " << (trick_number + 1) 
-                << "\n" 
-                << reason << endl;
+            err << "Error: " << reason << endl;
         }
-
-        */
+        
 
         update_state(
             scores,
@@ -419,11 +430,13 @@ bool is_legal_play(
     const int                   master,
     const int                   trick_number
 ) {
-    // Trick is just beginning.
+    // Trick is just beginning, any card is legal.
     if (master == -1)
         return true;
 
-    if (!has_renounced(renounces, player, suit(card))) {
+    int evidence_trick_number = {};
+
+    if (!has_renounced(evidence_trick_number, renounces, player, suit(card))) {
         if (suit(card) == led_suit)
             return true;
         else {
@@ -436,8 +449,9 @@ bool is_legal_play(
                     if (is_stronger_trump(card, highest_trump_card))
                         return true;
                     else {
-                        // must overtrump
-                        return false;
+                        //reason = "Must overtrump when having a trump card";
+                        //return false;
+                        return true;
                     }
                 } else {
                     renounce(renounces, player, trump, trick_number);
@@ -448,42 +462,16 @@ bool is_legal_play(
         }
     }
 
-    // Illegal card suit
+    string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
+
+    reason = "Illegal card suit. "
+            + pretty_player(player) 
+            + " played " 
+            + pretty_card(evidence_card)
+            + " in trick "
+            + string(1, evidence_trick_number + 1);
     return false;
     
-    /*
-    if (!has_renounced(renounces, player, led_suit)) {
-        if (suit(card) != led_suit) {
-            reason = "Must follow suit " + pretty_suit(led_suit.front()) + " but played " + pretty_card(card);
-            return false;
-        }
-
-
-
-    } else {  // Player is void in suit
-
-        // Update the known void table with the (player, led_suit) => true 
-
-        if (partner(player) == master) {
-            return true;
-        } else {
-            if (suit(card) != trump) {
-                reason = "Must cut with trump but played " + pretty_card(card);
-                return false;
-            }
-        }    
-
-        // There has been a trump card in the trick, and player played a trump card.
-        if (suit(card) == trump && !highest_trump_card.empty()) {
-            if (!is_stronger_trump(card, highest_trump_card)) {
-                reason = "Must overtrump but played " + pretty_card(card) 
-                        + " which is not higher than " + pretty_card(highest_trump_card);
-                return false;
-            }
-        }
-        return true;
-    }
-    */
 }
 
 void renounce(
@@ -497,7 +485,6 @@ void renounce(
 
     table[player_index][suit_index] = {true, trick_number};
 }
-
 
 // todo return const size_t
 size_t suit_to_index(const string suit) {
@@ -514,6 +501,7 @@ size_t suit_to_index(const string suit) {
 }
 
 bool has_renounced(
+    int&                        evidence_trick_number,
     const RenouncementTable&    renounces,
     const int                   player,
     const string                suit
@@ -526,7 +514,12 @@ bool has_renounced(
     const size_t player_index = static_cast<size_t>(player);
     const size_t suit_index = suit_to_index(suit);
 
-    return renounces[player_index][suit_index].first;
+    bool res = renounces[player_index][suit_index].first;
+
+    if (res)
+        evidence_trick_number = renounces[player_index][suit_index].second;
+    
+    return res;
 }
 
 
@@ -796,11 +789,17 @@ bool is_stronger_in_order(
     size_t pos_compared_to = order.find(compared_to.front());
 
     if (pos_given == string::npos) {
-        cerr << "Error in stronger_trump: the given card has no known value." << endl;
+        cerr << "Error in is_stronger_in_order:"
+            << " the given card " << given
+            << " has no known value." 
+            << endl;
         return false;
     }
     if (pos_compared_to == string::npos) {
-        cerr << "Error in stronger_trump: the compared_to card has no known value." << endl;
+        cerr << "Error in is_stronger_in_order:"
+            << " the compared_to card " << compared_to
+            << " has no known value." 
+            << endl;
         return true;
     }
 
@@ -894,6 +893,10 @@ string pretty_value(const char value) {
     }
 }
 
+string pretty_player(const int player) {
+    return "Player " + string(1, player + 1);
+}
+
 int partner(const int player) {
     switch (player) {
         case 0: return 2;
@@ -942,6 +945,14 @@ int current_player(const int leader, const int offset) {
 // On the first trick, the leader is player 0
 int current_leader(const int trick_number, const int previous_winner) {
     return trick_number == 0 ? 0 : previous_winner;
+}
+
+string get_card_played(
+    const CardsCollection& cards_played, 
+    const int player, 
+    const int trick_number
+) {
+    return cards_played[static_cast<size_t>(player)][static_cast<size_t>(trick_number)];
 }
 
 void print_scores(
