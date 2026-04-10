@@ -44,7 +44,7 @@ constexpr int DIX_DE_DER_SCORE  = 10;
 using CardsCollection = array<vector<string>, NUM_CARDS>;
 using BeloteLookupTable = array<array<bool, NUM_TEAMS>, NUM_CARDS>;
 
-using KnownVoids = array<array<bool, NUM_SUITS>, NUM_PLAYERS>;
+using VoidsLookupTable = array<array<bool, NUM_SUITS>, NUM_PLAYERS>;
 
 // Returns the RHS part of the Card.
 string suit(const string card);
@@ -79,6 +79,7 @@ void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
+    VoidsLookupTable&           known_voids,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -192,9 +193,15 @@ int current_leader(const int trick_number, const int previous_trick_winner);
 
 // Checks whether a given card can be played by a player
 bool is_legal_play(
-    const CardsCollection&  cards_played, 
-    const string            card, 
-    const int               player
+    string&                     reason,
+    const CardsCollection&      cards_played,
+    const VoidsLookupTable&     known_voids,
+    const string                highest_trump_card,
+    const string                trump,
+    const string                led_suit,
+    const string                card,
+    const int                   player,
+    const int                   master  // master before the card has been played
 );
 
 // Function to print the intermediary scores of both teams and the trick winner.
@@ -229,6 +236,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     BeloteLookupTable           belote_table = {};
     pair<int, int>              belote_scored;
     CardsCollection             cards_played = {};
+    VoidsLookupTable            known_voids = {};
     int                         previous_trick_winner = {};
     array<bool, NUM_TRICKS>     tricks_won = {};
     
@@ -242,6 +250,7 @@ bool game(istream& in, ostream& out, ostream& err) {
             scores,
             cards_played,
             belote_table,
+            known_voids,
             belote_scored,
             previous_trick_winner,
             tricks_won,
@@ -273,6 +282,7 @@ void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
+    VoidsLookupTable&           known_voids,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -300,9 +310,15 @@ void process_trick(
         int player = current_player(leader, i);
 
         if (!is_legal_play(
+            reason,
             cards_played,
+            known_voids,
+            highest_trump_card,
+            trump,
+            led_suit,
             card,
-            player
+            player,
+            master  // can be -1 if no master, in which case it's the first card, and it's legal.
         )) {
             err << "Error: player " << (player + 1)
                 << " played " << card
@@ -334,6 +350,22 @@ void process_trick(
 
     previous_trick_winner = master;
 }
+
+bool is_legal_play(
+    string&                     reason,
+    const CardsCollection&      cards_played,
+    const VoidsLookupTable&     known_voids,
+    const string                highest_trump_card,
+    const string                trump,
+    const string                led_suit,
+    const string                card,
+    const int                   player,
+    const int                   master  // master before the card has been played
+) {
+
+    return true;
+}
+
 
 void update_state(
     pair<int, int>&       scores,
