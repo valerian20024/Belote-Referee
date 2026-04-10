@@ -44,7 +44,13 @@ constexpr int DIX_DE_DER_SCORE  = 10;
 using CardsCollection = array<vector<string>, NUM_CARDS>;
 using BeloteLookupTable = array<array<bool, NUM_TEAMS>, NUM_CARDS>;
 
-using VoidsLookupTable = array<array<bool, NUM_SUITS>, NUM_PLAYERS>;
+/**
+ * @brief A 4 by 4 array containing pairs of bool and int. 
+ * @example table[0][0] = (False, 0) means player 1 has not renounced to clubs. 
+ * He is still able to draw some from his hand.
+ * @example table[3][1] = (True, 4) means player 4 has renounced to diamonds in trick number 4.
+ * */
+using RenouncementTable = array<array<pair<bool, int>, NUM_SUITS>, NUM_PLAYERS>;
 
 // Returns the RHS part of the Card.
 string suit(const string card);
@@ -85,7 +91,7 @@ void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
-    VoidsLookupTable&           known_voids,
+    RenouncementTable&           renounces,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -114,20 +120,30 @@ void update_state(
 // Checks whether a given card can be played by a player
 bool is_legal_play(
     string&                     reason,
+    RenouncementTable&          renounces,
     const CardsCollection&      cards_played,
-    const VoidsLookupTable&     known_voids,
     const string                highest_trump_card,
     const string                trump,
     const string                led_suit,
     const string                card,
     const int                   player,
-    const int                   master  // master before the card has been played
+    const int                   master,
+    const int                   trick_number
 );
 
-bool is_void_in_suit(
-    const VoidsLookupTable& known_voids,
-    const int               player,
-    const string&           suit
+/// @brief Tells whether a player has renounced a given suit in the past.
+bool has_renounced(
+    const RenouncementTable&    renounces,
+    const int                   player,
+    const string                suit
+);
+
+/// @brief Marks `player` renouncing `suit` during trick `trick_number`.
+void renounce(
+    RenouncementTable&  table,
+    const int           player, 
+    const string        suit, 
+    const int           trick_number
 );
 
 void update_cards_played(
@@ -150,7 +166,10 @@ void update_highest_cards(
     const string trump
 );
 
-// Returns true if rank of given card is stronger. False otherwise.
+/**
+ * @brief Returns true if rank of given card is stronger. False otherwise.
+ * @note Can take either a card or directly a value.
+ */
 bool is_stronger_trump(const string given, const string compared_to);
 
 // Returns true if rank of given card is stronger. False otherwise.
@@ -251,7 +270,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     BeloteLookupTable           belote_table = {};
     pair<int, int>              belote_scored;
     CardsCollection             cards_played = {};
-    VoidsLookupTable            known_voids = {};
+    RenouncementTable            renounces = {};
     int                         previous_trick_winner = {};
     array<bool, NUM_TRICKS>     tricks_won = {};
     
@@ -265,7 +284,7 @@ bool game(istream& in, ostream& out, ostream& err) {
             scores,
             cards_played,
             belote_table,
-            known_voids,
+            renounces,
             belote_scored,
             previous_trick_winner,
             tricks_won,
@@ -297,7 +316,7 @@ void process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
-    VoidsLookupTable&           known_voids,
+    RenouncementTable&           renounces,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -324,16 +343,18 @@ void process_trick(
 
         int player = current_player(leader, i);
 
+        /*
         if (!is_legal_play(
             reason,
+            renounces,
             cards_played,
-            known_voids,
             highest_trump_card,
             trump,
             led_suit,
             card,
             player,
-            master  // can be -1 if no master, in which case it's the first card, and it's legal.
+            master,  // can be -1 if no master, in which case it's the first card, and it's legal.
+            trick_number
         )) {
             err << "Error: player " << (player + 1)
                 << " played " << pretty_card(card)
@@ -341,6 +362,8 @@ void process_trick(
                 << "\n" 
                 << reason << endl;
         }
+
+        */
 
         update_state(
             scores,
@@ -369,57 +392,97 @@ void process_trick(
 
 bool is_legal_play(
     string&                     reason,
+    RenouncementTable&          renounces,
     const CardsCollection&      cards_played,
-    const VoidsLookupTable&     known_voids,
     const string                highest_trump_card,
     const string                trump,
     const string                led_suit,
     const string                card,
     const int                   player,
-    const int                   master
+    const int                   master,
+    const int                   trick_number
 ) {
     // Trick is just beginning.
     if (master == -1)
         return true;
 
-    if (!is_void_in_suit(known_voids, player, led_suit)) {
+    if (!has_renounced(renounces, player, suit(card))) {
+        if (suit(card) == led_suit)
+            return true;
+        else {
+            renounce(renounces, player, led_suit, trick_number);
+
+            if (partner(player) == master)
+                return true;
+            else {
+                if (suit(card) == trump) {
+                    if (is_stronger_trump(card, highest_trump_card))
+                        return true;
+                    else {
+                        // must overtrump
+                        return false;
+                    }
+                } else {
+                    renounce(renounces, player, trump, trick_number);
+
+                    return true;
+                }
+            }
+        }
+    }
+
+    // Illegal card suit
+    return false;
+    
+    /*
+    if (!has_renounced(renounces, player, led_suit)) {
         if (suit(card) != led_suit) {
             reason = "Must follow suit " + pretty_suit(led_suit.front()) + " but played " + pretty_card(card);
             return false;
         }
-    
-    if (is_void_in_suit(known_voids, player, led_suit)) {
-        if (!(partner(player) == master)) {
-            if (!(suit(card) == trump)) {
+
+
+
+    } else {  // Player is void in suit
+
+        // Update the known void table with the (player, led_suit) => true 
+
+        if (partner(player) == master) {
+            return true;
+        } else {
+            if (suit(card) != trump) {
                 reason = "Must cut with trump but played " + pretty_card(card);
                 return false;
             }
-            // Now we know he played a trump while forced → continue to overtrump check
-        } else {
-            // Partner being master, any card is allowed.
-            return true;
-        }
-    }
+        }    
 
-    /*
-    // Rule 3 – Overtrump obligation (only reached if he was forced to trump)
-    if (is_trump(card, trump) && !highest_trump_card.empty()) {
-        if (!is_stronger_trump(card, highest_trump_card)) {   // reuse or adapt your existing function
-            // Here we detect a "liar": he played a trump, but it is not higher
-            reason = "must overtrump but played " + card 
-                     + " which is not higher than " + highest_trump_card;
-            return false;
+        // There has been a trump card in the trick, and player played a trump card.
+        if (suit(card) == trump && !highest_trump_card.empty()) {
+            if (!is_stronger_trump(card, highest_trump_card)) {
+                reason = "Must overtrump but played " + pretty_card(card) 
+                        + " which is not higher than " + pretty_card(highest_trump_card);
+                return false;
+            }
         }
+        return true;
     }
-        */
+    */
+}
 
-    return true;
+void renounce(
+    RenouncementTable&  table,
+    const int           player, 
+    const string        suit, 
+    const int           trick_number
+) {
+    size_t player_index = static_cast<size_t>(player);
+    size_t suit_index = suit_to_index(suit);
+
+    table[player_index][suit_index] = {true, trick_number};
 }
 
 
-    return true;
-}
-
+// todo return const size_t
 size_t suit_to_index(const string suit) {
     const string suits = "cdhs";
 
@@ -433,18 +496,20 @@ size_t suit_to_index(const string suit) {
     }
 }
 
-bool is_void_in_suit(
-    const VoidsLookupTable& known_voids,
-    const int               player,
-    const string&           suit
+bool has_renounced(
+    const RenouncementTable&    renounces,
+    const int                   player,
+    const string                suit
 ) {
-    if (suit.empty())
+    if (suit.empty()) {
+        cerr << "Error in has_renounced: suit is empty." << endl;
         return false;
+    }
+    
+    const size_t player_index = static_cast<size_t>(player);
+    const size_t suit_index = suit_to_index(suit);
 
-    size_t player_index = static_cast<size_t>(player);
-    size_t suit_index = suit_to_index(suit);
-
-    return known_voids[player_index][suit_index];
+    return renounces[player_index][suit_index].first;
 }
 
 
@@ -702,9 +767,27 @@ bool is_stronger_trump(
     const string given, 
     const string compared_to
 ) {
+    if (given.empty())
+        return false;
+
+    if (compared_to.empty())
+        return true;
+
     const string trump_order = "78QKTA9J";
-    size_t pos_given = trump_order.find(given);
-    size_t pos_compared_to = trump_order.find(compared_to);
+
+    // Search for the character directly
+    size_t pos_given = trump_order.find(given.front());
+    size_t pos_compared_to = trump_order.find(compared_to.front());
+
+    if (pos_given == string::npos) {
+        cerr << "Error in stronger_trump: the given card has no known value." << endl;
+        return false;
+    }
+    if (pos_compared_to == string::npos) {
+        cerr << "Error in stronger_trump: the compared_to card has no known value." << endl;
+        return true;
+    }
+
     return pos_given > pos_compared_to;
 }
 
@@ -712,9 +795,14 @@ bool is_stronger_raw(
     const string given, 
     const string compared_to
 ) {
+    if (compared_to.empty())
+        return true;
+
     const string plain_order = "789JQKTA";
+
     size_t pos_given = plain_order.find(given);
     size_t pos_compared_to = plain_order.find(compared_to);
+    
     return pos_given > pos_compared_to;
 }
 
