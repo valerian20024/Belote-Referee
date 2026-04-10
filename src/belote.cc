@@ -63,7 +63,13 @@ bool is_stronger(
 int points(const string card, const bool is_trump);
 
 // Returns the card name in a human readable format
-string prettify(const string card);
+string pretty_card(const string card);
+
+// Returns the card value in a human readable format
+string pretty_value(const string card);
+
+// Returns the card suit in a human readable format
+string pretty_suit(const string card);
 
 // Returns the partner of a given player.
 int partner(const int player);
@@ -330,9 +336,10 @@ void process_trick(
             master  // can be -1 if no master, in which case it's the first card, and it's legal.
         )) {
             err << "Error: player " << (player + 1)
-                << " played " << card
-                << " in trick : " << (trick_number + 1)
-                << " - " << reason << endl;
+                << " played " << pretty_card(card)
+                << " in trick " << (trick_number + 1) 
+                << "\n" 
+                << reason << endl;
         }
 
         update_state(
@@ -375,6 +382,14 @@ bool is_legal_play(
     if (master == -1)
         return true;
 
+    if (must_follow_suit(known_voids, player, led_suit)) {
+        if (suit(card) != led_suit) {
+            reason = "must follow suit " + led_suit + " but played " + pretty_card(card);
+            return false;
+        }
+    
+    return true;
+}
 
 
     return true;
@@ -718,34 +733,38 @@ int points(const string card, const bool is_trump) {
     }
 }
 
-string prettify(const string card) {
-    const char val = card.front();
+string pretty_card(const string card) {
+    return pretty_value(card) + " of " + pretty_suit(card);
+}
+
+string pretty_suit(const string card) {
     const char suit = card.back();
+    switch (suit) {
+        case 's': return "Spade";
+        case 'h': return "Heart";
+        case 'd': return "Diamond";
+        case 'c': return "Club";
 
-    string card_name = {};
-
-    switch (val) {
-        case 'A': card_name += "Ace";       break;
-        case 'T': card_name += "Ten";       break;
-        case 'K': card_name += "King";      break;
-        case 'Q': card_name += "Queen";     break;
-        case 'J': card_name += "Jack";      break;
-        
-        default:  {
-            card_name += string(1, val);
+        default: {
+            cerr << "Error in pretty_suit: " << suit << " is unknown.";
+            return "";
         }
     }
+}
 
-    card_name += " of ";
-
-    switch (suit) {
-        case 's': card_name += "Spade";     break;
-        case 'h': card_name += "Heart";     break;
-        case 'd': card_name += "Diamond";   break;
-        case 'c': card_name += "Club";      break;
+string pretty_value(const string card) {
+    const char value = card.front();
+    switch (value) {
+        case 'A': return "Ace";
+        case 'T': return "Ten";
+        case 'K': return "King";
+        case 'Q': return "Queen";
+        case 'J': return "Jack";
+        
+        default:  {
+            return string(1, value);
+        }
     }
-
-    return card_name;
 }
 
 int team(const int player) {
