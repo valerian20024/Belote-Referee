@@ -294,19 +294,19 @@ void process_trick(
         string card;
         in >> card;
 
-        cout << card << endl;
-        cout << prettify(card) << "\n" << endl;
-
         if (i == 0) 
             led_suit = suit(card);
 
         int player = current_player(leader, i);
 
-        //todo add the trick number
-        //todo add a function to convert raw card format to human_readable ones.
-        if (!true) {
+        if (!is_legal_play(
+            cards_played,
+            card,
+            player
+        )) {
             err << "Error: player " << (player + 1)
                 << " played " << card
+                << " in trick : " << (trick_number + 1)
                 << " - " << reason << endl;
         }
 
