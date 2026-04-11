@@ -98,8 +98,11 @@ int team(const int player);
  */
 int current_player(const int leader, const int offset);
 
-/// @brief Orchestrator for processing one trick.
-void process_trick(
+/**
+ * @brief Orchestrator for processing one trick.
+ * @return 0 when everything went right. A non-null int otherwise.
+ */
+int process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
@@ -315,7 +318,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     contract_team -= 1;
 
     for (int trick_counter = 0; trick_counter < NUM_TRICKS; trick_counter++) {
-        process_trick(
+        int error = process_trick(
             scores,
             cards_played,
             belote_table,
@@ -328,6 +331,9 @@ bool game(istream& in, ostream& out, ostream& err) {
             trump,
             trick_counter
         );
+
+        if (error)
+            return 1;
 
         print_scores(scores, previous_trick_winner, out);
     }
@@ -346,7 +352,7 @@ bool game(istream& in, ostream& out, ostream& err) {
     return true;
 }
 
-void process_trick(
+int process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
@@ -390,9 +396,9 @@ void process_trick(
             trick_number
         )) {
             err << "Error: " << reason << endl;
+            return 1;
         }
         
-
         update_state(
             scores,
             cards_played, 
@@ -416,6 +422,8 @@ void process_trick(
         award_dix_de_der(scores, tricks_won);
 
     previous_trick_winner = master;
+
+    return 0;
 }
 
 bool is_legal_play(
@@ -894,7 +902,7 @@ string pretty_value(const char value) {
 }
 
 string pretty_player(const int player) {
-    return "Player " + string(1, player + 1);
+    return "Player " + to_string(player + 1);
 }
 
 int partner(const int player) {
@@ -990,7 +998,7 @@ void print_final_scores(const pair<int, int>& scores, ostream& out) {
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
     out << "=== Cards played by each player so far ===\n";
     for (int player = 0; player < NUM_PLAYERS; ++player) {
-        out << "Player " << (player + 1) << ": ";
+        out << pretty_player(player) << ": ";
         
         if (cards_played[static_cast<size_t>(player)].empty()) {
             out << "(none)";
