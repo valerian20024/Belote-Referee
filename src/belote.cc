@@ -366,7 +366,7 @@ bool game(istream& in, ostream& out, ostream& err) {
         );
 
         if (error)
-            return 1;
+            return false;
 
         print_scores(scores, previous_trick_winner, out);
     }
@@ -486,7 +486,7 @@ bool is_legal_play(
         if (suit(card) == led_suit)
             return true;
         else {
-            // Player states he cannot play this suit anymore. We record this fact.
+            // We record player states he cannot play this suit anymore.
             renounce(renounces_led, player, led_suit, trick_number);
 
             // Players whose partner are master can play any card.
@@ -495,13 +495,22 @@ bool is_legal_play(
             else {
                 // In the case of trumps, rules are different.
                 if (suit(card) == trump) {
-                    // If player is not playing a higher trump than that he previously renounced to follow,
-                    // then he previously lied because he could have drawn a higher trump card.
+                    // If player is not playing a higher trump than that 
+                    // he previously renounced to follow, then he previously
+                    // lied because he could have drawn a higher trump card.
                     if (has_renounced_higher_trump_card(
                             evidence_trick_number, renounces_trump, player, card
                     )) {
-                        string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
-                        reason = build_error_reason(player, evidence_card, evidence_trick_number);
+                        string evidence_card = get_card_played(
+                            cards_played, 
+                            player, 
+                            evidence_trick_number
+                        );
+                        reason = build_error_reason(
+                            player, 
+                            evidence_card, 
+                            evidence_trick_number
+                        );
 
                         return false;
                     }
@@ -511,7 +520,12 @@ bool is_legal_play(
                         return true;
                     else {
                         // We record player states he doesn't have better than the highest trump card.
-                        renounce_overtrumping(renounces_trump, player, card, trick_number);
+                        renounce_overtrumping(
+                            renounces_trump, 
+                            player, 
+                            highest_trump_card, 
+                            trick_number
+                        );
 
                         return true;
                     }
