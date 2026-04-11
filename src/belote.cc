@@ -85,6 +85,9 @@ string pretty_suit(const char suit);
 /// @brief Returns the name of the player in a human readable format.
 string pretty_player(const int player);
 
+/// @brief Returns the trick number as 1-indexed, easier for a human to read.
+string pretty_trick_number(const int trick_number);
+
 /// @brief Returns the partner of a given player.
 int partner(const int player);
 
@@ -477,7 +480,7 @@ bool is_legal_play(
             + " played " 
             + pretty_card(evidence_card)
             + " in trick "
-            + string(1, evidence_trick_number + 1);
+            + pretty_trick_number(evidence_trick_number);
     return false;
     
 }
@@ -896,13 +899,17 @@ string pretty_value(const char value) {
         case 'J': return "Jack";
         
         default:  {
-            return string(1, value);
+            return to_string(value);
         }
     }
 }
 
 string pretty_player(const int player) {
     return "Player " + to_string(player + 1);
+}
+
+string pretty_trick_number(const int trick_number) {
+    return to_string(trick_number + 1);
 }
 
 int partner(const int player) {
