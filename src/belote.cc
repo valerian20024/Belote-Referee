@@ -44,16 +44,22 @@ constexpr int CAPOT_SCORE       = 252;
 /// @example cards_collection[0][4] returns the fifth card player1 played 
 using CardsCollection = array<vector<string>, NUM_CARDS>;
 
-/// @brief table[3][1] = true would mean player 4 has played a queen of trump.
+/// @brief Tracks which King and Queen of trump have been played by each player.
+/// @example table[3][1] = true would mean player 4 has played a queen of trump.
 using BeloteLookupTable = array<array<bool, 2>, NUM_PLAYERS>;
 
 /**
- * @brief A 4 by 4 array containing pairs of bool and int. 
+ * @brief Tracks whether and when has a player renounced to play a certain suit.
  * @example table[0][0] = (False, 0) means player 1 has not renounced to clubs. 
  * He is still able to draw some from his hand.
  * @example table[3][1] = (True, 4) means player 4 has renounced to diamonds in trick number 4.
  */
 using RenouncementTable = array<array<pair<bool, int>, NUM_SUITS>, NUM_PLAYERS>;
+
+/**
+ * @brief Tracks the trump card each player could not overtrump and at which trick.
+ */
+using OvertrumpRenouncementTable = array<pair<string, int>, NUM_PLAYERS>;
 
 // Returns the RHS part of the Card.
 string suit(const string card);
@@ -109,7 +115,8 @@ int process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
-    RenouncementTable&           renounces,
+    RenouncementTable&          renounces_led,
+    OvertrumpRenouncementTable& renounces_trump,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -138,6 +145,7 @@ void update_state(
 bool is_legal_play(
     string&                     reason,
     RenouncementTable&          renounces,
+    OvertrumpRenouncementTable& renounces_trump,
     const CardsCollection&      cards_played,
     const string                highest_trump_card,
     const string                trump,
@@ -162,6 +170,26 @@ void renounce(
     const int           player, 
     const string        suit, 
     const int           trick_number
+);
+
+bool has_renounced_higher_trump_card(
+    int&                                evidence_trick_number,
+    const OvertrumpRenouncementTable&   table,
+    const int                           player,
+    const string                        card
+);
+
+void renounce_overtrumping(
+    OvertrumpRenouncementTable& table,
+    const int                   player,
+    const string                card,
+    const int                   trick_number
+);
+
+string build_error_reason(
+    const int       player, 
+    const string    evidence_card,
+    const int       evidence_trick_number
 );
 
 void update_cards_played(
@@ -305,15 +333,16 @@ string get_card_played(
 
 
 bool game(istream& in, ostream& out, ostream& err) {
-    string                      trump = {};
-    int                         contract_team = {};
-    pair<int, int>              scores = {};
-    BeloteLookupTable           belote_table = {};
+    string                      trump                   = {};
+    int                         contract_team           = {};
+    pair<int, int>              scores                  = {};
+    BeloteLookupTable           belote_table            = {};
     pair<int, int>              belote_scored;
-    CardsCollection             cards_played = {};
-    RenouncementTable            renounces = {};
-    int                         previous_trick_winner = {};
-    array<bool, NUM_TRICKS>     tricks_won = {};
+    CardsCollection             cards_played            = {};
+    RenouncementTable           renounces_led           = {};
+    OvertrumpRenouncementTable  renounces_trump         = {};
+    int                         previous_trick_winner   = {};
+    array<bool, NUM_TRICKS>     tricks_won              = {};
     
     in >> trump >> contract_team;
 
@@ -325,7 +354,8 @@ bool game(istream& in, ostream& out, ostream& err) {
             scores,
             cards_played,
             belote_table,
-            renounces,
+            renounces_led,
+            renounces_trump,
             belote_scored,
             previous_trick_winner,
             tricks_won,
@@ -359,7 +389,8 @@ int process_trick(
     pair<int, int>&             scores,
     CardsCollection&            cards_played,
     BeloteLookupTable&          belote_table,
-    RenouncementTable&           renounces,
+    RenouncementTable&          renounces_led,
+    OvertrumpRenouncementTable& renounces_trump,
     pair<int, int>&             belote_scored,
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
@@ -388,7 +419,8 @@ int process_trick(
         
         if (!is_legal_play(
             reason,
-            renounces,
+            renounces_led,
+            renounces_trump,
             cards_played,
             highest_trump_card,
             trump,
@@ -431,7 +463,8 @@ int process_trick(
 
 bool is_legal_play(
     string&                     reason,
-    RenouncementTable&          renounces,
+    RenouncementTable&          renounces_led,
+    OvertrumpRenouncementTable& renounces_trump,
     const CardsCollection&      cards_played,
     const string                highest_trump_card,
     const string                trump,
@@ -447,25 +480,45 @@ bool is_legal_play(
 
     int evidence_trick_number = {};
 
-    if (!has_renounced(evidence_trick_number, renounces, player, suit(card))) {
+    // If player can play this suit card.
+    if (!has_renounced(evidence_trick_number, renounces_led, player, suit(card))) {
+        // If following the led suit, it's OK.
         if (suit(card) == led_suit)
             return true;
         else {
-            renounce(renounces, player, led_suit, trick_number);
+            // Player states he cannot play this suit anymore. We record this fact.
+            renounce(renounces_led, player, led_suit, trick_number);
 
+            // Players whose partner are master can play any card.
             if (partner(player) == master)
                 return true;
             else {
+                // In the case of trumps, rules are different.
                 if (suit(card) == trump) {
+                    // If player is not playing a higher trump than that he previously renounced to follow,
+                    // then he previously lied because he could have drawn a higher trump card.
+                    if (has_renounced_higher_trump_card(
+                            evidence_trick_number, renounces_trump, player, card
+                    )) {
+                        string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
+                        reason = build_error_reason(player, evidence_card, evidence_trick_number);
+
+                        return false;
+                    }
+
+                    // If player plays a stronger trump card, it's OK.
                     if (is_stronger_trump(card, highest_trump_card))
                         return true;
                     else {
-                        //reason = "Must overtrump when having a trump card";
-                        //return false;
+                        // We record player states he doesn't have better than the highest trump card.
+                        renounce_overtrumping(renounces_trump, player, card, trick_number);
+
                         return true;
                     }
                 } else {
-                    renounce(renounces, player, trump, trick_number);
+                    // We record player states he doesn't have any led suit nor trump suit cards.
+                    // He can play anything he has left.
+                    renounce(renounces_led, player, trump, trick_number);
 
                     return true;
                 }
@@ -474,27 +527,22 @@ bool is_legal_play(
     }
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
+    reason = build_error_reason(player, evidence_card, evidence_trick_number);
 
-    reason = "Illegal card suit. "
-            + pretty_player(player) 
-            + " played " 
-            + pretty_card(evidence_card)
-            + " in trick "
-            + pretty_trick_number(evidence_trick_number);
     return false;
-    
 }
 
-void renounce(
-    RenouncementTable&  table,
-    const int           player, 
-    const string        suit, 
-    const int           trick_number
+string build_error_reason(
+    const int       player, 
+    const string    evidence_card,
+    const int       evidence_trick_number
 ) {
-    size_t player_index = static_cast<size_t>(player);
-    size_t suit_index = suit_to_index(suit);
-
-    table[player_index][suit_index] = {true, trick_number};
+    return "Illegal card. "
+        + pretty_player(player) 
+        + " played " 
+        + pretty_card(evidence_card)
+        + " in trick "
+        + pretty_trick_number(evidence_trick_number);
 }
 
 // todo return const size_t
@@ -533,6 +581,50 @@ bool has_renounced(
     return res;
 }
 
+void renounce(
+    RenouncementTable&  table,
+    const int           player, 
+    const string        suit, 
+    const int           trick_number
+) {
+    size_t player_index = static_cast<size_t>(player);
+    size_t suit_index = suit_to_index(suit);
+
+    table[player_index][suit_index] = {true, trick_number};
+}
+
+bool has_renounced_higher_trump_card(
+    int&                                evidence_trick_number,
+    const OvertrumpRenouncementTable&   table,
+    const int                           player,
+    const string                        card
+) {
+    const size_t player_index = static_cast<size_t>(player);
+    const string highest_renounced_trump_card = table[player_index].first;
+
+    if (highest_renounced_trump_card.empty())
+        return false; 
+
+    // Problem, player lied before.
+    if (is_stronger_trump(card, highest_renounced_trump_card)) {
+        evidence_trick_number = table[player_index].second;
+    
+        return true;
+    }
+
+    return false;
+}
+
+void renounce_overtrumping(
+    OvertrumpRenouncementTable& table,
+    const int                   player,
+    const string                card,
+    const int                   trick_number
+) {
+    const size_t player_index = static_cast<size_t>(player);
+
+    table[player_index] = {card, trick_number};
+}
 
 void update_state(
     pair<int, int>&       scores,
