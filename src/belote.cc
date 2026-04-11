@@ -24,6 +24,7 @@ constexpr bool DEBUG_MODE =
 
 
 // Business logic of the belote game.
+
 constexpr int NUM_TEAMS         = 2;
 constexpr int NUM_CARDS         = 4;
 constexpr int NUM_PLAYERS       = 4;
@@ -61,10 +62,10 @@ using RenouncementTable = array<array<pair<bool, int>, NUM_SUITS>, NUM_PLAYERS>;
  */
 using OvertrumpRenouncementTable = array<pair<string, int>, NUM_PLAYERS>;
 
-// Returns the RHS part of the Card.
+/// @brief Returns the RHS part of the Card.
 string suit(const string card);
 
-// Returns the LHS of the Card.
+/// @brief Returns the LHS of the Card.
 string value(const string card);
 
 /**
@@ -212,7 +213,6 @@ void update_highest_cards(
     const string card, 
     const string trump
 );
-
 
 /**
  * @brief Assesses whether `given` is stronger than `compared_to` following the `order`.
@@ -500,10 +500,6 @@ bool is_legal_play(
     const int                   master,
     const int                   trick_number
 ) {
-    // Trick is just beginning, any card is legal.
-    if (master == -1)
-        return true;
-
     if (DEBUG_MODE) {
         print_renouncement_table(renounces_led, cout);
         print_overtrump_renouncement_table(renounces_trump, cout);
@@ -513,6 +509,11 @@ bool is_legal_play(
 
     // If player can play this suit card.
     if (!has_renounced(evidence_trick_number, renounces_led, player, suit(card))) {
+
+        // Trick is just beginning, any card is legal.
+        if (master == -1)
+            return true;
+
         // If following the led suit, it's OK.
         if (suit(card) == led_suit)
             return true;
@@ -1242,6 +1243,7 @@ void print_trick_banner(const int trick_number, ostream& out) {
         << endl;
 }
 
+// todo make inline
 string styling(const string code, const string text) {
     return code + text + "\033[0m";
 }
