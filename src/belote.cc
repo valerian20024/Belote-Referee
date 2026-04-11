@@ -991,7 +991,7 @@ string pretty_value(const char value) {
         case 'J': return "Jack";
         
         default:  {
-            return to_string(value);
+            return string(1, value);
         }
     }
 }

@@ -11,7 +11,7 @@ EXECUTABLE := belote
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(SRC_DIR)/belote.cc $(SRC_DIR)/belote.hh
+$(EXECUTABLE): $(SRC_DIR)/belote.cc $(SRC_DIR)/belote.hh $(SRC_DIR)/main.cc
 	$(CXX) $(CXXFLAGS) $(SRC_DIR)/belote.cc $(SRC_DIR)/main.cc -o $(EXECUTABLE)
 
 
