@@ -337,6 +337,15 @@ void print_overtrump_renouncement_table(
     ostream& out
 );
 
+/// @brief Returns the text with some ANSI characters codes for easier debugging.
+string styling(const string code, const string text);
+
+/// @brief Returns the text with some color.
+string debug_header(const string text);
+
+/// @brief Returns the text with some flashy color.
+string debug_notification(const string text);
+
 /// @brief Prints a nice banner indicating the start of a new trick.
 void print_trick_banner(const int trick_number, ostream& out);
 
@@ -590,7 +599,8 @@ size_t suit_to_index(const string suit) {
     if (!(index == string::npos)) {
         return index;
     } else {
-        cerr << "Error in suit_to_index: unknown suit";
+        cerr << debug_notification("Error in suit_to_index: unknown suit") 
+             << endl;
         return -1;
     }
 }
@@ -602,7 +612,8 @@ bool has_renounced(
     const string                suit
 ) {
     if (suit.empty()) {
-        cerr << "Error in has_renounced: suit is empty." << endl;
+        cerr << debug_notification("Error in has_renounced: suit is empty.") 
+             << endl;
         return false;
     }
     
@@ -689,7 +700,7 @@ void update_state(
     update_trick_points(trick_points, card, trump);
 
     if (DEBUG_MODE) {
-        cout << ">>> New card <<<\n"
+        cout << debug_notification(">>> New card <<<\n")
             << "Master is [" << master << "]\n"
             << "Player [" << player << "] played card [" << card << "]\n"
             << "Highest cards : \n" 
@@ -1010,7 +1021,8 @@ string pretty_suit(const char suit) {
         case 'c': return "Club";
 
         default: {
-            cerr << "Error in pretty_suit: " << suit << " is unknown.";
+            cerr << debug_notification("Error in pretty_suit: unknown " + string(1, suit)) 
+                 << endl;
             return "";
         }
     }
@@ -1046,7 +1058,8 @@ int partner(const int player) {
         case 3: return 1;
 
         default: {
-            cerr << "Error in partner: unknown player ID." << endl;
+            cerr << debug_notification("Error in partner: unknown player ID.") 
+                 << endl;
             return -1;
         }
     }
@@ -1065,7 +1078,8 @@ int team(const int player) {
 
 string suit(const string card) {
     if (card.empty()) {
-        cerr << "ERROR: suit() called on empty string." << endl;
+        cerr << debug_notification("ERROR: suit() called on empty string.")
+             << endl;
         return "";
     }
     return string(1, card.back());
@@ -1073,7 +1087,8 @@ string suit(const string card) {
 
 string value(const string card) {
     if (card.empty()) {
-        cerr << "ERROR: value() called on empty string." << endl;
+        cerr << debug_notification("ERROR: value() called on empty string.") 
+             << endl;
         return "";
     }
     return string(1, card.front());
@@ -1103,7 +1118,7 @@ void print_scores(
 ) {
     if (DEBUG_MODE) {
         // 0-indexed player and pretty-printing.
-        out << "=== Scores ===\n"
+        out << debug_notification(">>> Scores <<<\n")
             << scores.first << " " 
             << scores.second << " " 
             << trick_winner << "\n" << endl;
@@ -1117,7 +1132,7 @@ void print_scores(
 
 void print_final_scores(const pair<int, int>& scores, ostream& out) {
     if (DEBUG_MODE) {
-        out << "===== Finals =====\n"
+        out << debug_notification(">>> Finals <<<\n")
             << scores.first << " " 
             << scores.second << "\n" << endl;
     } else {
@@ -1127,7 +1142,7 @@ void print_final_scores(const pair<int, int>& scores, ostream& out) {
 }
 
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
-    out << "=== Cards played ===\n";
+    out << debug_header("=== Cards played ===\n");
     for (int player = 0; player < NUM_PLAYERS; ++player) {
         out << pretty_player(player) << ": ";
         
@@ -1148,11 +1163,11 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
 }
 
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out) {
-    out << "=== Belote assets ===\n";
+    out << debug_header("=== Belote assets ===\n");
     for (int p = 0; p < NUM_PLAYERS; ++p) {
         out << "Player " << (p + 1) << ": "
-            << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
-            << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
+            << (assets[static_cast<size_t>(p)][0] ? "K " : "(none) ")
+            << (assets[static_cast<size_t>(p)][1] ? "Q" : "(none)")
             << "\n";
     }
     out << endl;
@@ -1162,7 +1177,7 @@ void print_tricks_won(
     const array<bool, NUM_TRICKS>&  tricks_won, 
     ostream&                        out
 ) {
-    out << "=== Tricks won by team ===\n";
+    out << debug_header("=== Tricks won by team ===\n");
     for (int t = 0; t < NUM_TRICKS; ++t) {
         out << "Trick " << (t + 1) << ": Team " 
             << (tricks_won[static_cast<size_t>(t)] ? "1" : "2") 
@@ -1173,7 +1188,8 @@ void print_tricks_won(
 
 
 void print_renouncement_table(const RenouncementTable& renounces, ostream& out) {
-    out << "=== Suit Renouncement Table ===\n";
+    out << debug_header("=== Suit Renouncement Table ===\n");
+    
     for (int player = 0; player < NUM_PLAYERS; ++player) {
         out << pretty_player(player) << ": ";
         
@@ -1199,7 +1215,8 @@ void print_overtrump_renouncement_table(
     const OvertrumpRenouncementTable& renounces_trump, 
     ostream& out
 ) {
-    out << "=== Overtrump Renouncement Table ===\n";
+    out << debug_header("=== Overtrump Renouncement Table ===\n");
+    
     for (int player = 0; player < NUM_PLAYERS; ++player) {
         const auto& entry = renounces_trump[static_cast<size_t>(player)];
         
@@ -1219,9 +1236,20 @@ void print_overtrump_renouncement_table(
 }
 
 void print_trick_banner(const int trick_number, ostream& out) {
-    out << "\n"
-        << "╔═══════════════════════════════════════════════════╗\n"
+    out << "╔═══════════════════════════════════════════════════╗\n"
         << "║                    NEW TRICK (" + to_string(trick_number) + ")                  ║\n"
         << "╚═══════════════════════════════════════════════════╝\n"
         << endl;
+}
+
+string styling(const string code, const string text) {
+    return code + text + "\033[0m";
+}
+
+string debug_header(const string text) {
+    return styling("\033[33m", text);
+}
+
+string debug_notification(const string text) {
+    return styling("\033[91m", text);
 }
