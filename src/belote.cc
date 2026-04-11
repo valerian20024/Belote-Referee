@@ -121,6 +121,7 @@ int process_trick(
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
     istream&                    in,
+    ostream&                    out,
     ostream&                    err,
     const string                trump,
     const int                   trick_number
@@ -327,6 +328,18 @@ string get_card_played(
     const int trick_number
 );
 
+/// @brief Prints the current state of suit renouncements for debugging.
+void print_renouncement_table(const RenouncementTable& renounces, ostream& out);
+
+/// @brief Prints the current state of overtrump renouncements for debugging.
+void print_overtrump_renouncement_table(
+    const OvertrumpRenouncementTable& renounces_trump, 
+    ostream& out
+);
+
+/// @brief Prints a nice banner indicating the start of a new trick.
+void print_trick_banner(const int trick_number, ostream& out);
+
     /*================================================++
     ||               IMPLEMENTATIONS                  ||
     ++================================================*/
@@ -360,6 +373,7 @@ bool game(istream& in, ostream& out, ostream& err) {
             previous_trick_winner,
             tricks_won,
             in,
+            out,
             err,
             trump,
             trick_counter
@@ -395,6 +409,7 @@ int process_trick(
     int&                        previous_trick_winner,
     array<bool, NUM_TRICKS>&    tricks_won,
     istream&                    in,
+    ostream&                    out,
     ostream&                    err,
     const string                trump,
     const int                   trick_number
@@ -407,6 +422,9 @@ int process_trick(
     int trick_points = {};
     string reason = {};
 
+    if (DEBUG_MODE) 
+        print_trick_banner(trick_number, out);
+
     for (int i = 0; i < NUM_CARDS; i++) {
         string card;
         in >> card;
@@ -415,7 +433,6 @@ int process_trick(
             led_suit = suit(card);
 
         int player = current_player(leader, i);
-        
         
         if (!is_legal_play(
             reason,
@@ -477,6 +494,11 @@ bool is_legal_play(
     // Trick is just beginning, any card is legal.
     if (master == -1)
         return true;
+
+    if (DEBUG_MODE) {
+        print_renouncement_table(renounces_led, cout);
+        print_overtrump_renouncement_table(renounces_trump, cout);
+    }
 
     int evidence_trick_number = {};
 
@@ -667,14 +689,12 @@ void update_state(
     update_trick_points(trick_points, card, trump);
 
     if (DEBUG_MODE) {
-        cout << "----- New card -----\n"
+        cout << ">>> New card <<<\n"
             << "Master is [" << master << "]\n"
             << "Player [" << player << "] played card [" << card << "]\n"
-            << "Highest cards : " 
-            << "t: [" << highest_trump_card << "] "
-            << "l: [" << highest_led_card << "]\n"
-            << "---------------------\n"
-            << endl;
+            << "Highest cards : \n" 
+            << "  t: [" << highest_trump_card << "] \n"
+            << "  l: [" << highest_led_card << "]\n" << endl;
 
         print_cards_played(cards_played, cout);
         print_belote_assets(belote_table, cout);
@@ -1086,8 +1106,7 @@ void print_scores(
         out << "=== Scores ===\n"
             << scores.first << " " 
             << scores.second << " " 
-            << trick_winner << "\n"
-            << "=================\n" << endl;
+            << trick_winner << "\n" << endl;
     } else {
         // Release version.
         out << scores.first << " " 
@@ -1100,8 +1119,7 @@ void print_final_scores(const pair<int, int>& scores, ostream& out) {
     if (DEBUG_MODE) {
         out << "===== Finals =====\n"
             << scores.first << " " 
-            << scores.second << "\n" 
-            << "==================\n" << endl;
+            << scores.second << "\n" << endl;
     } else {
         out << scores.first << " "
             << scores.second << endl;
@@ -1109,7 +1127,7 @@ void print_final_scores(const pair<int, int>& scores, ostream& out) {
 }
 
 void print_cards_played(const CardsCollection& cards_played, ostream& out) {
-    out << "=== Cards played by each player so far ===\n";
+    out << "=== Cards played ===\n";
     for (int player = 0; player < NUM_PLAYERS; ++player) {
         out << pretty_player(player) << ": ";
         
@@ -1126,18 +1144,18 @@ void print_cards_played(const CardsCollection& cards_played, ostream& out) {
         }
         out << "\n";
     }
-    out << "====================================================\n" << endl;
+    out << endl;
 }
 
 void print_belote_assets(const BeloteLookupTable& assets, ostream& out) {
-    out << "=== Belote assets (King/Queen of trump per player) ===\n";
+    out << "=== Belote assets ===\n";
     for (int p = 0; p < NUM_PLAYERS; ++p) {
         out << "Player " << (p + 1) << ": "
             << (assets[static_cast<size_t>(p)][0] ? "K " : "- ")
             << (assets[static_cast<size_t>(p)][1] ? "Q" : "-")
             << "\n";
     }
-    out << "====================================================\n" << endl;
+    out << endl;
 }
 
 void print_tricks_won(
@@ -1150,5 +1168,60 @@ void print_tricks_won(
             << (tricks_won[static_cast<size_t>(t)] ? "1" : "2") 
             << "\n";
     }
-    out << "=======================================================\n" << endl;
+    out << endl;
+}
+
+
+void print_renouncement_table(const RenouncementTable& renounces, ostream& out) {
+    out << "=== Suit Renouncement Table ===\n";
+    for (int player = 0; player < NUM_PLAYERS; ++player) {
+        out << pretty_player(player) << ": ";
+        
+        bool has_any = false;
+        for (size_t suit_idx = 0; suit_idx < NUM_SUITS; ++suit_idx) {
+            const auto& entry = renounces[static_cast<size_t>(player)][suit_idx];
+            if (entry.first) {  // has renounced
+                if (has_any) out << ", ";
+                out << pretty_suit("cdhs"[suit_idx]) 
+                    << " (trick " << pretty_trick_number(entry.second) << ")";
+                has_any = true;
+            }
+        }
+        
+        if (!has_any)
+            out << "(none)";
+        out << "\n";
+    }
+    out << endl;
+}
+
+void print_overtrump_renouncement_table(
+    const OvertrumpRenouncementTable& renounces_trump, 
+    ostream& out
+) {
+    out << "=== Overtrump Renouncement Table ===\n";
+    for (int player = 0; player < NUM_PLAYERS; ++player) {
+        const auto& entry = renounces_trump[static_cast<size_t>(player)];
+        
+        out << pretty_player(player) << ": ";
+        
+        if (entry.first.empty()) {
+            out << "(none)";
+        } else {
+            out << "Cannot overtrump " 
+                << pretty_card(entry.first)
+                << " (since trick " 
+                << pretty_trick_number(entry.second) << ")";
+        }
+        out << "\n";
+    }
+    out << endl;
+}
+
+void print_trick_banner(const int trick_number, ostream& out) {
+    out << "\n"
+        << "╔═══════════════════════════════════════════════════╗\n"
+        << "║                    NEW TRICK (" + to_string(trick_number) + ")                  ║\n"
+        << "╚═══════════════════════════════════════════════════╝\n"
+        << endl;
 }

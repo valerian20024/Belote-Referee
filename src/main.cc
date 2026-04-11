@@ -91,7 +91,20 @@ int main() {
     Kd 9h Ks 9d
     )";
 
-    istringstream in(test251);
+
+    string test257 = R"(
+    d 1
+    9h 9c Td Qs
+    8h As 9d Ks
+    8d 8c Kd Qh
+    Jh 7c Ad 7d
+    8s Jc Ac Qc
+    Qd Th Jd 9s
+    Ts Tc Js Kc
+    7s Ah Kh 7h
+    )";
+
+    istringstream in(test257);
 
     return game(in, cout, cerr);
 } 
