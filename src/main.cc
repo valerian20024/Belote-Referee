@@ -116,7 +116,7 @@ int main() {
     9c Th 8d Td
     )";
 
-    istringstream in(test334);
+    istringstream in(test251);
 
     return game(in, cout, cerr);
 } 

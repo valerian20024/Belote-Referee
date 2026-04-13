@@ -205,8 +205,12 @@ void renounce_overtrumping(
 
 string build_error_reason(
     const int       player, 
+    const string    illegal_card,
+    const int       trick_number,
     const string    evidence_card,
-    const int       evidence_trick_number
+    const int       evidence_trick_number,
+    const string    context_suit,
+    const int       error_type
 );
 
 void update_cards_played(
@@ -471,7 +475,7 @@ int process_trick(
             master,
             trick_number
         )) {
-            err << "Error: " << reason << endl;
+            err << reason << endl;
             return 1;
         }
         
@@ -553,10 +557,16 @@ bool is_legal_play(
                             player, 
                             evidence_trick_number
                         );
+
+                        //todo check my arguments!!!
                         reason = build_error_reason(
-                            player, 
-                            evidence_card, 
-                            evidence_trick_number
+                            player,
+                            card,
+                            trick_number,
+                            evidence_card,
+                            evidence_trick_number,
+                            suit(card),
+                            0
                         );
 
                         // RANDOM PROBE HACK
@@ -596,30 +606,64 @@ bool is_legal_play(
     }
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
-    reason = build_error_reason(player, evidence_card, evidence_trick_number);
+
+    //todo check my arguments!!!
+    reason = build_error_reason(
+        player,
+        card,
+        trick_number,
+        evidence_card,
+        evidence_trick_number,
+        suit(card),
+        0
+    );
 
     // RANDOM PROBE HACK
     static std::mt19937 gen(std::random_device{}());
     static std::uniform_int_distribution<int> dist(0, 7);
     if (dist(gen) == 0) {
-        cout << "TRIGGEREDDD" << endl;
+        cout << "TRIGGERED" << endl;
         return true;
     }
 
     return false;
 }
 
+
+//todo check the arguments use in the function.
 string build_error_reason(
     const int       player, 
+    const string    illegal_card,
+    const int       trick_number,
     const string    evidence_card,
-    const int       evidence_trick_number
+    const int       evidence_trick_number,
+    const string    context_suit,
+    const int       error_type
 ) {
-    return "Illegal card. "
-        + pretty_player(player) 
-        + " played " 
-        + pretty_card(evidence_card)
-        + " in trick "
+    string reason = "Error: " + pretty_player(player) 
+        + " has just played " + pretty_card(illegal_card)
+        + " in trick " + pretty_trick_number(trick_number)
+        + ".\n"
         + pretty_trick_number(evidence_trick_number);
+    
+    // Trump errors.
+    if (error_type == 0) {
+        reason += "However, he should not have any trumps left as he discarded a " 
+            + pretty_card(evidence_card)
+            + " instead of cutting in trick " 
+            + pretty_trick_number(evidence_trick_number) 
+            + ".\n";
+    } else {
+    // Should have followed errors.
+        const string suit_name = pretty_suit(context_suit.front());
+
+        reason += "However he should not have any " + suit_name
+            + " left as he played a " + pretty_card(evidence_card) 
+            + " over " + suit_name
+            + " in trick " + pretty_trick_number(evidence_trick_number) 
+            + ".\n";
+    }
+    return reason;
 }
 
 // todo return const size_t
