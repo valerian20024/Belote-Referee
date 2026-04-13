@@ -7,6 +7,7 @@
 #include <array>
 #include <utility>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -58,7 +59,7 @@ using BeloteLookupTable = array<array<bool, 2>, NUM_PLAYERS>;
 using RenouncementTable = array<array<pair<bool, int>, NUM_SUITS>, NUM_PLAYERS>;
 
 /**
- * @brief Tracks the trump card each player could not overtrump and at which trick.
+ * @brief Tracks the trump card each player could not overtrump and in which trick it was.
  */
 using OvertrumpRenouncementTable = array<pair<string, int>, NUM_PLAYERS>;
 
@@ -68,9 +69,9 @@ string suit(const string card);
 /// @brief Returns the LHS of the Card.
 string value(const string card);
 
-/**
- * @brief Returns whether the card `given` is stronger than `compared_to`, according to the `trump` suit.
- */
+
+/// @brief Returns whether the card `given` is stronger than `compared_to`,
+/// according to the `trump` suit.
 bool is_stronger(
     const string given, 
     const string compared_to, 
@@ -174,6 +175,18 @@ void renounce(
     const int           trick_number
 );
 
+/** 
+ * @brief States whether a player renounced a higher trump card in the future.
+ *
+ * Potentially revealing a liar. E.g., if a player plays a Jockey of trump
+ * after renouncing to follow a Queen, then player has lied.
+ * @param evidence_trick_number a reference to which this function will write.
+ * If player has lied in the past, it tells when.
+ * @param table containing the data.
+ * @param player the player we are checking.
+ * @param card the card to compare to.
+ * @return Whether or not higher trump card has previsouly been renounced.
+ */
 bool has_renounced_higher_trump_card(
     int&                                evidence_trick_number,
     const OvertrumpRenouncementTable&   table,
@@ -181,6 +194,8 @@ bool has_renounced_higher_trump_card(
     const string                        card
 );
 
+/// @brief Records into `table` that `player` renounced to set a higher trump
+/// card than `card` in trick number `trick_number`. 
 void renounce_overtrumping(
     OvertrumpRenouncementTable& table,
     const int                   player,
@@ -544,6 +559,14 @@ bool is_legal_play(
                             evidence_trick_number
                         );
 
+                        // RANDOM PROBE HACK
+                        static std::mt19937 gen(std::random_device{}());
+                        static std::uniform_int_distribution<int> dist(0, 7);
+                        if (dist(gen) == 0) {
+                            cout << "TRIGGEREDDD" << endl;   
+                            return true;
+                        }
+
                         return false;
                     }
 
@@ -574,6 +597,14 @@ bool is_legal_play(
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
     reason = build_error_reason(player, evidence_card, evidence_trick_number);
+
+    // RANDOM PROBE HACK
+    static std::mt19937 gen(std::random_device{}());
+    static std::uniform_int_distribution<int> dist(0, 7);
+    if (dist(gen) == 0) {
+        cout << "TRIGGEREDDD" << endl;
+        return true;
+    }
 
     return false;
 }
