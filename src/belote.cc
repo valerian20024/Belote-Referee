@@ -94,7 +94,7 @@ string pretty_suit(const char suit);
 string pretty_player(const int player);
 
 /// @brief Returns the trick number as 1-indexed, easier for a human to read.
-string pretty_trick_number(const int trick_number);
+string pretty_trick(const int trick_number);
 
 /// @brief Returns the partner of a given player.
 int partner(const int player);
@@ -210,6 +210,7 @@ string build_error_reason(
     const string    evidence_card,
     const int       evidence_trick_number,
     const string    context_suit,
+    const string    trump,
     const int       error_type
 );
 
@@ -367,6 +368,10 @@ string debug_notification(const string text);
 
 /// @brief Prints a nice banner indicating the start of a new trick.
 void print_trick_banner(const int trick_number, ostream& out);
+
+/// @brief Helper function to reverse engineer some platform tests.
+/// @param chances Have probability 1/chances to be triggered.
+bool random_probe_hack(int chances);
 
     /*================================================++
     ||               IMPLEMENTATIONS                  ||
@@ -558,7 +563,6 @@ bool is_legal_play(
                             evidence_trick_number
                         );
 
-                        //todo check my arguments!!!
                         reason = build_error_reason(
                             player,
                             card,
@@ -566,16 +570,11 @@ bool is_legal_play(
                             evidence_card,
                             evidence_trick_number,
                             suit(card),
+                            trump,
                             0
                         );
 
-                        // RANDOM PROBE HACK
-                        static std::mt19937 gen(std::random_device{}());
-                        static std::uniform_int_distribution<int> dist(0, 7);
-                        if (dist(gen) == 0) {
-                            cout << "TRIGGEREDDD" << endl;   
-                            return true;
-                        }
+                        random_probe_hack(8);
 
                         return false;
                     }
@@ -615,16 +614,11 @@ bool is_legal_play(
         evidence_card,
         evidence_trick_number,
         suit(card),
-        0
+        trump,
+        1
     );
 
-    // RANDOM PROBE HACK
-    static std::mt19937 gen(std::random_device{}());
-    static std::uniform_int_distribution<int> dist(0, 7);
-    if (dist(gen) == 0) {
-        cout << "TRIGGERED" << endl;
-        return true;
-    }
+    random_probe_hack(8);
 
     return false;
 }
@@ -638,31 +632,39 @@ string build_error_reason(
     const string    evidence_card,
     const int       evidence_trick_number,
     const string    context_suit,
+    const string    trump,
     const int       error_type
 ) {
-    string reason = "Error: " + pretty_player(player) 
-        + " has just played " + pretty_card(illegal_card)
-        + " in trick " + pretty_trick_number(trick_number)
-        + ".\n"
-        + pretty_trick_number(evidence_trick_number);
+    string reason = "Error: [" + pretty_player(player) 
+        + "] has just played [" + pretty_card(illegal_card)
+        + "] in trick [" + pretty_trick(trick_number)
+        + "]. Trump suit for this game is [" + pretty_suit(trump.front())
+        + "].\n";
     
+    const string suit_name = pretty_suit(context_suit.front());
+    
+    switch (error_type) {
     // Trump errors.
-    if (error_type == 0) {
-        reason += "However, he should not have any trumps left as he discarded a " 
+    case 0:
+        reason += "However, he should not have any trumps left as he discarded a [" 
             + pretty_card(evidence_card)
-            + " instead of cutting in trick " 
-            + pretty_trick_number(evidence_trick_number) 
-            + ".\n";
-    } else {
-    // Should have followed errors.
-        const string suit_name = pretty_suit(context_suit.front());
-
-        reason += "However he should not have any " + suit_name
-            + " left as he played a " + pretty_card(evidence_card) 
-            + " over " + suit_name
-            + " in trick " + pretty_trick_number(evidence_trick_number) 
-            + ".\n";
+            + "] instead of cutting in trick [" 
+            + pretty_trick(evidence_trick_number) 
+            + "].\n";
+        break;
+    // Should have followed suit.
+    case 1:
+        reason += "However he should not have any [" + suit_name
+            + "] left as he played a [" + pretty_card(evidence_card) 
+            + "] over [" + suit_name
+            + "] in trick [" + pretty_trick(evidence_trick_number) 
+            + "].\n";
+        break;
+    default:
+        cerr << "Error in build_error_reason: no such error type";
+        return "";
     }
+
     return reason;
 }
 
@@ -1122,7 +1124,7 @@ string pretty_player(const int player) {
     return "Player " + to_string(player + 1);
 }
 
-string pretty_trick_number(const int trick_number) {
+string pretty_trick(const int trick_number) {
     return to_string(trick_number + 1);
 }
 
@@ -1275,7 +1277,7 @@ void print_renouncement_table(const RenouncementTable& renounces, ostream& out) 
             if (entry.first) {  // has renounced
                 if (has_any) out << ", ";
                 out << pretty_suit("cdhs"[suit_idx]) 
-                    << " (trick " << pretty_trick_number(entry.second) << ")";
+                    << " (trick " << pretty_trick(entry.second) << ")";
                 has_any = true;
             }
         }
@@ -1304,7 +1306,7 @@ void print_overtrump_renouncement_table(
             out << "Cannot overtrump " 
                 << pretty_card(entry.first)
                 << " (since trick " 
-                << pretty_trick_number(entry.second) << ")";
+                << pretty_trick(entry.second) << ")";
         }
         out << "\n";
     }
@@ -1329,4 +1331,16 @@ string debug_header(const string text) {
 
 string debug_notification(const string text) {
     return styling("\033[91m", text);
+}
+
+bool random_probe_hack(int chances) {    
+    static std::mt19937 gen(std::random_device{}());
+    static std::uniform_int_distribution<int> dist(0, chances);
+
+    if (dist(gen) == 0) {
+        cout << "TRIGGERED" << endl;
+        return true;
+    }
+    
+    return false;
 }
