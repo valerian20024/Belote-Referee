@@ -1,0 +1,1242 @@
+This automated test script will try to check that your submission
+looks like a valid one.
+
+It is by no mean exhaustive, **do your own tests!**
+
+If you see something funky, please tell the TA!
+
+* Initializing the environment...
+debconf: delaying package configuration, since apt-utils is not installed
+* Trying to decompress your archive...
+tar: s200825/belote.cc: time stamp 2026-04-14 13:30:57 is 549.048157692 s in the future
+* Checking presence of required files...
+* Copying our own main.cc into s200825...
+* Checking you are not using class...
+* Trying to compile the application...
+* Running a few tests, to check if your code at least seems OK...
+------------------------------------------------------------
+Testing tests/001-correct...
+OK
+------------------------------------------------------------
+Testing tests/002-correct...
+OK
+------------------------------------------------------------
+Testing tests/003-correct...
+OK
+------------------------------------------------------------
+Testing tests/004-correct...
+OK
+------------------------------------------------------------
+Testing tests/005-correct...
+OK
+------------------------------------------------------------
+Testing tests/006-correct...
+OK
+------------------------------------------------------------
+Testing tests/007-correct...
+OK
+------------------------------------------------------------
+Testing tests/008-correct...
+OK
+------------------------------------------------------------
+Testing tests/009-correct...
+OK
+------------------------------------------------------------
+Testing tests/010-correct...
+OK
+------------------------------------------------------------
+Testing tests/011-correct...
+OK
+------------------------------------------------------------
+Testing tests/012-correct...
+OK
+------------------------------------------------------------
+Testing tests/013-correct...
+OK
+------------------------------------------------------------
+Testing tests/014-correct...
+OK
+------------------------------------------------------------
+Testing tests/015-correct...
+OK
+------------------------------------------------------------
+Testing tests/016-correct...
+OK
+------------------------------------------------------------
+Testing tests/017-correct...
+OK
+------------------------------------------------------------
+Testing tests/018-correct...
+OK
+------------------------------------------------------------
+Testing tests/019-correct...
+OK
+------------------------------------------------------------
+Testing tests/020-correct...
+OK
+------------------------------------------------------------
+Testing tests/021-correct...
+OK
+------------------------------------------------------------
+Testing tests/022-correct...
+OK
+------------------------------------------------------------
+Testing tests/023-correct...
+OK
+------------------------------------------------------------
+Testing tests/024-correct...
+OK
+------------------------------------------------------------
+Testing tests/025-correct...
+OK
+------------------------------------------------------------
+Testing tests/026-correct...
+OK
+------------------------------------------------------------
+Testing tests/027-correct...
+OK
+------------------------------------------------------------
+Testing tests/028-correct...
+OK
+------------------------------------------------------------
+Testing tests/029-correct...
+OK
+------------------------------------------------------------
+Testing tests/030-correct...
+OK
+------------------------------------------------------------
+Testing tests/031-correct...
+OK
+------------------------------------------------------------
+Testing tests/032-correct...
+OK
+------------------------------------------------------------
+Testing tests/033-correct...
+OK
+------------------------------------------------------------
+Testing tests/034-correct...
+OK
+------------------------------------------------------------
+Testing tests/035-correct...
+OK
+------------------------------------------------------------
+Testing tests/036-correct...
+OK
+------------------------------------------------------------
+Testing tests/037-correct...
+OK
+------------------------------------------------------------
+Testing tests/038-correct...
+OK
+------------------------------------------------------------
+Testing tests/039-correct...
+OK
+------------------------------------------------------------
+Testing tests/040-correct...
+OK
+------------------------------------------------------------
+Testing tests/041-correct...
+OK
+------------------------------------------------------------
+Testing tests/042-correct...
+OK
+------------------------------------------------------------
+Testing tests/043-correct...
+OK
+------------------------------------------------------------
+Testing tests/044-correct...
+OK
+------------------------------------------------------------
+Testing tests/045-correct...
+OK
+------------------------------------------------------------
+Testing tests/046-correct...
+OK
+------------------------------------------------------------
+Testing tests/047-correct...
+OK
+------------------------------------------------------------
+Testing tests/048-correct...
+OK
+------------------------------------------------------------
+Testing tests/049-correct...
+OK
+------------------------------------------------------------
+Testing tests/050-correct...
+OK
+------------------------------------------------------------
+Testing tests/051-correct...
+OK
+------------------------------------------------------------
+Testing tests/052-correct...
+OK
+------------------------------------------------------------
+Testing tests/053-correct...
+OK
+------------------------------------------------------------
+Testing tests/054-correct...
+OK
+------------------------------------------------------------
+Testing tests/055-correct...
+OK
+------------------------------------------------------------
+Testing tests/056-correct...
+OK
+------------------------------------------------------------
+Testing tests/057-correct...
+OK
+------------------------------------------------------------
+Testing tests/058-correct...
+OK
+------------------------------------------------------------
+Testing tests/059-correct...
+OK
+------------------------------------------------------------
+Testing tests/060-correct...
+OK
+------------------------------------------------------------
+Testing tests/061-correct...
+OK
+------------------------------------------------------------
+Testing tests/062-correct...
+OK
+------------------------------------------------------------
+Testing tests/063-correct...
+OK
+------------------------------------------------------------
+Testing tests/064-correct...
+OK
+------------------------------------------------------------
+Testing tests/065-correct...
+OK
+------------------------------------------------------------
+Testing tests/066-correct...
+OK
+------------------------------------------------------------
+Testing tests/067-correct...
+OK
+------------------------------------------------------------
+Testing tests/068-correct...
+OK
+------------------------------------------------------------
+Testing tests/069-correct...
+OK
+------------------------------------------------------------
+Testing tests/070-correct...
+OK
+------------------------------------------------------------
+Testing tests/071-correct...
+OK
+------------------------------------------------------------
+Testing tests/072-correct...
+OK
+------------------------------------------------------------
+Testing tests/073-correct...
+OK
+------------------------------------------------------------
+Testing tests/074-correct...
+OK
+------------------------------------------------------------
+Testing tests/075-correct...
+OK
+------------------------------------------------------------
+Testing tests/076-correct...
+OK
+------------------------------------------------------------
+Testing tests/077-correct...
+OK
+------------------------------------------------------------
+Testing tests/078-correct...
+OK
+------------------------------------------------------------
+Testing tests/079-correct...
+OK
+------------------------------------------------------------
+Testing tests/080-correct...
+OK
+------------------------------------------------------------
+Testing tests/081-correct...
+OK
+------------------------------------------------------------
+Testing tests/082-correct...
+OK
+------------------------------------------------------------
+Testing tests/083-correct...
+OK
+------------------------------------------------------------
+Testing tests/084-correct...
+OK
+------------------------------------------------------------
+Testing tests/085-correct...
+OK
+------------------------------------------------------------
+Testing tests/086-correct...
+OK
+------------------------------------------------------------
+Testing tests/087-correct...
+OK
+------------------------------------------------------------
+Testing tests/088-correct...
+OK
+------------------------------------------------------------
+Testing tests/089-correct...
+OK
+------------------------------------------------------------
+Testing tests/090-correct...
+OK
+------------------------------------------------------------
+Testing tests/091-correct...
+OK
+------------------------------------------------------------
+Testing tests/092-correct...
+OK
+------------------------------------------------------------
+Testing tests/093-correct...
+OK
+------------------------------------------------------------
+Testing tests/094-correct...
+OK
+------------------------------------------------------------
+Testing tests/095-correct...
+OK
+------------------------------------------------------------
+Testing tests/096-correct...
+OK
+------------------------------------------------------------
+Testing tests/097-correct...
+OK
+------------------------------------------------------------
+Testing tests/098-correct...
+OK
+------------------------------------------------------------
+Testing tests/099-correct...
+OK
+------------------------------------------------------------
+Testing tests/100-correct...
+OK
+------------------------------------------------------------
+Testing tests/101-correct...
+OK
+------------------------------------------------------------
+Testing tests/102-correct...
+OK
+------------------------------------------------------------
+Testing tests/103-correct...
+OK
+------------------------------------------------------------
+Testing tests/104-correct...
+OK
+------------------------------------------------------------
+Testing tests/105-correct...
+OK
+------------------------------------------------------------
+Testing tests/106-correct...
+OK
+------------------------------------------------------------
+Testing tests/107-correct...
+OK
+------------------------------------------------------------
+Testing tests/108-correct...
+OK
+------------------------------------------------------------
+Testing tests/109-correct...
+OK
+------------------------------------------------------------
+Testing tests/110-correct...
+OK
+------------------------------------------------------------
+Testing tests/111-correct...
+OK
+------------------------------------------------------------
+Testing tests/112-correct...
+OK
+------------------------------------------------------------
+Testing tests/113-correct...
+OK
+------------------------------------------------------------
+Testing tests/114-correct...
+OK
+------------------------------------------------------------
+Testing tests/115-correct...
+OK
+------------------------------------------------------------
+Testing tests/116-correct...
+OK
+------------------------------------------------------------
+Testing tests/117-correct...
+OK
+------------------------------------------------------------
+Testing tests/118-correct...
+OK
+------------------------------------------------------------
+Testing tests/119-correct...
+OK
+------------------------------------------------------------
+Testing tests/120-correct...
+OK
+------------------------------------------------------------
+Testing tests/121-correct...
+OK
+------------------------------------------------------------
+Testing tests/122-correct...
+OK
+------------------------------------------------------------
+Testing tests/123-correct...
+OK
+------------------------------------------------------------
+Testing tests/124-correct...
+OK
+------------------------------------------------------------
+Testing tests/125-correct...
+OK
+------------------------------------------------------------
+Testing tests/126-correct...
+OK
+------------------------------------------------------------
+Testing tests/127-correct...
+OK
+------------------------------------------------------------
+Testing tests/128-correct...
+OK
+------------------------------------------------------------
+Testing tests/129-correct...
+OK
+------------------------------------------------------------
+Testing tests/130-correct...
+OK
+------------------------------------------------------------
+Testing tests/131-correct...
+OK
+------------------------------------------------------------
+Testing tests/132-correct...
+OK
+------------------------------------------------------------
+Testing tests/133-correct...
+OK
+------------------------------------------------------------
+Testing tests/134-correct...
+OK
+------------------------------------------------------------
+Testing tests/135-correct...
+OK
+------------------------------------------------------------
+Testing tests/136-correct...
+OK
+------------------------------------------------------------
+Testing tests/137-correct...
+OK
+------------------------------------------------------------
+Testing tests/138-correct...
+OK
+------------------------------------------------------------
+Testing tests/139-correct...
+OK
+------------------------------------------------------------
+Testing tests/140-correct...
+OK
+------------------------------------------------------------
+Testing tests/141-correct...
+OK
+------------------------------------------------------------
+Testing tests/142-correct...
+OK
+------------------------------------------------------------
+Testing tests/143-correct...
+OK
+------------------------------------------------------------
+Testing tests/144-correct...
+OK
+------------------------------------------------------------
+Testing tests/145-correct...
+OK
+------------------------------------------------------------
+Testing tests/146-correct...
+OK
+------------------------------------------------------------
+Testing tests/147-correct...
+OK
+------------------------------------------------------------
+Testing tests/148-correct...
+OK
+------------------------------------------------------------
+Testing tests/149-correct...
+OK
+------------------------------------------------------------
+Testing tests/150-correct...
+OK
+------------------------------------------------------------
+Testing tests/151-correct...
+OK
+------------------------------------------------------------
+Testing tests/152-correct...
+OK
+------------------------------------------------------------
+Testing tests/153-correct...
+OK
+------------------------------------------------------------
+Testing tests/154-correct...
+OK
+------------------------------------------------------------
+Testing tests/155-correct...
+OK
+------------------------------------------------------------
+Testing tests/156-correct...
+OK
+------------------------------------------------------------
+Testing tests/157-correct...
+OK
+------------------------------------------------------------
+Testing tests/158-correct...
+OK
+------------------------------------------------------------
+Testing tests/159-correct...
+OK
+------------------------------------------------------------
+Testing tests/160-correct...
+OK
+------------------------------------------------------------
+Testing tests/161-correct...
+OK
+------------------------------------------------------------
+Testing tests/162-correct...
+OK
+------------------------------------------------------------
+Testing tests/163-correct...
+OK
+------------------------------------------------------------
+Testing tests/164-correct...
+OK
+------------------------------------------------------------
+Testing tests/165-correct...
+OK
+------------------------------------------------------------
+Testing tests/166-correct...
+OK
+------------------------------------------------------------
+Testing tests/167-correct...
+OK
+------------------------------------------------------------
+Testing tests/168-correct...
+OK
+------------------------------------------------------------
+Testing tests/169-correct...
+OK
+------------------------------------------------------------
+Testing tests/170-correct...
+OK
+------------------------------------------------------------
+Testing tests/171-correct...
+OK
+------------------------------------------------------------
+Testing tests/172-correct...
+OK
+------------------------------------------------------------
+Testing tests/173-correct...
+OK
+------------------------------------------------------------
+Testing tests/174-correct...
+OK
+------------------------------------------------------------
+Testing tests/175-correct...
+OK
+------------------------------------------------------------
+Testing tests/176-correct...
+OK
+------------------------------------------------------------
+Testing tests/177-correct...
+OK
+------------------------------------------------------------
+Testing tests/178-correct...
+OK
+------------------------------------------------------------
+Testing tests/179-correct...
+OK
+------------------------------------------------------------
+Testing tests/180-correct...
+OK
+------------------------------------------------------------
+Testing tests/181-correct...
+OK
+------------------------------------------------------------
+Testing tests/182-correct...
+OK
+------------------------------------------------------------
+Testing tests/183-correct...
+OK
+------------------------------------------------------------
+Testing tests/184-correct...
+OK
+------------------------------------------------------------
+Testing tests/185-correct...
+OK
+------------------------------------------------------------
+Testing tests/186-correct...
+OK
+------------------------------------------------------------
+Testing tests/187-correct...
+OK
+------------------------------------------------------------
+Testing tests/188-correct...
+OK
+------------------------------------------------------------
+Testing tests/189-correct...
+OK
+------------------------------------------------------------
+Testing tests/190-correct...
+OK
+------------------------------------------------------------
+Testing tests/191-correct...
+OK
+------------------------------------------------------------
+Testing tests/192-correct...
+OK
+------------------------------------------------------------
+Testing tests/193-correct...
+OK
+------------------------------------------------------------
+Testing tests/194-correct...
+OK
+------------------------------------------------------------
+Testing tests/195-correct...
+OK
+------------------------------------------------------------
+Testing tests/196-correct...
+OK
+------------------------------------------------------------
+Testing tests/197-correct...
+OK
+------------------------------------------------------------
+Testing tests/198-correct...
+OK
+------------------------------------------------------------
+Testing tests/199-correct...
+OK
+------------------------------------------------------------
+Testing tests/200-correct...
+OK
+------------------------------------------------------------
+Testing tests/201-correct...
+OK
+------------------------------------------------------------
+Testing tests/202-correct...
+OK
+------------------------------------------------------------
+Testing tests/203-correct...
+OK
+------------------------------------------------------------
+Testing tests/204-correct...
+OK
+------------------------------------------------------------
+Testing tests/205-correct...
+OK
+------------------------------------------------------------
+Testing tests/206-correct...
+OK
+------------------------------------------------------------
+Testing tests/207-correct...
+OK
+------------------------------------------------------------
+Testing tests/208-correct...
+OK
+------------------------------------------------------------
+Testing tests/209-correct...
+OK
+------------------------------------------------------------
+Testing tests/210-correct...
+OK
+------------------------------------------------------------
+Testing tests/211-correct...
+OK
+------------------------------------------------------------
+Testing tests/212-correct...
+OK
+------------------------------------------------------------
+Testing tests/213-correct...
+OK
+------------------------------------------------------------
+Testing tests/214-correct...
+OK
+------------------------------------------------------------
+Testing tests/215-correct...
+OK
+------------------------------------------------------------
+Testing tests/216-correct...
+OK
+------------------------------------------------------------
+Testing tests/217-correct...
+OK
+------------------------------------------------------------
+Testing tests/218-correct...
+OK
+------------------------------------------------------------
+Testing tests/219-correct...
+OK
+------------------------------------------------------------
+Testing tests/220-correct...
+OK
+------------------------------------------------------------
+Testing tests/221-correct...
+OK
+------------------------------------------------------------
+Testing tests/222-correct...
+OK
+------------------------------------------------------------
+Testing tests/223-correct...
+OK
+------------------------------------------------------------
+Testing tests/224-correct...
+OK
+------------------------------------------------------------
+Testing tests/225-correct...
+OK
+------------------------------------------------------------
+Testing tests/226-correct...
+OK
+------------------------------------------------------------
+Testing tests/227-correct...
+OK
+------------------------------------------------------------
+Testing tests/228-correct...
+OK
+------------------------------------------------------------
+Testing tests/229-correct...
+OK
+------------------------------------------------------------
+Testing tests/230-correct...
+OK
+------------------------------------------------------------
+Testing tests/231-correct...
+OK
+------------------------------------------------------------
+Testing tests/232-correct...
+OK
+------------------------------------------------------------
+Testing tests/233-correct...
+OK
+------------------------------------------------------------
+Testing tests/234-correct...
+OK
+------------------------------------------------------------
+Testing tests/235-correct...
+OK
+------------------------------------------------------------
+Testing tests/236-correct...
+OK
+------------------------------------------------------------
+Testing tests/237-correct...
+OK
+------------------------------------------------------------
+Testing tests/238-correct...
+OK
+------------------------------------------------------------
+Testing tests/239-correct...
+OK
+------------------------------------------------------------
+Testing tests/240-correct...
+OK
+------------------------------------------------------------
+Testing tests/241-correct...
+OK
+------------------------------------------------------------
+Testing tests/242-correct...
+OK
+------------------------------------------------------------
+Testing tests/243-correct...
+OK
+------------------------------------------------------------
+Testing tests/244-correct...
+OK
+------------------------------------------------------------
+Testing tests/245-correct...
+OK
+------------------------------------------------------------
+Testing tests/246-correct...
+OK
+------------------------------------------------------------
+Testing tests/247-correct...
+OK
+------------------------------------------------------------
+Testing tests/248-correct...
+OK
+------------------------------------------------------------
+Testing tests/249-correct...
+OK
+------------------------------------------------------------
+Testing tests/250-correct...
+OK
+------------------------------------------------------------
+Testing tests/251-incorrect...
+game() output differs from expected one.
+Input game:
+d 2
+Ac Jc Js Ts
+8c Qc 8d 7d
+Kc 9s Jh Th
+As Td 7h 7s
+Kh Qd Tc 9c
+Qs 8s Jd 7c
+Ad 8h Ah Qh
+Kd 9h Ks 9d
+Your game() standard output:
+25 0 1
+TRIGGERED
+28 0 3
+Expected game() standard output:
+25 0 1
+Your game() standard error:
+Error: [Player 3] has just played [King of Club] in trick [3]. Trump suit for this game is [Diamond].
+CASE 1: However he should not have any [Club] left as he played a [8 of Diamond] over [Club] in trick [2].
+
+Example expected error message:
+Error: player 4 just played a 7d but he should not have any trumps left as 
+       he discarded a Ts instead of cutting in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/252-incorrect...
+game() output differs from expected one.
+Input game:
+c 1
+Ac 7d Ad 8c
+Qc 7c Tc Js
+8d 9s 9h Ks
+9c 9d Qh 8h
+Ts Jd Kh Kd
+Kc Qs 7h 8s
+Qd As Ah Jc
+Th Jh Td 7s
+Your game() standard output:
+22 0 1
+TRIGGERED
+Expected game() standard output:
+22 0 1
+Your game() standard error:
+Error: [Player 3] has just played [Ten of Club] in trick [2]. Trump suit for this game is [Club].
+CASE 1: However he should not have any [Club] left as he played a [Ace of Diamond] over [Club] in trick [1].
+
+Example expected error message:
+Error: player 2 just played a 7c but he should not have any clubs left as
+       he played a 7d over clubs in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/253-incorrect...
+game() output differs from expected one.
+Input game:
+h 1
+Ks Js Kc Kd
+Ad 7h Kh 9d
+Qc 9s Jd 8h
+9h Ac Qd Qh
+Tc Qs Ah Jc
+As 9c 8d Ts
+Th Td 7c 7d
+8s 7s Jh 8c
+Your game() standard output:
+14 0 1
+29 0 3
+TRIGGERED
+29 5 2
+29 36 2
+Expected game() standard output:
+14 0 1
+29 0 3
+Your game() standard error:
+Error: [Player 2] has just played [Ten of Club] in trick [5]. Trump suit for this game is [Heart].
+CASE 1: However he should not have any [Club] left as he played a [8 of Heart] over [Club] in trick [3].
+
+Example expected error message:
+Error: player 4 just played a 9s but he should not have any spades left as
+       he played a Kd over spades in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/254-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/255-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/256-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/257-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/258-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/259-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/260-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/261-incorrect...
+game() output differs from expected one.
+Input game:
+s 2
+9c Td 7c Kc
+7s Js 9h Jd
+Qd Qc As Ac
+Tc Ah Kh Ks
+7h Qs 7d Kd
+8c 9s 8d 9d
+Jh Ts 8s Ad
+Jc Th Qh 8h
+Your game() standard output:
+0 14 4
+22 14 1
+TRIGGERED
+Expected game() standard output:
+0 14 4
+22 14 1
+Your game() standard error:
+Error: [Player 3] has just played [Ace of Spade] in trick [3]. Trump suit for this game is [Spade].
+CASE 1: However he should not have any [Spade] left as he played a [Jack of Diamond] over [Spade] in trick [2].
+
+Example expected error message:
+Error: player 2 just played a Qc but he should not have any clubs left as
+       he played a Td over clubs in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/262-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/263-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/264-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/265-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/266-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/267-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/268-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/269-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/270-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/271-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/272-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/273-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/274-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/275-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/276-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/277-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/278-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/279-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/280-incorrect...
+game() output differs from expected one.
+Input game:
+c 2
+Th 7h Jh 8c
+Td 7d 9d 9c
+Qd Kd Js Ts
+As Ks Qc Ad
+7c Kh 9h 8d
+Jd 8s 8h 9s
+Qs Ah 7s Qh
+Kc Ac Tc Jc
+Your game() standard output:
+0 12 4
+24 12 3
+TRIGGERED
+24 31 4
+Expected game() standard output:
+0 12 4
+24 12 3
+Your game() standard error:
+Error: [Player 3] has just played [Ace of Diamond] in trick [4]. Trump suit for this game is [Club].
+CASE 1: However he should not have any [Diamond] left as he played a [9 of Club] over [Diamond] in trick [2].
+
+Example expected error message:
+Error: player 3 just played a Qd but he should not have any diamonds left as
+       he played a 9c over diamonds in trick 2.
+Test failed!
+------------------------------------------------------------
+Testing tests/281-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/282-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/283-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/284-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/285-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/286-incorrect...
+game() output differs from expected one.
+Input game:
+d 1
+Jh Ac Th Ts
+7h Td Jd Js
+Tc 9h Ks Kd
+Jc 9s 9d Ad
+8h Kh 7s Ah
+Kc As 9c 7c
+Qs 8d 8c 8s
+Qc 7d Qd Qh
+Your game() standard output:
+33 0 3
+TRIGGERED
+65 0 1
+Expected game() standard output:
+33 0 3
+Your game() standard error:
+Error: [Player 2] has just played [9 of Heart] in trick [3]. Trump suit for this game is [Diamond].
+CASE 1: However he should not have any [Heart] left as he played a [Jack of Spade] over [Heart] in trick [2].
+
+Example expected error message:
+Error: player 4 just played a Td but he should not have any trumps left as 
+       he discarded a Ts instead of cutting in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/287-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/288-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/289-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/290-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/291-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/292-incorrect...
+game() output differs from expected one.
+Input game:
+h 2
+Qd 7s As 7d
+7c Ah Ad 8s
+Kh Js Th 9s
+9h Kc 9c 7h
+Ks 8c Ts 9d
+Qh 8d Tc Jd
+Ac 8h Qc Qs
+Jh Td Jc Kd
+Your game() standard output:
+14 0 1
+TRIGGERED
+Expected game() standard output:
+14 0 1
+Your game() standard error:
+Error: [Player 3] has just played [Ace of Diamond] in trick [2]. Trump suit for this game is [Heart].
+CASE 1: However he should not have any [Diamond] left as he played a [Ace of Spade] over [Diamond] in trick [1].
+
+Example expected error message:
+Error: player 2 just played a Ah but he should not have any trumps left as 
+       he discarded a 7s instead of cutting in trick 1.
+Test failed!
+------------------------------------------------------------
+Testing tests/293-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/294-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/295-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/296-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/297-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/298-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/299-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/300-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/301-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/302-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/303-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/304-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/305-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/306-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/307-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/308-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/309-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/310-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/311-incorrect...
+game() output differs from expected one.
+Input game:
+d 1
+Ad Jh 8d Qc
+Qd 7s Kc Ks
+Ah Ac Kh 7c
+7d 8c Th 9h
+8s 8h Ts Kd
+Tc Td 9s As
+Qh Jd Qs Js
+Jc 9d 7h 9c
+Your game() standard output:
+16 0 1
+27 0 1
+53 0 1
+TRIGGERED
+63 0 1
+Expected game() standard output:
+16 0 1
+27 0 1
+53 0 1
+Your game() standard error:
+Error: [Player 2] has just played [8 of Heart] in trick [5]. Trump suit for this game is [Diamond].
+CASE 1: However he should not have any [Heart] left as he played a [Ace of Club] over [Heart] in trick [3].
+
+Example expected error message:
+Error: player 4 just played a 9h but he should not have any hearts left as
+       he played a 7c over hearts in trick 3.
+Test failed!
+------------------------------------------------------------
+Testing tests/312-incorrect...
+game() output differs from expected one.
+Input game:
+s 1
+7c Qd Kd Jd
+8d Td 8h Jh
+Ah 8s Th As
+Js 9d 7h Ks
+9s 8c Kc 9c
+Kh Qh 9h Ac
+Qs Ts Jc Ad
+Tc 7d Qc 7s
+Your game() standard output:
+9 0 1
+9 12 2
+TRIGGERED
+41 12 1
+Expected game() standard output:
+9 0 1
+9 12 2
+Your game() standard error:
+Error: [Player 4] has just played [King of Spade] in trick [4]. Trump suit for this game is [Spade].
+CASE 1: However he should not have any [Spade] left as he played a [Jack of Diamond] over [Spade] in trick [1].
+
+Example expected error message:
+Error: player 3 just played a 8s but he should not have any trumps left as 
+       he discarded a 8h instead of cutting in trick 2.
+Test failed!
+------------------------------------------------------------
+Testing tests/313-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/314-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/315-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/316-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/317-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/318-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/319-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/320-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/321-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/322-incorrect...
+OK
+------------------------------------------------------------
+Testing tests/323-incorrect...
+game() output differs from expected one.
+Input game:
+s 2
+As 9c 7d Jc
+Qs 7c 9s 8s
+9d Ks Qh Jh
+Td 8c Kd Ts
+7h 9h Tc Ac
+8d 8h Qd Js
+Kc Jd Qc Kh
+Ah Ad 7s Th
+Your game() standard output:
+13 0 1
+TRIGGERED
+Expected game() standard output:
+13 0 1
+Your game() standard error:
+Error: [Player 4] has just played [8 of Spade] in trick [2]. Trump suit for this game is [Spade].
+CASE 1: However he should not have any [Spade] left as he played a [Jack of Club] over [Spade] in trick [1].
+
+Example expected error message:
+Error: player 3 just played a 9s but he should not have any spades left as
+       he played a 7d over spades in trick 1.
+Test failed!
+------------------------------------------------------------
+Too many errors. Skipping remaining tests.
+
+* Tests finished. Passed 313 over 323.
+
+You submission presents some serious issues.
+Beware, you are likely to get zero mark unless you improve!
+Check the above error messages for improvements to make.

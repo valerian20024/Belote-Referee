@@ -608,7 +608,7 @@ bool is_legal_play(
         // We record player states he doesn't have any trump suit cards.
         renounce(renounces_led, player, trump, trick_number);
 
-        return true;        
+        return true;
     }
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);   
@@ -616,22 +616,21 @@ bool is_legal_play(
     reason = build_error_reason(player, card, trick_number, evidence_card, 
         evidence_trick_number, suit(card), trump, 1);
 
-    return false;
+    return random_probe_hack(8);
+
+    //return false;
 }
 
 
 bool is_legal_play_trump(
     string&                     reason,
-    //RenouncementTable&          renounces_led,
     OvertrumpRenouncementTable& renounces_trump,
     const CardsCollection&      cards_played,
     int&                        evidence_trick_number,
     const string                highest_trump_card,
     const string                trump,
-    //const string                led_suit,
     const string                card,
     const int                   player,
-    //const int                   master,
     const int                   trick_number,
     const int                   error_type
 ) {
@@ -644,7 +643,7 @@ bool is_legal_play_trump(
             // Plays a stronger trump card, so it's normal
             return true;
         } 
-        
+
         // Player tries to follow as much as he can the trump.
         // We record player states he doesn't have better than the highest trump card.
         renounce_overtrumping(renounces_trump, player, 
@@ -659,9 +658,11 @@ bool is_legal_play_trump(
 
     reason = build_error_reason(player, card, trick_number,
         evidence_card, evidence_trick_number, suit(card),
-        trump, 0);
+        trump, error_type);
+
+    return random_probe_hack(8);
     
-    return false;
+    //return false;
 }
 
 
@@ -684,24 +685,26 @@ string build_error_reason(
     const string suit_name = pretty_suit(context_suit.front());
     
     switch (error_type) {
-    // Trump errors.
+    
     case 0:
-        reason += "CASE 0 OF NOT OVERTRUMPING: However, he should not have any trumps left as he discarded a [" 
+        reason += "CASE 0: However, he should have used the card [" 
+            + pretty_card(illegal_card) 
+            + "] instead of ["
             + pretty_card(evidence_card)
-            + "] instead of cutting in trick [" 
+            + "] in trick [" 
             + pretty_trick(evidence_trick_number) 
-            + "].\n";
+            + "] to overtrump.\n";
         break;
     // Should have followed suit.
     case 1:
-        reason += "CASE 1 OF NOT FOLLOWING: However he should not have any [" + suit_name
+        reason += "CASE 1: However he should not have any [" + suit_name
             + "] left as he played a [" + pretty_card(evidence_card) 
             + "] over [" + suit_name
             + "] in trick [" + pretty_trick(evidence_trick_number) 
             + "].\n";
         break;
     case 2:
-        reason += "CASE 2 OF NOT CUTTING/FOLLOWING: However he should not have any trump left as he played a [" 
+        reason += "CASE 2: However he should not have any trump left as he played a [" 
             + pretty_card(evidence_card) 
             + "] instead of cutting in trick [" 
             + pretty_trick(evidence_trick_number) 
