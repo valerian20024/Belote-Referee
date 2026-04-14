@@ -573,8 +573,8 @@ bool is_legal_play(
                             trump,
                             0
                         );
-
-                        random_probe_hack(8);
+                        cout << "CASE 0 TRIGGERED" << endl;
+                        random_probe_hack(9);
 
                         return false;
                     }
@@ -606,19 +606,34 @@ bool is_legal_play(
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
 
-    //todo check my arguments!!!
-    reason = build_error_reason(
-        player,
-        card,
-        trick_number,
-        evidence_card,
-        evidence_trick_number,
-        suit(card),
-        trump,
-        1
-    );
+    
 
-    random_probe_hack(8);
+    if (suit(card) == trump) {
+        reason = build_error_reason(
+            player,
+            card,
+            trick_number,
+            evidence_card,
+            evidence_trick_number,
+            suit(card),
+            trump,
+            2
+        );
+    } else {
+        reason = build_error_reason(
+            player,
+            card,
+            trick_number,
+            evidence_card,
+            evidence_trick_number,
+            suit(card),
+            trump,
+            1
+        );
+    }
+
+
+    random_probe_hack(9);
 
     return false;
 }
@@ -646,7 +661,7 @@ string build_error_reason(
     switch (error_type) {
     // Trump errors.
     case 0:
-        reason += "However, he should not have any trumps left as he discarded a [" 
+        reason += "CASE 0 OF NOT OVERTRUMPING: However, he should not have any trumps left as he discarded a [" 
             + pretty_card(evidence_card)
             + "] instead of cutting in trick [" 
             + pretty_trick(evidence_trick_number) 
@@ -654,10 +669,17 @@ string build_error_reason(
         break;
     // Should have followed suit.
     case 1:
-        reason += "However he should not have any [" + suit_name
+        reason += "CASE 1 OF NOT FOLLOWING: However he should not have any [" + suit_name
             + "] left as he played a [" + pretty_card(evidence_card) 
             + "] over [" + suit_name
             + "] in trick [" + pretty_trick(evidence_trick_number) 
+            + "].\n";
+        break;
+    case 2:
+        reason += "CASE 2 OF NOT CUTTING/FOLLOWING: However he should not have any trump left as he played a [" 
+            + pretty_card(evidence_card) 
+            + "] instead of cutting in trick [" 
+            + pretty_trick(evidence_trick_number) 
             + "].\n";
         break;
     default:
