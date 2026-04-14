@@ -1,0 +1,385 @@
+This automated test script will try to check that your submission
+looks like a valid one.
+
+It is by no mean exhaustive, **do your own tests!**
+
+If you see something funky, please tell the TA!
+
+* Initializing the environment...
+debconf: delaying package configuration, since apt-utils is not installed
+* Trying to decompress your archive...
+tar: s200825/belote.cc: time stamp 2026-04-14 13:11:36 is 504.018655739 s in the future
+* Checking presence of required files...
+* Copying our own main.cc into s200825...
+* Checking you are not using class...
+* Trying to compile the application...
+* Running a few tests, to check if your code at least seems OK...
+------------------------------------------------------------
+Testing tests/001-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Ac Qc Kc 7c
+8c Jc 9c 7d
+8h Ah Qh 8d
+Ad Td Qd 9d
+Th Kd Kh 7h
+As Ts Qs 8s
+Js 9s Ks 7s
+Jh Tc Jd 9h
+Your game() standard output:
+18 0 1
+18 2 4
+32 2 3
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+32 40 2
+50 40 3
+74 40 3
+80 40 1
+122 40 3
+162 0
+Expected game() standard output:
+18 0 1
+18 2 4
+32 2 3
+32 40 2
+50 40 3
+74 40 3
+80 40 1
+122 40 3
+162 0
+Test failed!
+------------------------------------------------------------
+Testing tests/002-correct...
+OK
+------------------------------------------------------------
+Testing tests/003-correct...
+game() output differs from expected one.
+Input game:
+s 2
+8h 9h Jh Th
+9s 8s Qs Ks
+8d 9d Qd Td
+Ah 7s Qh Kh
+Qc Ac 8c Kd
+7h Ts As Js
+Ad 7c 9c 7d
+Kc Jc Tc Jd
+Your game() standard output:
+0 12 4
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+0 33 4
+13 33 3
+13 51 4
+31 51 1
+31 92 4
+31 103 4
+31 131 2
+31 131
+Expected game() standard output:
+0 12 4
+0 33 4
+13 33 3
+13 51 4
+31 51 1
+31 92 4
+31 103 4
+31 131 2
+31 131
+Test failed!
+------------------------------------------------------------
+Testing tests/004-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Td 9d 8d 7d
+9c Tc 7c Jc
+Qh Th Jh Ah
+Qc Ac 8c Kc
+8h Kh 7h 8s
+9s Ad Qs As
+9h Kd Js 7s
+Jd Ts Ks Qd
+Your game() standard output:
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+0 24 2
+12 24 3
+12 50 2
+30 50 3
+30 54 4
+55 54 1
+55 60 2
+RENOUNCED OVERTRUMPING
+55 107 2
+55 107
+Expected game() standard output:
+0 24 2
+12 24 3
+12 50 2
+30 50 3
+30 54 4
+55 54 1
+55 60 2
+55 107 2
+55 107
+Test failed!
+------------------------------------------------------------
+Testing tests/005-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Tc Ac Jc Kc
+Td Kh 8d Ad
+8h Jd Qh Jh
+9c 7c Kd 8c
+Js As 9s 8s
+7s 9d Ks Ts
+Qc Th Qs Qd
+7h 7d 9h Ah
+Your game() standard output:
+0 27 2
+RENOUNCED OVERTRUMPING
+25 27 1
+25 52 2
+25 56 4
+38 56 1
+38 84 2
+57 84 1
+57 105 2
+57 105
+Expected game() standard output:
+0 27 2
+25 27 1
+25 52 2
+25 56 4
+38 56 1
+38 84 2
+57 84 1
+57 105 2
+57 105
+Test failed!
+------------------------------------------------------------
+Testing tests/006-correct...
+game() output differs from expected one.
+Input game:
+s 1
+9h 7h Kh Th
+Qc 8c 7c Ac
+Ad Td 7d Jd
+8d Kd Ks 9s
+7s As Js Ah
+Kc Tc Qs 8s
+8h Qh 9c Jh
+Qd 9d Jc Ts
+Your game() standard output:
+0 14 4
+14 14 3
+37 14 3
+37 36 2
+37 78 4
+RENOUNCED OVERTRUMPING
+37 95 2
+42 95 3
+42 120 2
+0 162
+Expected game() standard output:
+0 14 4
+14 14 3
+37 14 3
+37 36 2
+37 78 4
+37 95 2
+42 95 3
+42 120 2
+0 162
+Test failed!
+------------------------------------------------------------
+Testing tests/007-correct...
+game() output differs from expected one.
+Input game:
+s 2
+Th 7h Kh Jh
+Kd 7d 9d Ad
+9c Qc As Kc
+9h Qh Qs Ah
+Js 9s Ts 8s
+Qd Td Jd Ks
+7c 8c Jc 7s
+8h Ac 8d Tc
+Your game() standard output:
+16 0 1
+16 15 4
+16 33 2
+16 50 4
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+16 94 4
+35 94 3
+35 96 2
+35 127 2
+35 127
+Expected game() standard output:
+16 0 1
+16 15 4
+16 33 2
+16 50 4
+16 94 4
+35 94 3
+35 96 2
+35 127 2
+35 127
+Test failed!
+------------------------------------------------------------
+Testing tests/008-correct...
+game() output differs from expected one.
+Input game:
+c 1
+Jd Td 9d Ad
+Ts Qs Js As
+Kh Th Ah 9h
+Kc Jc Tc Ac
+Jh Qh 9c 7h
+8s Qc 7s 9s
+8h 8c 7d Ks
+8d Qd 7c Kd
+Your game() standard output:
+0 23 4
+26 23 3
+51 23 1
+RENOUNCED OVERTRUMPING
+RENOUNCED OVERTRUMPING
+51 68 2
+51 87 4
+74 87 1
+74 91 2
+74 108 4
+20 162
+Expected game() standard output:
+0 23 4
+26 23 3
+51 23 1
+51 68 2
+51 87 4
+74 87 1
+74 91 2
+74 108 4
+20 162
+Test failed!
+------------------------------------------------------------
+Testing tests/009-correct...
+game() output differs from expected one.
+Input game:
+s 1
+Ah Qh Jh 7h
+Qd Jd 9d Td
+Kc 8s Tc Ac
+9h Ts 7s 8h
+Qc Jc 7c As
+Th Qs 8c Kd
+Ks 7d Ad Js
+Kh 9s 9c 8d
+Your game() standard output:
+16 0 1
+16 15 4
+41 15 1
+RENOUNCED OVERTRUMPING
+41 25 2
+57 25 1
+57 42 2
+92 62 1
+92 90 2
+92 90
+Expected game() standard output:
+16 0 1
+16 15 4
+41 15 1
+41 25 2
+57 25 1
+57 42 2
+92 62 1
+92 90 2
+92 90
+Test failed!
+------------------------------------------------------------
+Testing tests/010-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Kd 8d Qc Ad
+Kh Td Ah 7h
+Ts 9s Qs Js
+Jc Qd Ac Tc
+7s Ks 8s Jd
+7c As Jh Kc
+9d 9c Qh Th
+7d 8c 8h 9h
+Your game() standard output:
+RENOUNCED OVERTRUMPING
+0 18 4
+25 18 1
+40 18 1
+40 44 2
+64 44 1
+64 61 4
+64 88 4
+64 98 4
+64 98
+Expected game() standard output:
+0 18 4
+25 18 1
+40 18 1
+40 44 2
+64 44 1
+64 61 4
+64 88 4
+64 98 4
+64 98
+Test failed!
+------------------------------------------------------------
+Testing tests/011-correct...
+game() output differs from expected one.
+Input game:
+d 2
+Kh 8h 9h 7h
+Td Ad Jd Qs
+7s As Ks Js
+7c Tc 7d Kc
+Ts 8s Ac 9s
+Jh Kd Qc Qh
+Qd 8c 9d 8d
+Th Ah 9c Jc
+Your game() standard output:
+4 0 1
+48 0 3
+48 17 4
+48 31 2
+48 52 2
+60 52 3
+RENOUNCED OVERTRUMPING
+97 52 1
+97 85 2
+182 0
+Expected game() standard output:
+4 0 1
+48 0 3
+48 17 4
+48 31 2
+48 52 2
+60 52 3
+97 52 1
+97 85 2
+182 0
+Test failed!
+------------------------------------------------------------
+Too many errors. Skipping remaining tests.
+
+* Tests finished. Passed 1 over 11.
+
+You submission presents some serious issues.
+Beware, you are likely to get zero mark unless you improve!
+Check the above error messages for improvements to make.
