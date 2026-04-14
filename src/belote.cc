@@ -218,6 +218,7 @@ void renounce_overtrumping(
     const int                   trick_number
 );
 
+/// @brief Creates a string representing the error encountered.
 string build_error_reason(
     const int       player, 
     const string    illegal_card,
@@ -229,12 +230,14 @@ string build_error_reason(
     const int       error_type
 );
 
+/// @brief Updates the cards played by each player.
 void update_cards_played(
     CardsCollection& cards_played, 
     const int player, 
     const string card
 );
 
+/// @brief Updates the belote assets played by each player.
 void update_belote_table(
     BeloteLookupTable& belote_table, 
     const int player, 
@@ -242,27 +245,19 @@ void update_belote_table(
     const string trump
 );
 
-//todo remove
-void update_highest_cards(
-    string& highest_trump_card, 
-    string& highest_led_card, 
-    const string card, 
-    const string trump
-);
-
+/// @brief Updates the current highest led card of the trick.
 void update_highest_led_card(
     string&         highest_led_card, 
     const string    card,
     const string    led_suit
 );
 
+/// @brief Updates the current highest trump card of the trick.
 void update_highest_trump_card(
     string&         highest_trump_card,
     const string    card,
     const string    trump
 );
-
-
 
 /**
  * @brief Assesses whether `given` is stronger than `compared_to` following the `order`.
@@ -289,6 +284,7 @@ bool is_stronger_trump(const string given, const string compared_to);
  */
 bool is_stronger_raw(const string given, const string compared_to);
 
+/// @brief Updates the current master of the trick.
 void update_master(
     int&            master,
     const int       player,
@@ -298,27 +294,31 @@ void update_master(
     const string    trump
 );
 
-// Updates the current trick points.
+/// @brief Updates the trick points gathered so far in the trick.
 void update_trick_points(
     int&            trick_points, 
     const string    card, 
     const string    trump
 );
 
+/// @brief Updates which trick has been won by which team.
 void update_tricks_won(
     array<bool, NUM_TRICKS>&    tricks_won, 
     const int                   master, 
     const int                   trick_number
 );
 
+/// @brief Updates both teams scores.
 void update_scores(
     pair<int, int>& scores, 
     const int       trick_points, 
     const int       winner
 );
 
+/// @brief Adds `points` points to team `team`.
 void add_points(int team, int points);
 
+/// @brief Awards the belote points if a team deserves it.
 void check_and_award_belote(
     pair<int, int>&      scores,
     BeloteLookupTable&   belote_table,
@@ -326,33 +326,33 @@ void check_and_award_belote(
     const int            player
 );
 
-// Sets score to 252 + belote scoring.
+/// @brief Awards the capot points if a team deserves it.
 void check_and_award_capot(
     pair<int, int>&                     scores, 
     const array<bool, NUM_TRICKS>&      tricks_won, 
     const pair<int, int>&               belote_scored
 );
 
-// Add 10 points to the team winning the last trick.
+/// @brief Awards dix de der points to the team winning the last trick.
 void award_dix_de_der(
     pair<int, int>&                 scores, 
     const array<bool, NUM_TRICKS>&  tricks_won
 );
 
-// Zeros out the points of the team not making the contract + belote scoring.
+/// @brief Zeroes score team not making the contract, except for belote scored.
 void check_and_award_dedans(
     pair<int, int>&         scores, 
     const pair<int, int>&   belote_scored,
     const int               contract_team
 );
 
-// Compute the current leader of the trick
+/// @brief Compute the current leader of the trick
 int current_leader(const int trick_number, const int previous_trick_winner);
 
-// Returns an index based on the suit.
+/// @brief Returns a universal index based on the suit.
 size_t suit_to_index(const string suit);
 
-// Function to print the intermediary scores of both teams and the trick winner.
+/// @brief Prints the intermediary scores of both teams and the trick winner.
 void print_scores(
     const pair<int, int>&   scores, 
     const int               trick_winner, 
@@ -406,7 +406,6 @@ bool random_probe_hack(int chances);
     /*================================================++
     ||               IMPLEMENTATIONS                  ||
     ++================================================*/
-
 
 bool game(istream& in, ostream& out, ostream& err) {
     string                      trump                   = {};
@@ -513,6 +512,20 @@ int process_trick(
             err << reason << endl;
             return 1;
         }
+
+        if (DEBUG_MODE) {
+            cout << debug_notification(">>> New card <<<\n")
+            << "Master is [" << master << "]\n"
+            << "Player [" << player << "] played card [" << card << "]\n"
+            << "Highest cards : \n" 
+            << "  t: [" << highest_trump_card << "] \n"
+            << "  l: [" << highest_led_card << "]\n" << endl;
+
+            print_cards_played(cards_played, cout);
+            print_belote_assets(belote_table, cout);
+            print_renouncement_table(renounces_led, cout);
+            print_overtrump_renouncement_table(renounces_trump, cout);
+        }
         
         update_state(
             scores,
@@ -554,12 +567,7 @@ bool is_legal_play(
     const int                   player,
     const int                   master,
     const int                   trick_number
-) {
-    if (DEBUG_MODE) {
-        print_renouncement_table(renounces_led, cout);
-        print_overtrump_renouncement_table(renounces_trump, cout);
-    }
-
+) { 
     int evidence_trick_number = {};
 
     // If player can play this suit card.
@@ -577,7 +585,6 @@ bool is_legal_play(
                 return is_legal_play_trump(reason, renounces_trump, 
                     cards_played, evidence_trick_number, highest_trump_card,
                     trump, card, player, trick_number, 0);
-            
             } 
 
             // Led suit is not trump: player can play this card
@@ -592,7 +599,6 @@ bool is_legal_play(
         if (partner(player) == master) {
             // Player can play any card.
             return true;
-
         }
 
         // Partner is not master
@@ -827,25 +833,10 @@ void update_state(
     // Updated based on the previous highest cards.
     update_master(master, player, card, highest_trump_card, highest_led_card, trump);
 
-    update_highest_cards(highest_trump_card, highest_led_card, card, trump);
-
     update_highest_led_card(highest_led_card, card, led_suit);
     update_highest_trump_card(highest_trump_card, card, trump);
 
-
     update_trick_points(trick_points, card, trump);
-
-    if (DEBUG_MODE) {
-        cout << debug_notification(">>> New card <<<\n")
-            << "Master is [" << master << "]\n"
-            << "Player [" << player << "] played card [" << card << "]\n"
-            << "Highest cards : \n" 
-            << "  t: [" << highest_trump_card << "] \n"
-            << "  l: [" << highest_led_card << "]\n" << endl;
-
-        print_cards_played(cards_played, cout);
-        print_belote_assets(belote_table, cout);
-    }
 }
 
 void update_cards_played(
@@ -873,40 +864,14 @@ void update_belote_table(
         belote_table[static_cast<size_t>(player)][1] = true;
 }
 
-void update_highest_cards(
-    string&         highest_trump_card, 
-    string&         highest_led_card, 
-    const string    card, 
-    const string    trump
-) {
-    if (suit(card) == trump) {
-        if (highest_trump_card.empty() 
-            || is_stronger(card, highest_trump_card, trump)
-        ) {
-            highest_trump_card = card;
-        }
-        return;
-    }
-
-    if (highest_led_card.empty() || suit(card) == suit(highest_led_card)) {
-        if (highest_led_card.empty() 
-            || is_stronger(card, highest_led_card, trump)
-        ) {
-            highest_led_card = card;
-        }
-    }
-}
-
 void update_highest_led_card(
     string&         highest_led_card, 
     const string    card,
     const string    led_suit
 ) {
     // Don't update if not needed
-    if (suit(card) != led_suit) {
-        //cerr << "Error in update_highest_led_card: card suit doesn't conform." << endl;
+    if (suit(card) != led_suit)
         return;
-    }
 
     if (highest_led_card.empty() || is_stronger_raw(card, highest_led_card)) {
         highest_led_card = card;
@@ -919,10 +884,8 @@ void update_highest_trump_card(
     const string    trump
 ) {
     // Don't update if not needed
-    if (suit(card) != trump) {
-        //cerr << "Error in update_highest_led_card: card suit doesn't conform." << endl;
+    if (suit(card) != trump)
         return;
-    }
 
     if (highest_trump_card.empty() || is_stronger_trump(card, highest_trump_card)) {
         highest_trump_card = card;

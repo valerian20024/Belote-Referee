@@ -115,6 +115,25 @@ int main() {
     8s 7s Jh 8c
     )";
 
+    string test255 = R"(
+    c 1
+    7h Kh Qs Ks
+    9s Jh Tc Ac
+    8s Jc 7s Js
+    9c 8c Qd 8h
+    Td Qh 7c Kd
+    9h Ts 8d Kc
+    Th As 9d Jd
+    Ad Qc 7d Ah
+    )";
+
+    /*
+    Example expected error message:
+    Error: player 3 just played a Jh but he should not have any hearts left as
+        he played a Qs over hearts in trick 1.
+    */
+
+
     string test257 = R"(
     d 1
     9h 9c Td Qs
@@ -138,6 +157,30 @@ int main() {
     7s 8c 9c 8s
     Ac 9h Kc Kd
     )";
+
+    /*
+    Example expected error message:
+    Error: player 4 just played a Ah but he should not have any trumps left as 
+       he discarded a Qd instead of cutting in trick 1.
+    */
+
+    string test274 = R"(
+    c 1
+    Ah Jd Ad Jc
+    Js Ac 9c 7c
+    7d 8c 7s Qd
+    Td 9d As 7h
+    Qc 8h Qs Tc
+    Kh Ts 8d Qh
+    Ks Kd Kc Th
+    9s 9h 8s Jh
+    )";
+
+    /*
+    Example expected error message:
+    Error: player 2 just played a 9c but he should not have any trumps left as 
+        he discarded a Jd instead of cutting in trick 1.
+    */
 
     string test283 = R"(
     h 2
@@ -177,7 +220,7 @@ int main() {
     9c Th 8d Td
     )";
     
-    istringstream in(case_0_test);
+    istringstream in(test274);
 
     return game(in, cout, cerr);
 } 
