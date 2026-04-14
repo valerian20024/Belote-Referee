@@ -554,65 +554,100 @@ bool is_legal_play(
         // Trick is just beginning, any card is legal.
         if (master == -1)
             return true;
-
-        // If following the led suit, it's OK.
+        
         if (suit(card) == led_suit) {
-            return true;
+            // If following the led suit
+
+            if (led_suit == trump) {
+                
+                // We check we can play this trump card
+                if (has_renounced_higher_trump_card(evidence_trick_number, 
+                            renounces_trump, player, card)) {
+                    // If not error
+                    string evidence_card = get_card_played(cards_played, 
+                        player, evidence_trick_number);
+
+                    reason = build_error_reason(player, card, trick_number,
+                        evidence_card, evidence_trick_number, suit(card),
+                        trump, 0);
+
+                    cout << "CASE 0 TRIGGERED" << endl;
+                    
+                    return false;
+
+                } else {
+                    
+                    // Player can play this card
+                    if (is_stronger_trump(card, highest_trump_card)) {
+                        // Plays a stronger trump card, so it's normal
+                        return true;
+                    } else {
+                        // Player tries to follow as much as he can the trump.
+                        // We record player states he doesn't have better than the highest trump card.
+                        renounce_overtrumping(renounces_trump, player, 
+                            highest_trump_card, trick_number);
+
+                        return true;
+                    }
+                }
+
+            } else {
+                // Led suit is not trump: player can play this card
+
+                return true;
+            }
+
+            
         } else {
+            // Player doesn't follow led suit
             // We record player states he cannot play this suit anymore.
             renounce(renounces_led, player, led_suit, trick_number);
 
-            // Players whose partner are master can play any card.
+            
             if (partner(player) == master) {
+                // Player can play any card.
                 return true;
+
             } else {
-                // In the case of trumps, rules are different.
+                // Partner is not master
+
                 if (suit(card) == trump) {
-                    // If player is not playing a higher trump than that 
-                    // he previously renounced to follow, then he previously
-                    // lied because he could have drawn a higher trump card.
-                    if (has_renounced_higher_trump_card(
-                            evidence_trick_number, renounces_trump, player, card
-                    )) {
-                        string evidence_card = get_card_played(
-                            cards_played, 
-                            player, 
-                            evidence_trick_number
-                        );
+                    
+                    // Player is cutting
+                    // We check player can use this trump card
+                    if (has_renounced_higher_trump_card(evidence_trick_number, 
+                            renounces_trump, player, card)) {
 
-                        reason = build_error_reason(
-                            player,
-                            card,
-                            trick_number,
-                            evidence_card,
-                            evidence_trick_number,
-                            suit(card),
-                            trump,
-                            0
-                        );
+                        string evidence_card = get_card_played(cards_played, 
+                            player, evidence_trick_number);
+
+                        reason = build_error_reason(player, card, trick_number,
+                            evidence_card, evidence_trick_number, suit(card),
+                            trump, 0);
+
                         cout << "CASE 0 TRIGGERED" << endl;
-                        //random_probe_hack(9);
-
-                        //return true;
+                        
                         return false;
-                    }
 
-                    // If player plays a stronger trump card, it's OK.
-                    if (is_stronger_trump(card, highest_trump_card)) {
-                        return true;
                     } else {
-                        // We record player states he doesn't have better than the highest trump card.
-                        renounce_overtrumping(
-                            renounces_trump, 
-                            player, 
-                            highest_trump_card, 
-                            trick_number
-                        );
+                        
+                        // Player can play this card
+                        if (is_stronger_trump(card, highest_trump_card)) {
+                            // Plays a stronger trump card, so it's normal
+                            return true;
+                        } else {
+                            // Player tries to follow as much as he can the trump.
+                            // We record player states he doesn't have better than the highest trump card.
+                            renounce_overtrumping(renounces_trump, player, 
+                                highest_trump_card, trick_number);
 
-                        return true;
+                            return true;
+                        }
                     }
+
                 } else {
-                    // We record player states he doesn't have any led suit nor trump suit cards.
+                    // Player plays non trump card
+                    // We record player states he doesn't have any trump suit cards.
                     // He can play anything he has left.
                     renounce(renounces_led, player, trump, trick_number);
 
@@ -650,11 +685,58 @@ bool is_legal_play(
         );
     }
 
-
-    //random_probe_hack(9);
-
     return false;
 }
+
+/*
+bool is_legal_play_trump(
+    string&                     reason,
+    RenouncementTable&          renounces_led,
+    OvertrumpRenouncementTable& renounces_trump,
+    const CardsCollection&      cards_played,
+    int&                        evidence_trick_number,
+    const string                highest_trump_card,
+    const string                trump,
+    const string                led_suit,
+    const string                card,
+    const int                   player,
+    const int                   master,
+    const int                   trick_number
+) {
+    if (has_renounced_higher_trump_card(evidence_trick_number, 
+            renounces_trump, player, card)) {
+
+        string evidence_card = get_card_played(cards_played, 
+            player, evidence_trick_number);
+
+        reason = build_error_reason(player, card, trick_number,
+            evidence_card, evidence_trick_number, suit(card),
+            trump, 0);
+
+        cout << "CASE 0 TRIGGERED" << endl;
+        
+        return false;
+
+    } else {
+        
+        // Player can play this card
+        if (is_stronger_trump(card, highest_trump_card)) {
+            // Plays a stronger trump card, so it's normal
+            return true;
+        } else {
+            // Player tries to follow as much as he can the trump.
+            // We record player states he doesn't have better than the highest trump card.
+            renounce_overtrumping(renounces_trump, player, 
+                highest_trump_card, trick_number);
+
+            return true;
+        }
+    }
+
+    string evidence_card = get_card_played(cards_played, player, evidence_trick_number);
+    build_error_reason(player, card, trick_number, evidence_card, evidence_trick_number, suit(card), trump, 
+}
+*/
 
 
 //todo check the arguments use in the function.
