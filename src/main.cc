@@ -163,7 +163,21 @@ int main() {
     9c Th 8d Td
     )";
 
-    istringstream in(test272);
+    // From trick 3 to 8: lorem ipsum copied from test334.
+    // Irrelevant since an error should trigger at trick 2.
+    string case_0_test = R"(
+    h 1
+    Kh 9c Qh 7s
+    7h Tc Th 8c
+    Qs 8c 7s Qd
+    9d Jc 9s Kd
+    Ts Qc Kc Js
+    Ah Ac Jd 7c
+    Qh 7d 7h Ad
+    9c Th 8d Td
+    )";
+    
+    istringstream in(case_0_test);
 
     return game(in, cout, cerr);
 } 

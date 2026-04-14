@@ -141,6 +141,7 @@ void update_state(
     int&                    trick_points,
     const int               player, 
     const string            card,
+    const string            led_suit,
     const string            trump
 );
 
@@ -227,12 +228,27 @@ void update_belote_table(
     const string trump
 );
 
+//todo remove
 void update_highest_cards(
     string& highest_trump_card, 
     string& highest_led_card, 
     const string card, 
     const string trump
 );
+
+void update_highest_led_card(
+    string&         highest_led_card, 
+    const string    card,
+    const string    led_suit
+);
+
+void update_highest_trump_card(
+    string&         highest_trump_card,
+    const string    card,
+    const string    trump
+);
+
+
 
 /**
  * @brief Assesses whether `given` is stronger than `compared_to` following the `order`.
@@ -495,6 +511,7 @@ int process_trick(
             trick_points,
             player,
             card,
+            led_suit,
             trump
         );
     }
@@ -539,16 +556,16 @@ bool is_legal_play(
             return true;
 
         // If following the led suit, it's OK.
-        if (suit(card) == led_suit)
+        if (suit(card) == led_suit) {
             return true;
-        else {
+        } else {
             // We record player states he cannot play this suit anymore.
             renounce(renounces_led, player, led_suit, trick_number);
 
             // Players whose partner are master can play any card.
-            if (partner(player) == master)
+            if (partner(player) == master) {
                 return true;
-            else {
+            } else {
                 // In the case of trumps, rules are different.
                 if (suit(card) == trump) {
                     // If player is not playing a higher trump than that 
@@ -574,15 +591,16 @@ bool is_legal_play(
                             0
                         );
                         cout << "CASE 0 TRIGGERED" << endl;
-                        random_probe_hack(9);
+                        //random_probe_hack(9);
 
+                        //return true;
                         return false;
                     }
 
                     // If player plays a stronger trump card, it's OK.
-                    if (is_stronger_trump(card, highest_trump_card))
+                    if (is_stronger_trump(card, highest_trump_card)) {
                         return true;
-                    else {
+                    } else {
                         // We record player states he doesn't have better than the highest trump card.
                         renounce_overtrumping(
                             renounces_trump, 
@@ -633,7 +651,7 @@ bool is_legal_play(
     }
 
 
-    random_probe_hack(9);
+    //random_probe_hack(9);
 
     return false;
 }
@@ -768,9 +786,12 @@ void renounce_overtrumping(
     const string                card,
     const int                   trick_number
 ) {
+    cout << "RENOUNCED OVERTRUMPING" << endl;
+
     const size_t player_index = static_cast<size_t>(player);
 
-    table[player_index] = {card, trick_number};
+    table[player_index].first = card;
+    table[player_index].second = trick_number;
 }
 
 void update_state(
@@ -784,6 +805,7 @@ void update_state(
     int&                  trick_points,
     const int             player,
     const string          card,
+    const string          led_suit,
     const string          trump
 ) {
     update_cards_played(cards_played, player, card);
@@ -796,6 +818,10 @@ void update_state(
     update_master(master, player, card, highest_trump_card, highest_led_card, trump);
 
     update_highest_cards(highest_trump_card, highest_led_card, card, trump);
+
+    update_highest_led_card(highest_led_card, card, led_suit);
+    update_highest_trump_card(highest_trump_card, card, trump);
+
 
     update_trick_points(trick_points, card, trump);
 
@@ -858,6 +884,38 @@ void update_highest_cards(
         ) {
             highest_led_card = card;
         }
+    }
+}
+
+void update_highest_led_card(
+    string&         highest_led_card, 
+    const string    card,
+    const string    led_suit
+) {
+    // Don't update if not needed
+    if (suit(card) != led_suit) {
+        //cerr << "Error in update_highest_led_card: card suit doesn't conform." << endl;
+        return;
+    }
+
+    if (highest_led_card.empty() || is_stronger_raw(card, highest_led_card)) {
+        highest_led_card = card;
+    }
+}
+
+void update_highest_trump_card(
+    string&         highest_trump_card,
+    const string    card,
+    const string    trump
+) {
+    // Don't update if not needed
+    if (suit(card) != trump) {
+        //cerr << "Error in update_highest_led_card: card suit doesn't conform." << endl;
+        return;
+    }
+
+    if (highest_trump_card.empty() || is_stronger_trump(card, highest_trump_card)) {
+        highest_trump_card = card;
     }
 }
 
