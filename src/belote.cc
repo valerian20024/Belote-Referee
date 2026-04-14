@@ -593,24 +593,22 @@ bool is_legal_play(
             // Player can play any card.
             return true;
 
-        } else {
-            // Partner is not master
-
-            if (suit(card) == trump) {
-                
-                // Player is cutting
-                return is_legal_play_trump(reason, renounces_trump, 
-                    cards_played, evidence_trick_number, highest_trump_card,
-                    trump, card, player, trick_number, 2);
-
-            } else {
-                // Player plays garbage card
-                // We record player states he doesn't have any trump suit cards.
-                renounce(renounces_led, player, trump, trick_number);
-
-                return true;
-            }
         }
+
+        // Partner is not master
+        if (suit(card) == trump) {
+            
+            // Player is cutting
+            return is_legal_play_trump(reason, renounces_trump, 
+                cards_played, evidence_trick_number, highest_trump_card,
+                trump, card, player, trick_number, 2);
+        }
+        
+        // Player plays garbage card
+        // We record player states he doesn't have any trump suit cards.
+        renounce(renounces_led, player, trump, trick_number);
+
+        return true;        
     }
 
     string evidence_card = get_card_played(cards_played, player, evidence_trick_number);   
@@ -645,32 +643,25 @@ bool is_legal_play_trump(
         if (is_stronger_trump(card, highest_trump_card)) {
             // Plays a stronger trump card, so it's normal
             return true;
-        } else {
-            // Player tries to follow as much as he can the trump.
-            // We record player states he doesn't have better than the highest trump card.
-            renounce_overtrumping(renounces_trump, player, 
-                highest_trump_card, trick_number);
-
-            return true;
-        }
-
-    } else {
-        // Player cannot play this card
-        string evidence_card = get_card_played(cards_played, 
-            player, evidence_trick_number);
-
-        reason = build_error_reason(player, card, trick_number,
-            evidence_card, evidence_trick_number, suit(card),
-            trump, 0);
+        } 
         
-        return false;
-    }
+        // Player tries to follow as much as he can the trump.
+        // We record player states he doesn't have better than the highest trump card.
+        renounce_overtrumping(renounces_trump, player, 
+            highest_trump_card, trick_number);
 
-    string evidence_card = get_card_played(
-        cards_played, player, evidence_trick_number);
+        return true;
+    } 
+
+    // Player cannot play this card
+    string evidence_card = get_card_played(cards_played, 
+        player, evidence_trick_number);
+
+    reason = build_error_reason(player, card, trick_number,
+        evidence_card, evidence_trick_number, suit(card),
+        trump, 0);
     
-    build_error_reason(player, card, trick_number, evidence_card, 
-        evidence_trick_number, suit(card), trump, error_type);
+    return false;
 }
 
 
